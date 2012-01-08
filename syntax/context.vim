@@ -95,11 +95,11 @@ syn match   contextDelimiter  display '\\\@![][{}]'
 syn match   contextDimension  display '\<[+-]\?\%(\d\+\%(\.\d\+\)\?\|\.\d\+\)\%(p[tc]\|in\|bp\|cc]\|[cm]m\|dd\|sp\|e[mx]\)\>'
 syn match   contextNumber     display '\<[+-]\?\%(\d\+\%(\.\d\+\)\?\|\.\d\+\)\>' contained
 
-syn match   contextEscaped    display '\\[%#&$^_\{} \n]'
+syn match   contextEscaped    display '\\[%#~&$^_\{} \n]'
 "syn match   contextEscaped    display '\\[`'"]'
 
 syn match   contextSpecial    display '\\\%(par\|crlf\)\>'
-syn match   contextSpecial    display '\\\@!\%(&\|\^\|_\|-\{2,3}\)'
+syn match   contextSpecial    display '\\\@!\%(~\|&\|\^\|_\|-\{2,3}\)'
 
 "FIXME
 syn match   contextParameter  display '\\\@!#\d\+'
