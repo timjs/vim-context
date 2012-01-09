@@ -680,8 +680,6 @@ endif
 " Typing: {{{1
 " -------
 
-syn cluster contextTypingGroup contains=contextComment
-
 syn region  contextTyping     display matchgroup=contextCommand keepend start='\\type\z(\A\)'                 end='\z1'
 syn region  contextTyping     display matchgroup=contextCommand keepend start='\\\%(type\?\|tex\|arg\|mat\){' end='}'
 
