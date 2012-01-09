@@ -699,6 +699,11 @@ syn region  contextTyping             matchgroup=contextBlock   keepend start='\
 syn region  contextEmphasize  display matchgroup=contextCommand keepend start='\\emph{'            end='}'
 syn region  contextEmphasize          matchgroup=contextBlock   keepend start='\\startemphasize\>' end='\\stopemphasize\>' contains=contextCommand,contextBlock
 
+" Syncing: {{{1
+" ========
+
+syn sync    ccomment          contextComment
+
 " Highlight Definitions: {{{1
 " ======================
 
