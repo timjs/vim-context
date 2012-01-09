@@ -77,15 +77,15 @@ syn match   contextSetup      display '\\\%(start\|stop\)\?setups\>'
 
 if has('folding')
   " We don't fold documentsections but only use them as containers for sections.
-  syn region  contextDocument   transparent      start='\\starttext\>'                end='\\stoptext'
-  syn region  contextDocument   transparent      start='\\startcomponent\>'           end='\\stopcomponent'
-  syn region  contextDocument   transparent      start='\\startproduct\>'             end='\\stopproduct'
-  syn region  contextDocument   transparent      start='\\startproject\>'             end='\\stopproject'
-  syn region  contextDocument   transparent      start='\\startenvironment\>'         end='\\stopenvironment'
+  syn region  contextDocument   transparent      start='\\starttext\>'                end='\\stoptext\>'
+  syn region  contextDocument   transparent      start='\\startcomponent\>'           end='\\stopcomponent\>'
+  syn region  contextDocument   transparent      start='\\startproduct\>'             end='\\stopproduct\>'
+  syn region  contextDocument   transparent      start='\\startproject\>'             end='\\stopproject\>'
+  syn region  contextDocument   transparent      start='\\startenvironment\>'         end='\\stopenvironment\>'
 
-  " We don't fold anthing lower than sub(section|subject).
+  " Fold everything upto subsections.
   syn region  contextPart       transparent fold start='\\startpart\>'                end='\\stoppart\>'                                                                                                               contained containedin=contextDocument
-  syn region  contextPart       transparent fold start='\\part\>'                     end='\ze\\\%(part\|stop\%(text\|component\|product\|project\|environment\)\>\)'                                                  contained containedin=contextDocument
+  syn region  contextPart       transparent fold start='\\part\>'                     end='\ze\\\%(part\|stop\%(text\|component\|product\|project\|environment\)\)\>'                                                  contained containedin=contextDocument
 
   syn region  contextChapter    transparent fold start='\\startchapter\>'             end='\\stopchapter\>'                                                                                                            contained containedin=contextDocument,contextPart
   syn region  contextChapter    transparent fold start='\\starttitle\>'               end='\\stoptitle\>'                                                                                                              contained containedin=contextDocument,contextPart
