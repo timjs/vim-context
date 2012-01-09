@@ -104,7 +104,6 @@ syn match   contextStyle      display '\\\%(underbar\|over\%(bar\|strike\)\)s\?'
 " Specials: {{{1
 " ---------
 
-syn match   contextNumber     display '\<[+-]\?\%(\d\+\%(\.\d\+\)\?\|\.\d\+\)\>' contained
 syn match   contextEscaped    display '\\[%#~&$^_\{} \n]'
 "syn match   contextEscaped    display '\\[`'"]'
 
@@ -116,9 +115,14 @@ syn match   contextParameter  display '\\\@!#\d\+'
 "TODO Errors for #, ^, _
 "TODO Hyphens || (?)
 
+"TODO Matching delimiters
+"FIXME Spell in Groups and Arguments
 syn region  contextGroup      display matchgroup=contextDelimiter keepend start='{'  end='}'  contains=TOP
 syn region  contextArgument   display matchgroup=contextDelimiter keepend start='\[' end='\]' contains=TOP,@Spell
+" Not needed with above definitions
+"syn match   contextDelimiter  display '\\\@![][{}]'
 "syn region  contextArgument   display transparent keepend start='\[' end='\]'
+"syn region  contextArgument   display transparent keepend start='\[' end='\]' contains=contextLabel,contextNumber
 "syn region  contextArgument   display transparent matchgroup=contextDelimiter keepend start='\[' end='\]' contains=contextLabel,contextNumber
 "syn region  contextArgument   display matchgroup=contextDelimiter transparent keepend start='\[' end='\]'
 
