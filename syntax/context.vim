@@ -55,6 +55,12 @@ syn match   contextHead       display '\\\%(start\|stop\)\?part\>'
 syn match   contextHead       display '\\\%(start\|stop\)\?\%(chapter\|title\)\>'
 syn match   contextHead       display '\\\%(start\|stop\)\?\%(sub\)*%\(section\|subject\)\>'
 
+" And these define the document structure.
+"FIXME Misschien toch gewoon match...
+syn region  contextStructure  display oneline start='^\s*\\\%(start\|stop\)\?\%(component\|product\|project\|environment\)\>' end='$'
+syn region  contextStructure  display oneline start='^\s*\\input\>'                                                           end='$'
+syn match   contextStructure  display               '^\s*\\\%(start\|stop\)text$'
+
 " Definitions And Setups: {{{1
 " -----------------------
 
@@ -65,10 +71,6 @@ syn match   contextDefine     display '\\\%(start\|stop\)texdefinition\>'
 
 syn match   contextSetup      display '\\\%(setup\|use\|enable\|disable\|prevent\|show\)\a\+'
 syn match   contextSetup      display '\\\%(start\|stop\)\?setups\>'
-
-syn region  contextInclude    display start='^\s*\\\%(start\|stop\)\?\%(component\|product\|project\|environment\)\>' end='$'
-syn region  contextInclude    display start='^\s*\\input\>'                                                           end='$'
-syn match   contextInclude    display       '^\s*\\\%(start\|stop\)text$'
 
 " Section Folding: {{{1
 " ----------------
@@ -733,10 +735,11 @@ hi def link contextCondition  Conditional
 hi def link contextLoop       Repeat
 hi def link contextHead       Keyword
 
-" Definitions:
+hi def link contextStructure  Include
+
+" Definitions And Setups:
 hi def link contextDefine     Define
 hi def link contextSetup      contextDefine
-hi def link contextInclude    Include
 
 " Types:
 hi def link contextFont       Type
