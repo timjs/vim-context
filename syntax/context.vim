@@ -710,19 +710,9 @@ hi def link contextTodo       Todo
 hi def link contextComment    Comment
 hi def link contextHiding     contextComment
 
-" Constants:
-hi def link contextDimension  Constant
-hi def link contextNumber     contextDimension
-
-" Regions:
-hi def link contextMath       String
-hi def link contextTyping     String
-hi def link contextMathText   Normal
-hi def link contextMathSymbol SpecialChar
-hi          contextEmphasize  gui=italic
-
 " Commands:
 hi def link contextCommand    Function
+
 hi def link contextBlock      Statement
 hi def link contextCondition  Conditional
 hi def link contextLoop       Repeat
@@ -734,9 +724,20 @@ hi def link contextStructure  Include
 hi def link contextDefine     Define
 hi def link contextSetup      contextDefine
 
-" Types:
+" Fonts And Styles:
 hi def link contextFont       Type
 hi def link contextStyle      contextFont
+
+" Constants:
+hi def link contextDimension  Constant
+hi def link contextNumber     contextDimension
+
+" Regions:
+hi def link contextMath       String
+hi def link contextTyping     String
+hi def link contextMathText   Normal
+hi def link contextMathSymbol SpecialChar
+hi          contextEmphasize  gui=italic
 
 " Specials:
 hi def link contextDelimiter  Delimiter
