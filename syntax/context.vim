@@ -144,16 +144,13 @@ syn match   contextLabel      display '\a\+:[0-9a-zA-Z_\-: ]\+'                 
 " Math: {{{1
 " -----
 
-syn cluster contextMathGroup  contains=contextComment,contextCommand,contextBlock,contextDelimiter,contextEscaped,contextSpecial,contextFont,contextStyle
+syn region  contextMath       display matchgroup=contextDelimiter keepend start='\$'                       end='\$'                 contains=TOP,@Spell
+syn region  contextMath       display matchgroup=contextCommand   keepend start='\\math\%(ematics\)\?{'    end='}'                  contains=TOP,@Spell
 
+syn region  contextMath               matchgroup=contextDelimiter keepend start='\$\$'                     end='\$\$'               contains=TOP,@Spell
+syn region  contextMath               matchgroup=contextBlock     keepend start='\\start\z(\a*\)formula\>' end='\\stop\z1formula\>' contains=TOP,@Spell
 
-syn region  contextMath       display matchgroup=contextDelimiter keepend start='\$'                       end='\$'                 contains=contextMathText,@contextMathGroup
-syn region  contextMath       display matchgroup=contextCommand   keepend start='\\math\%(ematics\)\?{'    end='}'                  contains=contextMathText,@contextMathGroup
-
-syn region  contextMath               matchgroup=contextDelimiter keepend start='\$\$'                     end='\$\$'               contains=contextMathText,@contextMathGroup
-syn region  contextMath               matchgroup=contextBlock     keepend start='\\start\z(\a*\)formula\>' end='\\stop\z1formula\>' contains=contextMathText,@contextMathGroup
-
-syn region  contextMathText   display matchgroup=contextCommand   keepend start='\\\%(inter\)\?text{'      end='}'        contained contains=contextMath,@contextMathGroup
+syn region  contextMathText   display matchgroup=contextCommand   keepend start='\\\%(inter\)\?text{'      end='}'        contained containedin=contextMath
 
 " Math Concealment: {{{1
 " ~~~~~~~~~~~~~~~~~
