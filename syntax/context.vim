@@ -135,7 +135,7 @@ syn match   contextParameter  display '\\\@!#\d\+'
 "syn region  contextArgument   display matchgroup=contextDelimiter keepend start='\[' end='\]' contains=TOP,@Spell
 syn region  contextArgument   display transparent keepend start='\[' end='\]'
 " Not needed with above definitions
-"syn match   contextDelimiter  display '\\\@![][{}]'
+syn match   contextDelimiter  display '\\\@![][{}]'
 "syn region  contextArgument   display transparent keepend start='\[' end='\]'
 "syn region  contextArgument   display transparent keepend start='\[' end='\]' contains=contextLabel,contextNumber
 "syn region  contextArgument   display transparent matchgroup=contextDelimiter keepend start='\[' end='\]' contains=contextLabel,contextNumber
