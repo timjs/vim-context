@@ -696,8 +696,12 @@ syn region  contextTyping             matchgroup=contextBlock   keepend start='\
 " Emphasize: {{{1
 " ----------
 
-syn region  contextEmphasize  display matchgroup=contextCommand keepend start='\\emph{'            end='}'
-syn region  contextEmphasize          matchgroup=contextBlock   keepend start='\\startemphasize\>' end='\\stopemphasize\>' contains=contextCommand,contextBlock
+"FIXME highlight \emph and {} distinctly
+syn region  contextEmphasize  display transparent keepend start='\\emph{'            end='}'
+syn region  contextEmphasize          transparent keepend start='\\startemphasize\>' end='\\stopemphasize\>'
+"syn region  contextEmphasize  display matchgroup=contextCommand keepend start='\\emph{'            end='}'
+"syn region  contextEmphasize          matchgroup=contextBlock   keepend start='\\startemphasize\>' end='\\stopemphasize\>' contains=contextCommand,contextBlock
+" contains=contextCommand,contextBlock
 
 " Syncing: {{{1
 " ========
