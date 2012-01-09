@@ -531,6 +531,9 @@ if has('conceal') && &enc == 'utf-8'
   if s:context_conceal =~ 'a'
     for symbol in s:contextAccentSymbols
       call s:ContextConcealSymbol('\\'.symbol[0].'\>', symbol[1])
+      "FIXME Conceal differently:
+      "  \zs after \\ doesn't work
+      "  can only conceal to one char, so loop doesn't work, complex mach doesn't work
       "call s:ContextConcealSymbol('\\'.symbol[0].'\>', symbol[2])
       "call s:ContextConcealSymbol('\\'.symbol[0].'\>{\z(\a\)}', '\z1'.symbol[2])
     endfor
