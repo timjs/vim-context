@@ -23,6 +23,17 @@ setlocal isk-=_
 
 "FIXME Good cluster structure
 syn cluster contextDocumentGroup contains=contextComment
+" Comments: {{{1
+" ---------
+
+syn keyword contextTodo       TODO FIXME NOTE XXX contained
+
+syn region  contextComment    display oneline start='\\\@!%'    end='$' contains=contextTodo
+syn region  contextComment    display oneline start='^%[CDM]\s' end='$' contains=TOP,contextComment
+"FIXME or:
+"syn region  contextComment    display oneline transparent matchgroup=contextComment start='^%[CDM]\s' end='$'
+
+syn region  contextHiding     matchgroup=contextBlock keepend start='\\starthiding\>' end='\\stophiding\>'
 
 " Commands: {{{1
 " ---------
@@ -129,18 +140,6 @@ syn region  contextArgument   display matchgroup=contextDelimiter keepend start=
 syn match   contextDimension  display '\<[+-]\?\%(\d\+\%(\.\d\+\)\?\|\.\d\+\)\%(p[tc]\|in\|bp\|cc]\|[cm]m\|dd\|sp\|e[mx]\)\>'
 syn match   contextNumber     display '\<[+-]\?\%(\d\+\%(\.\d\+\)\?\|\.\d\+\)\>' contained containedin=contextArgument
 syn match   contextLabel      display '\a\+:[0-9a-zA-Z_\-: ]\+'                  contained containedin=contextArgument
-
-" Comments: {{{1
-" ---------
-
-syn keyword contextTodo       TODO FIXME NOTE XXX contained
-
-syn region  contextComment    display start='\\\@!%'    end='$' contains=contextTodo
-syn region  contextComment    display start='^%[CDM]\s' end='$' contains=TOP,contextComment
-"FIXME matchgroup in combination with transparent...
-"syn region  contextComment    display start='^%[CDM]\s' end='$' matchgroup=contextComment transparent
-
-syn region  contextHiding     matchgroup=contextBlock keepend start='\\starthiding\>' end='\\stophiding\>'
 
 " Math: {{{1
 " -----
