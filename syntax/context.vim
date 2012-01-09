@@ -89,15 +89,15 @@ if has('folding')
 
   syn region  contextChapter    transparent fold start='\\startchapter\>'             end='\\stopchapter\>'                                                                                                            contained containedin=contextDocument,contextPart
   syn region  contextChapter    transparent fold start='\\starttitle\>'               end='\\stoptitle\>'                                                                                                              contained containedin=contextDocument,contextPart
-  syn region  contextChapter    transparent fold start='\\\%(chapter\|title\)\>'      end='\ze\\\%(chapter\|title\|part\|stop\%(text\|component\|product\|project\|environment\)\>\)'                                  contained containedin=contextDocument,contextPart
+  syn region  contextChapter    transparent fold start='\\\%(chapter\|title\)\>'      end='\ze\\\%(chapter\|title\|part\|stop\%(text\|component\|product\|project\|environment\)\)\>'                                  contained containedin=contextDocument,contextPart
 
   syn region  contextSection    transparent fold start='\\startsection\>'             end='\\stopsection\>'                                                                                                            contained containedin=contextDocument,contextChapter
   syn region  contextSection    transparent fold start='\\startsubject\>'             end='\\stopsubject\>'                                                                                                            contained containedin=contextDocument,contextChapter
-  syn region  contextSection    transparent fold start='\\\%(section\|subject\)\>'    end='\ze\\\%(section\|subject\|chapter\|title\|part\|stop\%(text\|component\|product\|project\|environment\)\>\)'                contained containedin=contextDocument,contextChapter
+  syn region  contextSection    transparent fold start='\\\%(section\|subject\)\>'    end='\ze\\\%(section\|subject\|chapter\|title\|part\|stop\%(text\|component\|product\|project\|environment\)\)\>'                contained containedin=contextDocument,contextChapter
 
   syn region  contextSubsection transparent fold start='\\startsubsection\>'          end='\\stopsubsection\>'                                                                                                         contained containedin=contextDocument,contextSection
   syn region  contextSubsection transparent fold start='\\startsubsubject\>'          end='\\stopsubsubject\>'                                                                                                         contained containedin=contextDocument,contextSection
-  syn region  contextSubsection transparent fold start='\\sub\%(section\|subject\)\>' end='\ze\\\%(\%(sub\)\?\%(section\|subject\)\|chapter\|title\|part\|stop\%(text\|component\|product\|project\|environment\)\>\)' contained containedin=contextDocument,contextSection
+  syn region  contextSubsection transparent fold start='\\sub\%(section\|subject\)\>' end='\ze\\\%(\%(sub\)\?\%(section\|subject\)\|chapter\|title\|part\|stop\%(text\|component\|product\|project\|environment\)\)\>' contained containedin=contextDocument,contextSection
 endif
 
 " Fonts And Styles: {{{1
