@@ -30,7 +30,7 @@ syn cluster contextDocumentGroup contains=contextComment
 " We just match \...alphabetic... Sometimes @ and ! are used inside commands, but this is only supported inside \unprotect'ed environments.
 syn match   contextCommand    display '\\\a\+'
 
-" Some commands are special statements.
+" Some commands are special statements...
 syn match   contextBlock      display '\\\%(start\|stop\)\a*'
 
 syn match   contextCondition  display '\\doif\a*' 
@@ -39,19 +39,27 @@ syn match   contextCondition  display '\\\%(start\|stop\)\%(not\)\?\%(all\)\?mod
 syn match   contextLoop       display '\\do\%(\%(stepwise\)\?recurse\|loop\)\>'
 syn match   contextLoop       display '\\\%(recurselevel\|exitloop\)\>'
 
+" ...or section heads.
+syn match   contextHead       display '\\\%(start\|stop\)\?part\>'
+syn match   contextHead       display '\\\%(start\|stop\)\?\%(chapter\|title\)\>'
+syn match   contextHead       display '\\\%(start\|stop\)\?\%(sub\)*%\(section\|subject\)\>'
+
 " Definitions And Setups: {{{1
 " -----------------------
 
 "syn match   contextDefine     display '\\[egx]\%(def\|let\)'
-syn match   contextDefine     display '\\\%(\%(re\)\?\%(define\|set\)\|get\|let\)\a*'
+syn match   contextDefine     display '\\\%(re\)\?define\>'
+syn match   contextDefine     display '\\\%(define\|\%(re\)\?set\|get\|let\)\a\+'
 syn match   contextDefine     display '\\\%(start\|stop\)texdefinition\>'
-syn match   contextSetup      display '\\\%(setup\|use\|enable\|disable\|prevent\|show\)\a*'
 
-"FIXME contextInclude --> contextInput omdat dat in TeX zo heet?
-syn match   contextInclude    display '^\s*\\\%(component\|product\|project\|environment\|input\)\>.*$'
+syn match   contextSetup      display '\\\%(setup\|use\|enable\|disable\|prevent\|show\)\a\+'
+syn match   contextSetup      display '\\\%(start\|stop\)\?setups\>'
 
 " Sections: {{{1
 " ---------
+syn region  contextInclude    display start='^\s*\\\%(start\|stop\)\?\%(component\|product\|project\|environment\)\>' end='$'
+syn region  contextInclude    display start='^\s*\\input\>'                                                           end='$'
+syn match   contextInclude    display       '^\s*\\\%(start\|stop\)text$'
 
 "FIXME contextInclude --> contextStructure duidelijker?
 "FIXME Transparant maken en appart highlighten?
