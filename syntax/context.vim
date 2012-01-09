@@ -21,8 +21,6 @@ setlocal isk-=_
 " Syntax Definitions:
 " ===================
 
-"FIXME Good cluster structure
-syn cluster contextDocumentGroup contains=contextComment
 " Comments: {{{1
 " ---------
 
