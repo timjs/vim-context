@@ -127,15 +127,19 @@ syn match   contextParameter  display '\\\@!#\d\+'
 "TODO Hyphens || (?)
 
 "TODO Matching delimiters
+"FIXME Problem with groups inside math doing it this way...
 "syn region  contextGroup      display matchgroup=contextDelimiter keepend start='{'  end='}'  contains=TOP
 
 " To get rid of nasty spell errors for options in other languages than English, we don't allow spellcheck inside argument brackets.
 "FIXME Highlighting parens as in [{[]}]
-"FIXME Number and Label inside Argument as transparent (containedin doesn't work)
+
 "syn region  contextArgument   display matchgroup=contextDelimiter keepend start='\[' end='\]' contains=TOP,@Spell
+"FIXME Number and Label inside Argument as transparent (containedin doesn't work)
 syn region  contextArgument   display transparent keepend start='\[' end='\]'
+
 " Not needed with above definitions
 syn match   contextDelimiter  display '\\\@![][{}]'
+
 "syn region  contextArgument   display transparent keepend start='\[' end='\]'
 "syn region  contextArgument   display transparent keepend start='\[' end='\]' contains=contextLabel,contextNumber
 "syn region  contextArgument   display transparent matchgroup=contextDelimiter keepend start='\[' end='\]' contains=contextLabel,contextNumber
