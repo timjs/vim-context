@@ -715,6 +715,7 @@ hi def link contextNumber     contextDimension
 hi def link contextMath       String
 hi def link contextTyping     String
 hi def link contextMathText   Normal
+hi def link contextMathSymbol SpecialChar
 hi          contextEmphasize  gui=italic
 
 " Commands:
