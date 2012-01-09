@@ -55,40 +55,37 @@ syn match   contextDefine     display '\\\%(start\|stop\)texdefinition\>'
 syn match   contextSetup      display '\\\%(setup\|use\|enable\|disable\|prevent\|show\)\a\+'
 syn match   contextSetup      display '\\\%(start\|stop\)\?setups\>'
 
-" Sections: {{{1
-" ---------
 syn region  contextInclude    display start='^\s*\\\%(start\|stop\)\?\%(component\|product\|project\|environment\)\>' end='$'
 syn region  contextInclude    display start='^\s*\\input\>'                                                           end='$'
 syn match   contextInclude    display       '^\s*\\\%(start\|stop\)text$'
 
-"FIXME contextInclude --> contextStructure duidelijker?
-"FIXME Transparant maken en appart highlighten?
-"FIXME Daarbij gebruiken voor sync?
-syn region  contextDocument   matchgroup=contextInclude start='^\\starttext$'                end='^\\stoptext$'        contains=TOP
-syn region  contextDocument   matchgroup=contextInclude start='^\\startcomponent\>.*$'       end='^\\stopcomponent$'   contains=TOP
-syn region  contextDocument   matchgroup=contextInclude start='^\\startproduct\>.*$'         end='^\\stopproduct$'     contains=TOP
-syn region  contextDocument   matchgroup=contextInclude start='^\\startproject\>.*$'         end='^\\stopproject$'     contains=TOP
-syn region  contextDocument   matchgroup=contextInclude start='^\\startenvironment\>.*$'     end='^\\stopenvironment$' contains=TOP
+" Section Folding: {{{1
+" ----------------
 
-syn region  contextPart       matchgroup=contextHead    start='\\startpart\>'                end='\\stoppart\>'                                                                                                                fold containedin=contextDocument                contains=TOP
-syn region  contextPart       matchgroup=contextHead    start='\\part\>'                     end='\ze\\\%(part\|\stop\%(text\|component\|product\|project\|environment\)\>\)'                                                  fold containedin=contextDocument                contains=TOP
+if has('folding')
+  " We don't fold documentsections but only use them as containers for sections.
+  syn region  contextDocument   transparent      start='\\starttext\>'                end='\\stoptext'
+  syn region  contextDocument   transparent      start='\\startcomponent\>'           end='\\stopcomponent'
+  syn region  contextDocument   transparent      start='\\startproduct\>'             end='\\stopproduct'
+  syn region  contextDocument   transparent      start='\\startproject\>'             end='\\stopproject'
+  syn region  contextDocument   transparent      start='\\startenvironment\>'         end='\\stopenvironment'
 
-syn region  contextChapter    matchgroup=contextHead    start='\\startchapter\>'             end='\\stopchapter\>'                                                                                                             fold containedin=contextDocument,contextPart    contains=TOP
-syn region  contextChapter    matchgroup=contextHead    start='\\starttitle\>'               end='\\stoptitle\>'                                                                                                               fold containedin=contextDocument,contextPart    contains=TOP
-syn region  contextChapter    matchgroup=contextHead    start='\\\%(chapter\|title\)\>'      end='\ze\\\%(chapter\|title\|part\|\stop\%(text\|component\|product\|project\|environment\)\>\)'                                  fold containedin=contextDocument,contextPart    contains=TOP
+  " We don't fold anthing lower than sub(section|subject).
+  syn region  contextPart       transparent fold start='\\startpart\>'                end='\\stoppart\>'                                                                                                               contained containedin=contextDocument
+  syn region  contextPart       transparent fold start='\\part\>'                     end='\ze\\\%(part\|stop\%(text\|component\|product\|project\|environment\)\>\)'                                                  contained containedin=contextDocument
 
-syn region  contextSection    matchgroup=contextHead    start='\\startsection\>'             end='\\stopsection\>'                                                                                                             fold containedin=contextDocument,contextChapter contains=TOP
-syn region  contextSection    matchgroup=contextHead    start='\\startsubject\>'             end='\\stopsubject\>'                                                                                                             fold containedin=contextDocument,contextChapter contains=TOP
-syn region  contextSection    matchgroup=contextHead    start='\\\%(section\|subject\)\>'    end='\ze\\\%(section\|subject\|chapter\|title\|part\|\stop\%(text\|component\|product\|project\|environment\)\>\)'                fold containedin=contextDocument,contextChapter contains=TOP
+  syn region  contextChapter    transparent fold start='\\startchapter\>'             end='\\stopchapter\>'                                                                                                            contained containedin=contextDocument,contextPart
+  syn region  contextChapter    transparent fold start='\\starttitle\>'               end='\\stoptitle\>'                                                                                                              contained containedin=contextDocument,contextPart
+  syn region  contextChapter    transparent fold start='\\\%(chapter\|title\)\>'      end='\ze\\\%(chapter\|title\|part\|stop\%(text\|component\|product\|project\|environment\)\>\)'                                  contained containedin=contextDocument,contextPart
 
-syn region  contextSubsection matchgroup=contextHead    start='\\startsubsection\>'          end='\\stopsubsection\>'                                                                                                          fold containedin=contextDocument,contextSection contains=TOP
-syn region  contextSubsection matchgroup=contextHead    start='\\startsubsubject\>'          end='\\stopsubsubject\>'                                                                                                          fold containedin=contextDocument,contextSection contains=TOP
-syn region  contextSubsection matchgroup=contextHead    start='\\sub\%(section\|subject\)\>' end='\ze\\\%(\%(sub\)\?\%(section\|subject\)\|chapter\|title\|part\|\stop\%(text\|component\|product\|project\|environment\)\>\)' fold containedin=contextDocument,contextSection contains=TOP
+  syn region  contextSection    transparent fold start='\\startsection\>'             end='\\stopsection\>'                                                                                                            contained containedin=contextDocument,contextChapter
+  syn region  contextSection    transparent fold start='\\startsubject\>'             end='\\stopsubject\>'                                                                                                            contained containedin=contextDocument,contextChapter
+  syn region  contextSection    transparent fold start='\\\%(section\|subject\)\>'    end='\ze\\\%(section\|subject\|chapter\|title\|part\|stop\%(text\|component\|product\|project\|environment\)\>\)'                contained containedin=contextDocument,contextChapter
 
-" We don't fold anthing lower than sub(section|subject), just highlight it.
-"FIXME: --> contextSubsubsection geeft geen clash met folds?
-syn match   contextHead       display '\\\%(sub\)\+subsection\>' containedin=contextSubsection
-syn match   contextHead       display '\\\%(sub\)\+subsubject\>' containedin=contextSubsection
+  syn region  contextSubsection transparent fold start='\\startsubsection\>'          end='\\stopsubsection\>'                                                                                                         contained containedin=contextDocument,contextSection
+  syn region  contextSubsection transparent fold start='\\startsubsubject\>'          end='\\stopsubsubject\>'                                                                                                         contained containedin=contextDocument,contextSection
+  syn region  contextSubsection transparent fold start='\\sub\%(section\|subject\)\>' end='\ze\\\%(\%(sub\)\?\%(section\|subject\)\|chapter\|title\|part\|stop\%(text\|component\|product\|project\|environment\)\>\)' contained containedin=contextDocument,contextSection
+endif
 
 " Fonts And Styles: {{{1
 " -----------------
