@@ -104,11 +104,7 @@ syn match   contextStyle      display '\\\%(underbar\|over\%(bar\|strike\)\)s\?'
 " Specials: {{{1
 " ---------
 
-syn match   contextDelimiter  display '\\\@![][{}]'
-
-syn match   contextDimension  display '\<[+-]\?\%(\d\+\%(\.\d\+\)\?\|\.\d\+\)\%(p[tc]\|in\|bp\|cc]\|[cm]m\|dd\|sp\|e[mx]\)\>'
 syn match   contextNumber     display '\<[+-]\?\%(\d\+\%(\.\d\+\)\?\|\.\d\+\)\>' contained
-
 syn match   contextEscaped    display '\\[%#~&$^_\{} \n]'
 "syn match   contextEscaped    display '\\[`'"]'
 
@@ -118,12 +114,17 @@ syn match   contextSpecial    display '\\\@!\%(\~\|&\|\^\|_\|-\{2,3}\)'
 syn match   contextParameter  display '\\\@!#\d\+'
 
 "TODO Errors for #, ^, _
-"TODO Matching delimiters
 "TODO Hyphens || (?)
 
-syn region  contextArgument   display matchgroup=contextDelimiter keepend start='\[' end='\]' contains=contextLabel,contextCommand,contextDimension,contextNumber
+syn region  contextGroup      display matchgroup=contextDelimiter keepend start='{'  end='}'  contains=TOP
+syn region  contextArgument   display matchgroup=contextDelimiter keepend start='\[' end='\]' contains=TOP,@Spell
+"syn region  contextArgument   display transparent keepend start='\[' end='\]'
+"syn region  contextArgument   display transparent matchgroup=contextDelimiter keepend start='\[' end='\]' contains=contextLabel,contextNumber
+"syn region  contextArgument   display matchgroup=contextDelimiter transparent keepend start='\[' end='\]'
 
-syn match   contextLabel      display '\a\+:[0-9a-zA-Z: ]\+' contained
+syn match   contextDimension  display '\<[+-]\?\%(\d\+\%(\.\d\+\)\?\|\.\d\+\)\%(p[tc]\|in\|bp\|cc]\|[cm]m\|dd\|sp\|e[mx]\)\>'
+syn match   contextNumber     display '\<[+-]\?\%(\d\+\%(\.\d\+\)\?\|\.\d\+\)\>' contained containedin=contextArgument
+syn match   contextLabel      display '\a\+:[0-9a-zA-Z_\-: ]\+'                  contained containedin=contextArgument
 
 " Comments: {{{1
 " ---------
