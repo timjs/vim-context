@@ -133,10 +133,12 @@ syn match   contextLabel      display '\a\+:[0-9a-zA-Z_\-: ]\+'                 
 " Comments: {{{1
 " ---------
 
-syn keyword contextTodo       TODO FIXME NOTE XXX
+syn keyword contextTodo       TODO FIXME NOTE XXX contained
 
-syn match   contextComment    display '\\\@!%.*$'    contains=contextTodo
-syn match   contextComment    display '^%[CDM]\s.*$' contains=TOP,contextComment contains=@Spell
+syn region  contextComment    display start='\\\@!%'    end='$' contains=contextTodo
+syn region  contextComment    display start='^%[CDM]\s' end='$' contains=TOP,contextComment
+"FIXME matchgroup in combination with transparent...
+"syn region  contextComment    display start='^%[CDM]\s' end='$' matchgroup=contextComment transparent
 
 syn region  contextHiding     matchgroup=contextBlock keepend start='\\starthiding\>' end='\\stophiding\>'
 
