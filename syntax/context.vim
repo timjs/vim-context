@@ -1,37 +1,26 @@
 " Vim syntax file
 " Language:         ConTeXt typesetting engine
 " Maintainer:       Tim Steenvoorden <tim.steenvoorden@gmail.com>
-" Latest Revision:  2012-01-03
+" Latest Revision:  2012-01-13
 
 " Initialize Syntaxfile: {{{1
 " ======================
 
-if exists("b:current_syntax")
+if exists('b:current_syntax')
   finish
 endif
-
-scriptencoding utf-8
 
 let s:cpo_save = &cpo
 set cpo&vim
 
-setlocal fdm=syntax
+scriptencoding utf-8
+
 setlocal isk-=_
+
+syn spell toplevel
 
 " Syntax Definitions:
 " ===================
-
-" Comments: {{{1
-" ---------
-
-syn keyword contextTodo       TODO FIXME NOTE XXX contained
-
-syn region  contextComment    display oneline start='\\\@!%'    end='$' contains=contextTodo
-syn region  contextComment    display oneline start='^%[CDM]\s' end='$' contains=TOP,contextComment
-"FIXME or:
-"syn region  contextComment    display oneline transparent matchgroup=contextComment start='^%[CDM]\s' end='$'
-
-syn region  contextHiding     matchgroup=contextBlock keepend start='\\starthiding\>' end='\\stophiding\>'
 
 " Commands: {{{1
 " ---------
@@ -51,13 +40,12 @@ syn match   contextLoop       display '\\\%(recurselevel\|exitloop\)\>'
 " ...or section heads.
 syn match   contextHead       display '\\\%(start\|stop\)\?part\>'
 syn match   contextHead       display '\\\%(start\|stop\)\?\%(chapter\|title\)\>'
-syn match   contextHead       display '\\\%(start\|stop\)\?\%(sub\)*%\(section\|subject\)\>'
+syn match   contextHead       display '\\\%(start\|stop\)\?\%(sub\)*\%(section\|subject\)\>'
 
 " And these define the document structure.
-"FIXME Misschien toch gewoon match...
-syn region  contextStructure  display oneline start='^\s*\\\%(start\|stop\)\?\%(component\|product\|project\|environment\)\>' end='$'
-syn region  contextStructure  display oneline start='^\s*\\input\>'                                                           end='$'
-syn match   contextStructure  display               '^\s*\\\%(start\|stop\)text$'
+syn match   contextStructure  display '^\s*\\\%(start\|stop\)\?\%(component\|product\|project\|environment\)\>.*$'
+syn match   contextStructure  display '^\s*\\input\>.*$'
+syn match   contextStructure  display '^\s*\\\%(start\|stop\)text$'
 
 " Definitions And Setups: {{{1
 " -----------------------
@@ -69,34 +57,6 @@ syn match   contextDefine     display '\\\%(start\|stop\)texdefinition\>'
 
 syn match   contextSetup      display '\\\%(setup\|use\|enable\|disable\|prevent\|show\)\a\+'
 syn match   contextSetup      display '\\\%(start\|stop\)\?setups\>'
-
-" Section Folding: {{{1
-" ----------------
-
-if has('folding')
-  " We don't fold documentsections but only use them as containers for sections.
-  syn region  contextDocument   transparent      start='\\starttext\>'                end='\\stoptext\>'
-  syn region  contextDocument   transparent      start='\\startcomponent\>'           end='\\stopcomponent\>'
-  syn region  contextDocument   transparent      start='\\startproduct\>'             end='\\stopproduct\>'
-  syn region  contextDocument   transparent      start='\\startproject\>'             end='\\stopproject\>'
-  syn region  contextDocument   transparent      start='\\startenvironment\>'         end='\\stopenvironment\>'
-
-  " Fold everything upto subsections.
-  syn region  contextPart       transparent fold start='\\startpart\>'                end='\\stoppart\>'                                                                                                               contained containedin=contextDocument
-  syn region  contextPart       transparent fold start='\\part\>'                     end='\ze\\\%(part\|stop\%(text\|component\|product\|project\|environment\)\)\>'                                                  contained containedin=contextDocument
-
-  syn region  contextChapter    transparent fold start='\\startchapter\>'             end='\\stopchapter\>'                                                                                                            contained containedin=contextDocument,contextPart
-  syn region  contextChapter    transparent fold start='\\starttitle\>'               end='\\stoptitle\>'                                                                                                              contained containedin=contextDocument,contextPart
-  syn region  contextChapter    transparent fold start='\\\%(chapter\|title\)\>'      end='\ze\\\%(chapter\|title\|part\|stop\%(text\|component\|product\|project\|environment\)\)\>'                                  contained containedin=contextDocument,contextPart
-
-  syn region  contextSection    transparent fold start='\\startsection\>'             end='\\stopsection\>'                                                                                                            contained containedin=contextDocument,contextChapter
-  syn region  contextSection    transparent fold start='\\startsubject\>'             end='\\stopsubject\>'                                                                                                            contained containedin=contextDocument,contextChapter
-  syn region  contextSection    transparent fold start='\\\%(section\|subject\)\>'    end='\ze\\\%(section\|subject\|chapter\|title\|part\|stop\%(text\|component\|product\|project\|environment\)\)\>'                contained containedin=contextDocument,contextChapter
-
-  syn region  contextSubsection transparent fold start='\\startsubsection\>'          end='\\stopsubsection\>'                                                                                                         contained containedin=contextDocument,contextSection
-  syn region  contextSubsection transparent fold start='\\startsubsubject\>'          end='\\stopsubsubject\>'                                                                                                         contained containedin=contextDocument,contextSection
-  syn region  contextSubsection transparent fold start='\\sub\%(section\|subject\)\>' end='\ze\\\%(\%(sub\)\?\%(section\|subject\)\|chapter\|title\|part\|stop\%(text\|component\|product\|project\|environment\)\)\>' contained containedin=contextDocument,contextSection
-endif
 
 " Fonts And Styles: {{{1
 " -----------------
@@ -112,6 +72,34 @@ syn match   contextStyle      display '\\\%(underbar\|over\%(bar\|strike\)\)s\?'
 "FIXME What is this?
 "syn match   contextStyle      display '\\\%(character\|Character\)s\?\>'
 
+" Groups And Arguments: {{{1
+" -------------------
+
+" To get rid of nasty spell errors for options, we don't allow spellcheck inside argument brackets.
+" We don't use keepend because it will mess up our mismatch algorithm.
+syn region  contextArgument               matchgroup=contextDelimiter start='\[' end='\]' contains=TOP,@Spell,contextError
+
+" We can't play the same trick with braces and parenthesis because containing TOP is not transparent in math mode. This is no problem with argument brackets, since you don't want to highlight the inside text as math. Here we use transparent regions.
+"FIXME conceal inside group and gather
+syn region  contextGroup      transparent matchgroup=contextDelimiter start='{'  end='}'
+syn region  contextGather     transparent matchgroup=contextDelimiter start='('  end=')'
+
+" Inside argument brackets we can highlight some constants.
+syn match   contextLabel      display '\a\+:[0-9a-zA-Z_\-: ]\+'                                                               contained containedin=contextArgument
+syn match   contextNumber     display '\<[+-]\?\%(\d\+\%(\.\d\+\)\?\|\.\d\+\)\>'                                              contained containedin=contextArgument
+syn match   contextDimension  display '\<[+-]\?\%(\d\+\%(\.\d\+\)\?\|\.\d\+\)\%(p[tc]\|in\|bp\|cc]\|[cm]m\|dd\|sp\|e[mx]\)\>' contained containedin=contextArgument
+
+syn keyword contextConstant   yes no on off start stop contained containedin=contextArgument
+
+"TODO Maybe highlight more constants, probably do it this way.
+"syn match   contextConstant   display '\<\%(yes\|no\|on\|off\)=\@!\>' contained containedin=contextArgument
+"syn match   contextConstant   display '\<\%(fit\|broad\|fixed\|local\)=\@!\>' contained containedin=contextArgument
+"syn match   contextConstant   display '\<\%(depth\|hanging\|high\|lohi\|low\|top\|middle\|bottom\)=\@!\>' contained containedin=contextArgument
+"syn match   contextConstant   display '\<\%(serif\|regular\|roman\|sans\|support\|sansserif\|mono\|type\|teletype\|handwritten\|calligraphic\)=\@!\>' contained containedin=contextArgument
+"syn match   contextConstant   display '\<\%(normal\|bold\|slanted\|boldslanted\|type\|cap\|small\)=\@!\>' contained containedin=contextArgument
+"syn match   contextConstant   display '\<\%(small\|medium\|big\|nowhite\|back\|white\|disable\|force\|reset\|line\|halfline\|fixed\|flexible\|none\|samepage\)=\@!\>' contained containedin=contextArgument
+"syn match   contextConstant   display '\<\%(left\|right\|here\|top\|bottom\|inleft\|inright\|inmargin\|margin\|leftmargin\|rightmargin\|leftedge\|rightedge\|innermargin\|outermargin\|inneredge\|outeredge\|inner\|outer\|line\|high\|low\|fit\|page\|leftpage\|rightpage\|opposite\|always\|auto\|force\|tall\|reset\|line\|height\|depth\)=\@!\>' contained containedin=contextArgument
+
 " Specials: {{{1
 " ---------
 
@@ -120,45 +108,30 @@ syn match   contextEscaped    display '\\[%#~&$^_\{} \n]'
 
 syn match   contextSpecial    display '\\\%(par\|crlf\)\>'
 syn match   contextSpecial    display '\\\@!\%(\~\|&\|\^\|_\|-\{2,3}\)'
+"syn match   contextSpecial    display '|[<>/]\?|'
 
 syn match   contextParameter  display '\\\@!#\d\+'
 
-"TODO Errors for #, ^, _
-"TODO Hyphens || (?)
+" Errors And Mismatches: {{{1
+" ----------------------
 
-"TODO Matching delimiters
-"FIXME Problem with groups inside math doing it this way...
-"syn region  contextGroup      display matchgroup=contextDelimiter keepend start='{'  end='}'  contains=TOP
+" These are not allowed outside mathmode.
+"FIXME # error inside mathmode?
+syn match   contextError      display '[#^_]'
 
-" To get rid of nasty spell errors for options in other languages than English, we don't allow spellcheck inside argument brackets.
-"FIXME Highlighting parens as in [{[]}]
-
-"syn region  contextArgument   display matchgroup=contextDelimiter keepend start='\[' end='\]' contains=TOP,@Spell
-"FIXME Number and Label inside Argument as transparent (containedin doesn't work)
-syn region  contextArgument   display transparent keepend start='\[' end='\]'
-
-" Not needed with above definitions
-syn match   contextDelimiter  display '\\\@![][{}]'
-
-"syn region  contextArgument   display transparent keepend start='\[' end='\]'
-"syn region  contextArgument   display transparent keepend start='\[' end='\]' contains=contextLabel,contextNumber
-"syn region  contextArgument   display transparent matchgroup=contextDelimiter keepend start='\[' end='\]' contains=contextLabel,contextNumber
-"syn region  contextArgument   display matchgroup=contextDelimiter transparent keepend start='\[' end='\]'
-
-syn match   contextDimension  display '\<[+-]\?\%(\d\+\%(\.\d\+\)\?\|\.\d\+\)\%(p[tc]\|in\|bp\|cc]\|[cm]m\|dd\|sp\|e[mx]\)\>'
-syn match   contextNumber     display '\<[+-]\?\%(\d\+\%(\.\d\+\)\?\|\.\d\+\)\>' contained containedin=contextArgument
-syn match   contextLabel      display '\a\+:[0-9a-zA-Z_\-: ]\+'                  contained containedin=contextArgument
+" Ending delimiters that are not matched by groups and arguments above (which have priority because the opening starts earlier), are matched as errors.
+syn match   contextMismatch   display '[]})]'
 
 " Math: {{{1
 " -----
 
-syn region  contextMath       display matchgroup=contextDelimiter keepend start='\$'                       end='\$'                 contains=TOP,@Spell
-syn region  contextMath       display matchgroup=contextCommand   keepend start='\\math\%(ematics\)\?{'    end='}'                  contains=TOP,@Spell
+syn region  contextMath       display matchgroup=contextDelimiter start='\$'                       end='\$'                 contains=TOP,@Spell,contextError
+syn region  contextMath       display matchgroup=contextCommand   start='\\math\%(ematics\)\?{'    end='}'                  contains=TOP,@Spell,contextError
 
-syn region  contextMath               matchgroup=contextDelimiter keepend start='\$\$'                     end='\$\$'               contains=TOP,@Spell
-syn region  contextMath               matchgroup=contextBlock     keepend start='\\start\z(\a*\)formula\>' end='\\stop\z1formula\>' contains=TOP,@Spell
+syn region  contextMath               matchgroup=contextDelimiter start='\$\$'                     end='\$\$'               contains=TOP,@Spell,contextError
+syn region  contextMath               matchgroup=contextBlock     start='\\start\z(\a*\)formula\>' end='\\stop\z1formula\>' contains=TOP,@Spell,contextError
 
-syn region  contextMathText   display matchgroup=contextCommand   keepend start='\\\%(inter\)\?text{'      end='}'        contained containedin=contextMath
+syn region  contextMathText   display matchgroup=contextCommand   start='\\\%(inter\)\?text{'      end='}'                  contains=TOP contained containedin=contextMath
 
 " Math Concealment: {{{1
 " ~~~~~~~~~~~~~~~~~
@@ -170,22 +143,23 @@ if has('conceal') && &enc == 'utf-8'
   " Let user determine which classes of concealment will be supported:
   "   m = math symbols
   "   f = fractions
+  "   s = math spaces
   "   d = delimiters
   "   a = accents/ligatures
   "   g = Greek
   "   n = number superscripts/subscripts
-  "   s = alphabetic superscripts/subscripts
+  "   r = roman superscripts/subscripts
   " At default we don't conceal fractions, because the commands are not standard,
   " and alphabetic superscript/subscripts, because they are not complete.
-  if !exists("g:context_conceal")
-   let s:context_conceal='mdagn'
+  if !exists('g:context_conceal')
+   let s:context_conceal = 'msdagn'
   else
-   let s:context_conceal=g:context_conceal
+   let s:context_conceal = g:context_conceal
   endif
 
   " We will define the unbraced variants seperatly for each symbol in the function ContextConcealScript.
-  syn region contextSuperscript matchgroup=contextDelimiter start='\^{' end='}' concealends contained containedin=contextMath contains=contextSuperscript,contextSubscript,contextSuperscripts,contextCommand
-  syn region contextSubscript   matchgroup=contextDelimiter start='_{'  end='}' concealends contained containedin=contextMath contains=contextSuperscript,contextSubscript,contextSubscripts,contextCommand
+  syn region contextSuperscript start='\^{' end='}' concealends contained containedin=contextMath contains=contextSuperscript,contextSubscript,contextSuperscripts,contextCommand
+  syn region contextSubscript   start='_{'  end='}' concealends contained containedin=contextMath contains=contextSuperscript,contextSubscript,contextSubscripts,contextCommand
 
   "syn cluster contextMathGroup add=contextSuperscipt,contextSubscript,contextMathSymbol
 
@@ -201,7 +175,7 @@ if has('conceal') && &enc == 'utf-8'
   endfun
 
   " Math Symbols: {{{2
-  let s:contextMathSymbols=[
+  let s:contextMathSymbols = [
     \ ['angle'              , '∠'],
     \ ['approx'             , '≈'],
     \ ['ast'                , '∗'],
@@ -437,7 +411,7 @@ if has('conceal') && &enc == 'utf-8'
   endif
   
   " Fraction Symbols: {{{2
-  let s:contextFractionSymbols=[
+  let s:contextFractionSymbols = [
     \ ['half'          , '½'],
     \ ['third'         , '⅓'],
     \ ['thwothirds'    , '⅔'],
@@ -460,9 +434,23 @@ if has('conceal') && &enc == 'utf-8'
     endfor
   endif
 
+  " Space Symbols: {{{2
+  let s:contextSpaceSymbols = [
+    \ [';'],
+    \ [':'],
+    \ [','],
+    \ ['!']]
+
+  if s:context_conceal =~ 's'
+    for symbol in s:contextSpaceSymbols
+      call s:ContextConcealSymbol('\\'.symbol[0], '␣')
+    endfor
+  endif
+
   " Delimiter Symbols: {{{2
-  " FIXME: issue with (){}[]<>.|/
-  let s:contextDelimiterSymbols=[
+  "FIXME issue with (){}[]<>.|/
+  "FIXME moustaches
+  let s:contextDelimiterSymbols = [
     \ ['\@!.'        , '.'],
     \ ['\@!('        , '('],
     \ ['\@!)'        , ')'],
@@ -513,7 +501,7 @@ if has('conceal') && &enc == 'utf-8'
   endif
 
   " Accent Symbols: {{{2
-  let s:contextAccentSymbols=[
+  let s:contextAccentSymbols = [
     \ ['acute'    , '´', '́'],
     \ ['bar'      , '¯', '̄'],
     \ ['breve'    , '˘', '̆'],
@@ -544,7 +532,7 @@ if has('conceal') && &enc == 'utf-8'
   endif
 
   " Greek Symbols: {{{2
-  let s:contextGreekSymbols=[
+  let s:contextGreekSymbols = [
     \ ['alpha'     , 'α', ' ', ' '],
     \ ['beta'      , 'β', ' ', 'ᵦ'],
     \ ['gamma'     , 'γ', ' ', 'ᵧ'],
@@ -595,7 +583,7 @@ if has('conceal') && &enc == 'utf-8'
   endif
 
   " Numeric Symbols: {{{2
-  let s:contextNumericSymbols=[
+  let s:contextNumericSymbols = [
     \ ['0' , '⁰', '₀'],
     \ ['1' , '¹', '₁'],
     \ ['2' , '²', '₂'],
@@ -622,8 +610,8 @@ if has('conceal') && &enc == 'utf-8'
     endfor
   endif
 
-  " Alphabetic Symbols: {{{2
-  let s:contextAlphabeticSymbols=[
+  " Roman Symbols: {{{2
+  let s:contextRomanSymbols = [
     \ ['a' , 'ᵃ' , 'ₐ'],
     \ ['b' , 'ᵇ' , ' '],
     \ ['c' , 'ᶜ' , ' '],
@@ -677,8 +665,8 @@ if has('conceal') && &enc == 'utf-8'
     \ ['Y' , ' ' , ' '],
     \ ['Z' , ' ' , ' ']]
 
-  if s:context_conceal =~ 's'
-    for symbol in s:contextPrintableSymbols
+  if s:context_conceal =~ 'r'
+    for symbol in s:contextRomanSymbols
       call s:ContextConcealScript(symbol[0], symbol[1], symbol[2])
     endfor
   endif
@@ -688,35 +676,80 @@ endif
 " Typing: {{{1
 " -------
 
-syn region  contextTyping     display matchgroup=contextCommand keepend start='\\type\z(\A\)'                 end='\z1'
-syn region  contextTyping     display matchgroup=contextCommand keepend start='\\\%(type\?\|tex\|arg\|mat\){' end='}'
+"FIXME other matchgroup?
+syn region  contextTyping     display matchgroup=contextCommand start='\\type\z(\A\)'                 end='\z1'
+syn region  contextTyping     display matchgroup=contextCommand start='\\\%(type\?\|tex\|arg\|mat\){' end='}'                 contains=contextGroup
 
-syn region  contextTyping             matchgroup=contextBlock   keepend start='\\start\z(\a*\)typing\>'       end='\\stop\z1typing\>' contains=contextComment
+"FIXME arguments after \starttyping
+syn region  contextTyping             matchgroup=contextBlock   start='\\start\z(\a*\)typing\>'       end='\\stop\z1typing\>' contains=contextComment
 
 "TODO MetaPost, Lua etc.
 
 " Emphasize: {{{1
 " ----------
 
-"FIXME highlight \emph and {} distinctly
-syn region  contextEmphasize  display transparent keepend start='\\emph{'            end='}'
-syn region  contextEmphasize          transparent keepend start='\\startemphasize\>' end='\\stopemphasize\>'
-"syn region  contextEmphasize  display matchgroup=contextCommand keepend start='\\emph{'            end='}'
-"syn region  contextEmphasize          matchgroup=contextBlock   keepend start='\\startemphasize\>' end='\\stopemphasize\>' contains=contextCommand,contextBlock
-" contains=contextCommand,contextBlock
+syn region  contextEmphasize  display matchgroup=contextCommand start='\\emph{'            end='}'                 contains=TOP
+syn region  contextEmphasize          matchgroup=contextBlock   start='\\startemphasize\>' end='\\stopemphasize\>' contains=TOP
+
+" Comments: {{{1
+" ---------
+
+syn keyword contextTodo       TODO FIXME NOTE XXX contained
+
+syn region  contextComment    display oneline start='\\\@!%'    end='$' contains=contextTodo
+syn region  contextComment    display oneline start='^%[CDM]\s' end='$' contains=TOP,contextComment
+
+syn region  contextComment    matchgroup=contextBlock start='\\starthiding\>' end='\\stophiding\>'
+
+" Folding: {{{1
+" --------
+
+if exists('g:context_no_fold')
+ let s:context_fold = 0
+else
+ let s:context_fold = 1
+endif
+
+"FIXME Folding of heads inside comments.
+if has('folding') && s:context_fold == 1
+  " All highlighting is done elsewhere. Here we just match the boundaries of a fold and use transparent.
+  setlocal fdm=syntax
+
+  " We don't fold document structure but only use them as containers for sections.
+  " The keepend is necessary to get the first match. This isn't a problem, because there can't be a \chapter inside a \chapter etcetera.
+  syn region  contextDocument   transparent keepend      start='\\starttext\>'                end='\\stoptext\>'
+  syn region  contextDocument   transparent keepend      start='\\startcomponent\>'           end='\\stopcomponent\>'
+  syn region  contextDocument   transparent keepend      start='\\startproduct\>'             end='\\stopproduct\>'
+  syn region  contextDocument   transparent keepend      start='\\startproject\>'             end='\\stopproject\>'
+  syn region  contextDocument   transparent keepend      start='\\startenvironment\>'         end='\\stopenvironment\>'
+
+  syn region  contextHiding     transparent keepend fold start='\\starthiding\>'              end='\\stophiding\>'                                                                                                             contained containedin=contextDocument
+
+  " Fold everything up to subsections.
+  syn region  contextPart       transparent keepend fold start='\\startpart\>'                end='\\stoppart\>'                                                                                                               contained containedin=contextDocument
+  syn region  contextPart       transparent keepend fold start='\\part\>'                     end='\ze\\\%(part\|stop\%(text\|component\|product\|project\|environment\)\)\>'                                                  contained containedin=contextDocument
+
+  syn region  contextChapter    transparent keepend fold start='\\startchapter\>'             end='\\stopchapter\>'                                                                                                            contained containedin=contextDocument,contextPart
+  syn region  contextChapter    transparent keepend fold start='\\starttitle\>'               end='\\stoptitle\>'                                                                                                              contained containedin=contextDocument,contextPart
+  syn region  contextChapter    transparent keepend fold start='\\\%(chapter\|title\)\>'      end='\ze\\\%(chapter\|title\|part\|stop\%(text\|component\|product\|project\|environment\)\)\>'                                  contained containedin=contextDocument,contextPart
+
+  syn region  contextSection    transparent keepend fold start='\\startsection\>'             end='\\stopsection\>'                                                                                                            contained containedin=contextDocument,contextChapter
+  syn region  contextSection    transparent keepend fold start='\\startsubject\>'             end='\\stopsubject\>'                                                                                                            contained containedin=contextDocument,contextChapter
+  syn region  contextSection    transparent keepend fold start='\\\%(section\|subject\)\>'    end='\ze\\\%(section\|subject\|chapter\|title\|part\|stop\%(text\|component\|product\|project\|environment\)\)\>'                contained containedin=contextDocument,contextChapter
+
+  syn region  contextSubsection transparent keepend fold start='\\startsubsection\>'          end='\\stopsubsection\>'                                                                                                         contained containedin=contextDocument,contextSection
+  syn region  contextSubsection transparent keepend fold start='\\startsubsubject\>'          end='\\stopsubsubject\>'                                                                                                         contained containedin=contextDocument,contextSection
+  syn region  contextSubsection transparent keepend fold start='\\sub\%(section\|subject\)\>' end='\ze\\\%(\%(sub\)\?\%(section\|subject\)\|chapter\|title\|part\|stop\%(text\|component\|product\|project\|environment\)\)\>' contained containedin=contextDocument,contextSection
+endif
 
 " Syncing: {{{1
 " ========
 
+" Syncing against comments is simply the best way to go.
 syn sync    ccomment          contextComment
 
 " Highlight Definitions: {{{1
 " ======================
-
-" Comments:
-hi def link contextTodo       Todo
-hi def link contextComment    Comment
-hi def link contextHiding     contextComment
 
 " Commands:
 hi def link contextCommand    Function
@@ -736,33 +769,45 @@ hi def link contextSetup      contextDefine
 hi def link contextFont       Type
 hi def link contextStyle      contextFont
 
-" Constants:
-hi def link contextDimension  Constant
-hi def link contextNumber     contextDimension
-
-" Regions:
-hi def link contextMath       String
-hi def link contextTyping     String
-hi def link contextMathText   Normal
-hi def link contextMathSymbol SpecialChar
-hi          contextEmphasize  gui=italic
+" Groups And Arguments:
+hi def link contextNumber     Number
+hi def link contextDimension  contextNumber
+hi def link contextLabel      Tag
+hi def link contextConstant   Constant
 
 " Specials:
-hi def link contextDelimiter  Delimiter
 hi def link contextParameter  Identifier
 hi def link contextSpecial    Special
 hi def link contextEscaped    contextSpecial
-hi def link contextLabel      Tag
 
-" Conceal:
+" Errors And Matches:
+hi def link contextError      Error
+hi def link contextMismatch   contextError
+
+hi def link contextDelimiter  Delimiter
+
+" Math:
+hi def link contextMath       String
+hi def link contextMathText   Normal
+hi def link contextMathSymbol SpecialChar
 hi!    link Conceal           SpecialChar
+
+" Typing:
+hi def link contextTyping     String
+
+" Emphasize:
+hi          contextEmphasize  gui=italic
+
+" Comments:
+hi def link contextTodo       Todo
+hi def link contextComment    Comment
 
 " Finalize Syntaxfile: {{{1
 " ====================
 
-let b:current_syntax = "context"
+let b:current_syntax = 'context'
 
 let &cpo = s:cpo_save
 unlet s:cpo_save
 
-" vim: ts=8 nowrap fdm=marker
+" vim: nowrap fdm=marker spell spl=en
