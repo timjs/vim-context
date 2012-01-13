@@ -126,12 +126,12 @@ syn match   contextMismatch   display '[]})]'
 " -----
 
 syn region  contextMath       display matchgroup=contextDelimiter start='\$'                       end='\$'                 contains=TOP,@Spell,contextError
-syn region  contextMath       display matchgroup=contextCommand   start='\\math\%(ematics\)\?{'    end='}'                  contains=TOP,@Spell,contextError
+syn region  contextMath       display matchgroup=contextDelimiter start='\\math\%(ematics\)\?{'    end='}'                  contains=TOP,@Spell,contextError
 
 syn region  contextMath               matchgroup=contextDelimiter start='\$\$'                     end='\$\$'               contains=TOP,@Spell,contextError
 syn region  contextMath               matchgroup=contextBlock     start='\\start\z(\a*\)formula\>' end='\\stop\z1formula\>' contains=TOP,@Spell,contextError
 
-syn region  contextMathText   display matchgroup=contextCommand   start='\\\%(inter\)\?text{'      end='}'                  contains=TOP contained containedin=contextMath
+syn region  contextMathText   display matchgroup=contextDelimiter start='\\\%(inter\)\?text{'      end='}'                  contains=TOP contained containedin=contextMath
 
 " Math Concealment: {{{1
 " ~~~~~~~~~~~~~~~~~
@@ -143,9 +143,9 @@ if has('conceal') && &enc == 'utf-8'
   " Let user determine which classes of concealment will be supported:
   "   m = math symbols
   "   f = fractions
-  "   s = math spaces
+  "   s = spaces
   "   d = delimiters
-  "   a = accents/ligatures
+  "   a = accents
   "   g = Greek
   "   n = number superscripts/subscripts
   "   r = roman superscripts/subscripts
@@ -157,11 +157,9 @@ if has('conceal') && &enc == 'utf-8'
    let s:context_conceal = g:context_conceal
   endif
 
-  " We will define the unbraced variants seperatly for each symbol in the function ContextConcealScript.
+  " We will define the unbraced variants separately for each symbol in the function ContextConcealScript.
   syn region contextSuperscript start='\^{' end='}' concealends contained containedin=contextMath contains=contextSuperscript,contextSubscript,contextSuperscripts,contextCommand
   syn region contextSubscript   start='_{'  end='}' concealends contained containedin=contextMath contains=contextSuperscript,contextSubscript,contextSubscripts,contextCommand
-
-  "syn cluster contextMathGroup add=contextSuperscipt,contextSubscript,contextMathSymbol
 
   fun! s:ContextConcealSymbol(pattern, replacement)
     exe 'syn match contextMathSymbol "'.a:pattern.'" contained containedin=contextMath conceal cchar='.a:replacement
@@ -259,6 +257,7 @@ if has('conceal') && &enc == 'utf-8'
     \ ['iiint'              , '∭'],
     \ ['iint'               , '∬'],
     \ ['Im'                 , 'ℑ'],
+    \ ['implies'            , '⇒'],
     \ ['in'                 , '∈'],
     \ ['infty'              , '∞'],
     \ ['int'                , '∫'],
@@ -339,8 +338,8 @@ if has('conceal') && &enc == 'utf-8'
     \ ['rceil'              , '⌉'],
     \ ['Re'                 , 'ℜ'],
     \ ['rfloor'             , '⌋'],
-    \ ['rightarrow'         , '⟶'],
-    \ ['Rightarrow'         , '⟹'],
+    \ ['rightarrow'         , '→'],
+    \ ['Rightarrow'         , '⇒'],
     \ ['rightarrowtail'     , '↣'],
     \ ['rightsquigarrow'    , '↝'],
     \ ['rightthreetimes'    , '⋌'],
@@ -410,7 +409,7 @@ if has('conceal') && &enc == 'utf-8'
     endfor
   endif
   
-  " Fraction Symbols: {{{2
+  " Fractions: {{{2
   let s:contextFractionSymbols = [
     \ ['half'          , '½'],
     \ ['third'         , '⅓'],
@@ -434,7 +433,7 @@ if has('conceal') && &enc == 'utf-8'
     endfor
   endif
 
-  " Space Symbols: {{{2
+  " Spaces: {{{2
   let s:contextSpaceSymbols = [
     \ [';'],
     \ [':'],
@@ -447,34 +446,33 @@ if has('conceal') && &enc == 'utf-8'
     endfor
   endif
 
-  " Delimiter Symbols: {{{2
-  "FIXME issue with (){}[]<>.|/
-  "FIXME moustaches
+  " Delimiters: {{{2
   let s:contextDelimiterSymbols = [
-    \ ['\@!.'        , '.'],
-    \ ['\@!('        , '('],
-    \ ['\@!)'        , ')'],
+    \ ['.'        , '¦'],
+    \ ['('        , '('],
+    \ [')'        , ')'],
+    \ ['\\{'      , '{'],
+    \ ['\\}'      , '}'],
+    \ ['\['       , '['],
+    \ ['\]'       , ']'],
+    \ ['<'        , '⟨'],
+    \ ['>'        , '⟩'],
+    \ ['|'        , '|'],
+    \ ['\\|'      , '‖'],
+    \ ['/'        , '/']]
+  let s:contextDelimiterCommands = [
     \ ['lgroup'      , '('],
     \ ['rgroup'      , ')'],
-    \ ['{'           , '{'],
-    \ ['}'           , '}'],
     \ ['lbrace'      , '{'],
     \ ['rbrace'      , '}'],
-    \ ['\@!\['       , '['],
-    \ ['\@!\]'       , ']'],
-    \ ['\@!<'        , '⟨'],
-    \ ['\@!>'        , '⟩'],
     \ ['langle'      , '⟨'],
     \ ['rangle'      , '⟩'],
-    \ ['\@!|'        , '|'],
     \ ['vert'        , '|'],
     \ ['lvert'       , '|'],
     \ ['rvert'       , '|'],
-    \ ['|'           , '‖'],
     \ ['Vert'        , '‖'],
     \ ['lVert'       , '‖'],
     \ ['rVert'       , '‖'],
-    \ ['\@!/'        , '/'],
     \ ['backslash'   , '\'],
     \ ['lfloor'      , '⌊'],
     \ ['rfloor'      , '⌋'],
@@ -490,17 +488,21 @@ if has('conceal') && &enc == 'utf-8'
     \ ['lrcorner'    , '⌟'],
     \ ['ulcorner'    , '⌜'],
     \ ['urconrner'   , '⌝'],
-    \ ['rmoustache'  , ' '],
-    \ ['lmoustache'  , ' ']]
+    \ ['lmoustache'  , '⎠'],
+    \ ['rmoustache'  , '⎝']]
 
   if s:context_conceal =~ 'd'
     for symbol in s:contextDelimiterSymbols
-      call s:ContextConcealSymbol('\\left\\'.symbol[0].'\>', symbol[1])
+      call s:ContextConcealSymbol('\\left'.symbol[0],  symbol[1])
+      call s:ContextConcealSymbol('\\right'.symbol[0], symbol[1])
+    endfor
+    for symbol in s:contextDelimiterCommands
+      call s:ContextConcealSymbol('\\left\\'.symbol[0].'\>',  symbol[1])
       call s:ContextConcealSymbol('\\right\\'.symbol[0].'\>', symbol[1])
     endfor
   endif
 
-  " Accent Symbols: {{{2
+  " Accents: {{{2
   let s:contextAccentSymbols = [
     \ ['acute'    , '´', '́'],
     \ ['bar'      , '¯', '̄'],
@@ -525,13 +527,14 @@ if has('conceal') && &enc == 'utf-8'
       call s:ContextConcealSymbol('\\'.symbol[0].'\>', symbol[1])
       "FIXME Conceal differently:
       "  \zs after \\ doesn't work
-      "  can only conceal to one char, so loop doesn't work, complex mach doesn't work
-      "call s:ContextConcealSymbol('\\'.symbol[0].'\>', symbol[2])
+      "  \@! after \\ doesn't work
+      "  can only conceal to one char, so loop doesn't work
+      "  complex match doesn't work
       "call s:ContextConcealSymbol('\\'.symbol[0].'\>{\z(\a\)}', '\z1'.symbol[2])
     endfor
   endif
 
-  " Greek Symbols: {{{2
+  " Greek: {{{2
   let s:contextGreekSymbols = [
     \ ['alpha'     , 'α', ' ', ' '],
     \ ['beta'      , 'β', ' ', 'ᵦ'],
@@ -582,7 +585,7 @@ if has('conceal') && &enc == 'utf-8'
     endfor
   endif
 
-  " Numeric Symbols: {{{2
+  " Numeric Scripts: {{{2
   let s:contextNumericSymbols = [
     \ ['0' , '⁰', '₀'],
     \ ['1' , '¹', '₁'],
@@ -610,60 +613,60 @@ if has('conceal') && &enc == 'utf-8'
     endfor
   endif
 
-  " Roman Symbols: {{{2
+  " Roman Scripts: {{{2
   let s:contextRomanSymbols = [
     \ ['a' , 'ᵃ' , 'ₐ'],
-    \ ['b' , 'ᵇ' , ' '],
-    \ ['c' , 'ᶜ' , ' '],
-    \ ['d' , 'ᵈ' , ' '],
+    \ ['b' , 'ᵇ' , 'b'],
+    \ ['c' , 'ᶜ' , 'c'],
+    \ ['d' , 'ᵈ' , 'd'],
     \ ['e' , 'ᵉ' , 'ₑ'],
-    \ ['f' , 'ᶠ' , ' '],
-    \ ['g' , 'ᵍ' , ' '],
-    \ ['h' , 'ʰ' , ' '],
+    \ ['f' , 'ᶠ' , 'f'],
+    \ ['g' , 'ᵍ' , 'g'],
+    \ ['h' , 'ʰ' , 'h'],
     \ ['i' , 'ⁱ' , 'ᵢ'],
-    \ ['j' , 'ʲ' , ' '],
-    \ ['k' , 'ᵏ' , ' '],
-    \ ['l' , 'ˡ' , ' '],
-    \ ['m' , 'ᵐ' , ' '],
-    \ ['n' , 'ⁿ' , ' '],
+    \ ['j' , 'ʲ' , 'j'],
+    \ ['k' , 'ᵏ' , 'k'],
+    \ ['l' , 'ˡ' , 'l'],
+    \ ['m' , 'ᵐ' , 'm'],
+    \ ['n' , 'ⁿ' , 'n'],
     \ ['o' , 'ᵒ' , 'ₒ'],
-    \ ['p' , 'ᵖ' , ' '],
-    \ ['q' , ' ' , ' '],
-    \ ['r' , 'ʳ' , ' '],
-    \ ['s' , 'ˢ' , ' '],
-    \ ['t' , 'ᵗ' , ' '],
+    \ ['p' , 'ᵖ' , 'p'],
+    \ ['q' , ' ' , 'q'],
+    \ ['r' , 'ʳ' , 'r'],
+    \ ['s' , 'ˢ' , 's'],
+    \ ['t' , 'ᵗ' , 't'],
     \ ['u' , 'ᵘ' , 'ᵤ'],
-    \ ['v' , 'ᵛ' , ' '],
-    \ ['w' , 'ʷ' , ' '],
-    \ ['x' , 'ˣ' , ' '],
-    \ ['y' , 'ʸ' , ' '],
-    \ ['z' , 'ᶻ' , ' '],
-    \ ['A' , 'ᴬ' , ' '],
-    \ ['B' , 'ᴮ' , ' '],
-    \ ['C' , ' ' , ' '],
-    \ ['D' , 'ᴰ' , ' '],
-    \ ['E' , 'ᴱ' , ' '],
-    \ ['F' , ' ' , ' '],
-    \ ['G' , 'ᴳ' , ' '],
-    \ ['H' , 'ᴴ' , ' '],
-    \ ['I' , 'ᴵ' , ' '],
-    \ ['J' , 'ᴶ' , ' '],
-    \ ['K' , 'ᴷ' , ' '],
-    \ ['L' , 'ᴸ' , ' '],
-    \ ['M' , 'ᴹ' , ' '],
-    \ ['N' , 'ᴺ' , ' '],
-    \ ['O' , 'ᴼ' , ' '],
-    \ ['P' , 'ᴾ' , ' '],
-    \ ['Q' , ' ' , ' '],
+    \ ['v' , 'ᵛ' , 'v'],
+    \ ['w' , 'ʷ' , 'w'],
+    \ ['x' , 'ˣ' , 'x'],
+    \ ['y' , 'ʸ' , 'y'],
+    \ ['z' , 'ᶻ' , 'z'],
+    \ ['A' , 'ᴬ' , 'A'],
+    \ ['B' , 'ᴮ' , 'B'],
+    \ ['C' , 'C' , 'C'],
+    \ ['D' , 'ᴰ' , 'D'],
+    \ ['E' , 'ᴱ' , 'E'],
+    \ ['F' , 'F' , 'F'],
+    \ ['G' , 'ᴳ' , 'G'],
+    \ ['H' , 'ᴴ' , 'H'],
+    \ ['I' , 'ᴵ' , 'I'],
+    \ ['J' , 'ᴶ' , 'J'],
+    \ ['K' , 'ᴷ' , 'K'],
+    \ ['L' , 'ᴸ' , 'L'],
+    \ ['M' , 'ᴹ' , 'M'],
+    \ ['N' , 'ᴺ' , 'N'],
+    \ ['O' , 'ᴼ' , 'O'],
+    \ ['P' , 'ᴾ' , 'P'],
+    \ ['Q' , 'Q' , 'Q'],
     \ ['R' , 'ᴿ' , 'ᵣ'],
-    \ ['S' , ' ' , ' '],
-    \ ['T' , 'ᵀ' , ' '],
-    \ ['U' , 'ᵁ' , ' '],
-    \ ['V' , ' ' , 'ᵥ'],
-    \ ['W' , 'ᵂ' , ' '],
-    \ ['X' , ' ' , 'ₓ'],
-    \ ['Y' , ' ' , ' '],
-    \ ['Z' , ' ' , ' ']]
+    \ ['S' , 'S' , 'S'],
+    \ ['T' , 'ᵀ' , 'T'],
+    \ ['U' , 'ᵁ' , 'U'],
+    \ ['V' , 'V' , 'ᵥ'],
+    \ ['W' , 'ᵂ' , 'W'],
+    \ ['X' , 'X' , 'ₓ'],
+    \ ['Y' , 'Y' , 'Y'],
+    \ ['Z' , 'Z' , 'Z']]
 
   if s:context_conceal =~ 'r'
     for symbol in s:contextRomanSymbols
@@ -676,9 +679,8 @@ endif
 " Typing: {{{1
 " -------
 
-"FIXME other matchgroup?
-syn region  contextTyping     display matchgroup=contextCommand start='\\type\z(\A\)'                 end='\z1'
-syn region  contextTyping     display matchgroup=contextCommand start='\\\%(type\?\|tex\|arg\|mat\){' end='}'                 contains=contextGroup
+syn region  contextTyping     display matchgroup=contextDelimiter start='\\type\z(\A\)'                 end='\z1'
+syn region  contextTyping     display matchgroup=contextDelimiter start='\\\%(type\?\|tex\|arg\|mat\){' end='}'               contains=contextGroup
 
 "FIXME arguments after \starttyping
 syn region  contextTyping             matchgroup=contextBlock   start='\\start\z(\a*\)typing\>'       end='\\stop\z1typing\>' contains=contextComment
@@ -688,16 +690,18 @@ syn region  contextTyping             matchgroup=contextBlock   start='\\start\z
 " Emphasize: {{{1
 " ----------
 
-syn region  contextEmphasize  display matchgroup=contextCommand start='\\emph{'            end='}'                 contains=TOP
-syn region  contextEmphasize          matchgroup=contextBlock   start='\\startemphasize\>' end='\\stopemphasize\>' contains=TOP
+"FIXME Maybe without keepend and with matchgroup as in typing.
+syn region  contextEmphasize  display keepend                 start='\\emph{'            end='}'                 contains=TOP
+syn region  contextEmphasize          matchgroup=contextBlock start='\\startemphasize\>' end='\\stopemphasize\>' contains=TOP
 
 " Comments: {{{1
 " ---------
 
 syn keyword contextTodo       TODO FIXME NOTE XXX contained
 
-syn region  contextComment    display oneline start='\\\@!%'    end='$' contains=contextTodo
-syn region  contextComment    display oneline start='^%[CDM]\s' end='$' contains=TOP,contextComment
+" The matchgroup is there to prevent spell checking of the %D %M and %C themselves.
+syn region  contextComment    display oneline                           start='\\\@!%'    end='$' contains=contextTodo
+syn region  contextComment    display oneline matchgroup=contextComment start='^%[CDM]\s' end='$' contains=TOP,contextComment
 
 syn region  contextComment    matchgroup=contextBlock start='\\starthiding\>' end='\\stophiding\>'
 
@@ -752,55 +756,57 @@ syn sync    ccomment          contextComment
 " ======================
 
 " Commands:
-hi def link contextCommand    Function
+hi def link contextCommand     Function
 
-hi def link contextBlock      Statement
-hi def link contextCondition  Conditional
-hi def link contextLoop       Repeat
-hi def link contextHead       Keyword
+hi def link contextBlock       Statement
+hi def link contextCondition   Conditional
+hi def link contextLoop        Repeat
+hi def link contextHead        Keyword
 
-hi def link contextStructure  Include
+hi def link contextStructure   Include
 
 " Definitions And Setups:
-hi def link contextDefine     Define
-hi def link contextSetup      contextDefine
+hi def link contextDefine      Define
+hi def link contextSetup       contextDefine
 
 " Fonts And Styles:
-hi def link contextFont       Type
-hi def link contextStyle      contextFont
+hi def link contextFont        Type
+hi def link contextStyle       contextFont
 
 " Groups And Arguments:
-hi def link contextNumber     Number
-hi def link contextDimension  contextNumber
-hi def link contextLabel      Tag
-hi def link contextConstant   Constant
+hi def link contextNumber      Number
+hi def link contextDimension   contextNumber
+hi def link contextLabel       Tag
+hi def link contextConstant    Constant
 
 " Specials:
-hi def link contextParameter  Identifier
-hi def link contextSpecial    Special
-hi def link contextEscaped    contextSpecial
+hi def link contextParameter   Identifier
+hi def link contextSpecial     Special
+hi def link contextEscaped     contextSpecial
 
 " Errors And Matches:
-hi def link contextError      Error
-hi def link contextMismatch   contextError
+hi def link contextError       Error
+hi def link contextMismatch    contextError
 
-hi def link contextDelimiter  Delimiter
+hi def link contextDelimiter   Delimiter
 
 " Math:
-hi def link contextMath       String
-hi def link contextMathText   Normal
-hi def link contextMathSymbol SpecialChar
-hi!    link Conceal           SpecialChar
+hi def link contextMath        String
+hi def link contextMathText    Normal
+hi def link contextMathSymbol  SpecialChar
+hi def link contextSuperscript contextMathSymbol
+hi def link contextSubscript   contextMathSymbol
+hi!    link Conceal            contextMathSymbol
 
 " Typing:
-hi def link contextTyping     String
+hi def link contextTyping      String
 
 " Emphasize:
-hi          contextEmphasize  gui=italic
+hi          contextEmphasize   gui=italic
 
 " Comments:
-hi def link contextTodo       Todo
-hi def link contextComment    Comment
+hi def link contextTodo        Todo
+hi def link contextComment     Comment
 
 " Finalize Syntaxfile: {{{1
 " ====================
