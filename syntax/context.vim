@@ -145,14 +145,14 @@ if has('conceal') && &enc == 'utf-8'
   "   f = fractions
   "   s = spaces
   "   d = delimiters
-  "   a = accents
   "   g = Greek
-  "   n = number superscripts/subscripts
-  "   r = roman superscripts/subscripts
+  "   l = Latin superscripts/subscripts
+  "   n = numeric superscripts/subscripts
+  "   a = accents
   " At default we don't conceal fractions, because the commands are not standard,
   " and alphabetic superscript/subscripts, because they are not complete.
   if !exists('g:context_conceal')
-   let s:context_conceal = 'msdagn'
+   let s:context_conceal = 'msdgna'
   else
    let s:context_conceal = g:context_conceal
   endif
@@ -163,6 +163,15 @@ if has('conceal') && &enc == 'utf-8'
 
   fun! s:ContextConcealSymbol(pattern, replacement)
     exe 'syn match contextMathSymbol "'.a:pattern.'" contained containedin=contextMath conceal cchar='.a:replacement
+  endfun
+
+  fun! s:ContextRegisterAccent(name, accent)
+    exe 'syn match   contextMathAccent'.a:name.' "}" contained conceal cchar='.a:accent
+    exe 'hi def link contextMathAccent'.a:name.' contextMathAccent'
+  endfun
+  
+  fun! s:ContextConcealAccent(name, pattern, replacement)
+    exe 'syn match contextMathSymbol "\\'.a:name.'{'.a:pattern.'" nextgroup=contextMathAccent'.a:name.' contained containedin=contextMath conceal cchar='.a:replacement
   endfun
 
   fun! s:ContextConcealScript(pattern, superscript, subscript)
@@ -502,38 +511,6 @@ if has('conceal') && &enc == 'utf-8'
     endfor
   endif
 
-  " Accents: {{{2
-  let s:contextAccentSymbols = [
-    \ ['acute'    , '´', '́'],
-    \ ['bar'      , '¯', '̄'],
-    \ ['breve'    , '˘', '̆'],
-    \ ['check'    , 'ˇ', '̌'],
-    \ ['ddot'     , '¨', '̈'],
-    \ ['dot'      , '˙', '̇'],
-    \ ['grave'    , '`', '̀'],
-    \ ['hat'      , 'ˆ', '̂'],
-    \ ['widehat'  , 'ˆ', '᷍'],
-    \ ['tilde'    , '˜', '̃'],
-    \ ['widetilde', '˜', '͠'],
-    \ ['vec'      , '→', '⃗']]
-  " Unicode names:
-  "   bar   -> macron
-  "   check -> caron
-  "   ddot  -> diaeresis
-  "   hat   -> circumflex
-
-  if s:context_conceal =~ 'a'
-    for symbol in s:contextAccentSymbols
-      call s:ContextConcealSymbol('\\'.symbol[0].'\>', symbol[1])
-      "FIXME Conceal differently:
-      "  \zs after \\ doesn't work
-      "  \@! after \\ doesn't work
-      "  can only conceal to one char, so loop doesn't work
-      "  complex match doesn't work
-      "call s:ContextConcealSymbol('\\'.symbol[0].'\>{\z(\a\)}', '\z1'.symbol[2])
-    endfor
-  endif
-
   " Greek: {{{2
   let s:contextGreekSymbols = [
     \ ['alpha'     , 'α', ' ', ' '],
@@ -579,42 +556,14 @@ if has('conceal') && &enc == 'utf-8'
   if s:context_conceal =~ 'g'
     for symbol in s:contextGreekSymbols
       call s:ContextConcealSymbol('\\'.symbol[0].'\>', symbol[1])
-      if s:context_conceal =~ 's'
-        call s:ContextConcealScript('\\'.symbol[0].'\>', symbol[2], symbol[3])
-      endif
+      "if s:context_conceal =~ 'l'
+        "call s:ContextConcealScript('\\'.symbol[0].'\>', symbol[2], symbol[3])
+      "endif
     endfor
   endif
 
-  " Numeric Scripts: {{{2
-  let s:contextNumericSymbols = [
-    \ ['0' , '⁰', '₀'],
-    \ ['1' , '¹', '₁'],
-    \ ['2' , '²', '₂'],
-    \ ['3' , '³', '₃'],
-    \ ['4' , '⁴', '₄'],
-    \ ['5' , '⁵', '₅'],
-    \ ['6' , '⁶', '₆'],
-    \ ['7' , '⁷', '₇'],
-    \ ['8' , '⁸', '₈'],
-    \ ['9' , '⁹', '₉'],
-    \ ['=' , '˭', '₌'],
-    \ ['+' , '⁺', '₊'],
-    \ ['-' , '⁻', '₋'],
-    \ ['/' , 'ˊ', 'ˏ'],
-    \ ['(' , '⁽', '₍'],
-    \ [')' , '⁾', '₎'],
-    \ ['<' , '˂', '˱'],
-    \ ['>' , '˃', '˲'],
-    \ ['\.', '˙', '‸']]
-
-  if s:context_conceal =~ 'n'
-    for symbol in s:contextNumericSymbols
-      call s:ContextConcealScript(symbol[0], symbol[1], symbol[2])
-    endfor
-  endif
-
-  " Roman Scripts: {{{2
-  let s:contextRomanSymbols = [
+  " Latin Scripts: {{{2
+  let s:contextLatinSymbols = [
     \ ['a' , 'ᵃ' , 'ₐ'],
     \ ['b' , 'ᵇ' , 'b'],
     \ ['c' , 'ᶜ' , 'c'],
@@ -669,12 +618,75 @@ if has('conceal') && &enc == 'utf-8'
     \ ['Z' , 'Z' , 'Z']]
 
   if s:context_conceal =~ 'r'
-    for symbol in s:contextRomanSymbols
+    for symbol in s:contextLatinSymbols
+      call s:ContextConcealScript(symbol[0], symbol[1], symbol[2])
+    endfor
+  endif
+
+  " Numeric Scripts: {{{2
+  let s:contextNumericSymbols = [
+    \ ['0' , '⁰', '₀'],
+    \ ['1' , '¹', '₁'],
+    \ ['2' , '²', '₂'],
+    \ ['3' , '³', '₃'],
+    \ ['4' , '⁴', '₄'],
+    \ ['5' , '⁵', '₅'],
+    \ ['6' , '⁶', '₆'],
+    \ ['7' , '⁷', '₇'],
+    \ ['8' , '⁸', '₈'],
+    \ ['9' , '⁹', '₉'],
+    \ ['=' , '˭', '₌'],
+    \ ['+' , '⁺', '₊'],
+    \ ['-' , '⁻', '₋'],
+    \ ['/' , 'ˊ', 'ˏ'],
+    \ ['(' , '⁽', '₍'],
+    \ [')' , '⁾', '₎'],
+    \ ['<' , '˂', '˱'],
+    \ ['>' , '˃', '˲'],
+    \ ['\.', '˙', '‸']]
+
+  if s:context_conceal =~ 'n'
+    for symbol in s:contextNumericSymbols
       call s:ContextConcealScript(symbol[0], symbol[1], symbol[2])
     endfor
   endif
 
 endif
+
+  " Accents: {{{2
+  let s:contextAccentSymbols = [
+    \ ['acute'    , '´', '́'],
+    \ ['bar'      , '¯', '̄'],
+    \ ['breve'    , '˘', '̆'],
+    \ ['check'    , 'ˇ', '̌'],
+    \ ['ddot'     , '¨', '̈'],
+    \ ['dot'      , '˙', '̇'],
+    \ ['grave'    , '`', '̀'],
+    \ ['hat'      , 'ˆ', '̂'],
+    \ ['widehat'  , 'ˆ', '᷍'],
+    \ ['tilde'    , '˜', '̃'],
+    \ ['widetilde', '˜', '͠'],
+    \ ['vec'      , '→', '⃗']]
+  " Unicode names:
+  "   bar   -> macron
+  "   check -> caron
+  "   ddot  -> diaeresis
+  "   hat   -> circumflex
+
+  " This is a bit hacked code, but it works...
+  if s:context_conceal =~ 'a'
+    for symbol in s:contextAccentSymbols
+      call s:ContextRegisterAccent(symbol[0], symbol[2])
+      for letter in s:contextGreekSymbols
+        call s:ContextConcealAccent(symbol[0], '\\'.letter[0], letter[1])
+      endfor
+      for letter in s:contextLatinSymbols
+        call s:ContextConcealAccent(symbol[0], letter[0], letter[0])
+      endfor
+      " Old solution just replaced the command:
+      "call s:ContextConcealSymbol('\\'.symbol[0].'\>', symbol[1])
+    endfor
+  endif
 
 " Typing: {{{1
 " -------
@@ -794,6 +806,7 @@ hi def link contextDelimiter   Delimiter
 hi def link contextMath        String
 hi def link contextMathText    Normal
 hi def link contextMathSymbol  SpecialChar
+hi def link contextMathAccent  contextMathSymbol
 hi def link contextSuperscript contextMathSymbol
 hi def link contextSubscript   contextMathSymbol
 hi!    link Conceal            contextMathSymbol
