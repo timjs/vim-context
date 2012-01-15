@@ -173,8 +173,8 @@ if has('conceal') && &enc == 'utf-8'
     exe 'syn match contextMathSymbol "\\'.a:name.'{'.a:pattern.'" nextgroup=contextMathAccent'.a:name.' contained containedin=contextMath conceal cchar='.a:replacement
   endfun
 
-  " Scripts are only concealed if there is a suitable character in the Unicode tables.
   fun! s:ContextConcealScript(pattern, superscript, subscript)
+    " Scripts are only concealed if there is a suitable character in the Unicode tables.
     if a:superscript != ' '
       exe 'syn match contextSuperscript "\^'.a:pattern.'" contained containedin=contextMath conceal cchar='.a:superscript
       exe 'syn match contextSuperscripts  "'.a:pattern.'" contained                         conceal cchar='.a:superscript.' nextgroup=contextSuperscripts'
