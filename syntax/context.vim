@@ -424,25 +424,26 @@ if has('conceal') && &enc == 'utf-8'
   
   " Fractions: {{{2
   let s:contextFractionSymbols = [
-    \ ['half'          , '½'],
-    \ ['third'         , '⅓'],
-    \ ['thwothirds'    , '⅔'],
-    \ ['quarter'       , '¼'],
-    \ ['threequarters' , '¾'],
-    \ ['fifth'         , '⅕'],
-    \ ['twofifths'     , '⅖'],
-    \ ['threefifths'   , '⅗'],
-    \ ['fourfifths'    , '⅘'],
-    \ ['sixth'         , '⅙'],
-    \ ['fifesixths'    , '⅚'],
-    \ ['eighth'        , '⅛'],
-    \ ['threeeighths'  , '⅜'],
-    \ ['fifeeighths'   , '⅝'],
-    \ ['seveneighths'  , '⅞']]
+    \ ['half'          , 'frac12' , '½'],
+    \ ['third'         , 'frac13' , '⅓'],
+    \ ['thwothirds'    , 'frac23' , '⅔'],
+    \ ['quarter'       , 'frac14' , '¼'],
+    \ ['threequarters' , 'frac34' , '¾'],
+    \ ['fifth'         , 'frac15' , '⅕'],
+    \ ['twofifths'     , 'frac25' , '⅖'],
+    \ ['threefifths'   , 'frac35' , '⅗'],
+    \ ['fourfifths'    , 'frac45' , '⅘'],
+    \ ['sixth'         , 'frac16' , '⅙'],
+    \ ['fifesixths'    , 'frac56' , '⅚'],
+    \ ['eighth'        , 'frac18' , '⅛'],
+    \ ['threeeighths'  , 'frac38' , '⅜'],
+    \ ['fifeeighths'   , 'frac58' , '⅝'],
+    \ ['seveneighths'  , 'frac78' , '⅞']]
 
   if s:context_conceal =~ 'f'
     for symbol in s:contextFractionSymbols
-      call s:ContextConcealSymbol('\\'.symbol[0].'\>', symbol[1])
+      call s:ContextConcealSymbol('\\'.symbol[0].'\>', symbol[2])
+      call s:ContextConcealSymbol('\\'.symbol[1],      symbol[2])
     endfor
   endif
 
