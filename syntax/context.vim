@@ -58,33 +58,18 @@ syn match   contextDefine     display '\\\%(start\|stop\)texdefinition\>'
 syn match   contextSetup      display '\\\%(setup\|use\|enable\|disable\|prevent\|show\)\a\+'
 syn match   contextSetup      display '\\\%(start\|stop\)\?setups\>'
 
-" Fonts And Styles: {{{1
-" -----------------
-
-syn match   contextFont       display '\\\%(rm\|ss\|tt\|hw\|cg\|mf\)\>'
-
-syn match   contextFont       display '\\\%(em\|tf\|b[fsi]\|s[cl]\|it\|os\)\%(xx\|[xabcd]\)\?\>'
-syn match   contextFont       display '\\\%(vi\{1,3}\|ix\|xi\{0,2}\)\>'
-
-syn match   contextStyle      display '\\\%(cap\|Cap\|CAP\|Caps\|nocap\)\>'
-syn match   contextStyle      display '\\\%(Word\|WORD\|Words\|WORDS\)\>'
-syn match   contextStyle      display '\\\%(underbar\|over\%(bar\|strike\)\)s\?'
-"FIXME What is this?
-"syn match   contextStyle      display '\\\%(character\|Character\)s\?\>'
-
 " Groups And Arguments: {{{1
 " -------------------
 
-" To get rid of nasty spell errors for options, we don't allow spellcheck inside argument brackets.
-" We don't use keepend because it will mess up our mismatch algorithm.
-syn region  contextArgument               matchgroup=contextDelimiter start='\[' end='\]' contains=TOP,@Spell,contextError
-
-" We can't play the same trick with braces and parenthesis because containing TOP is not transparent in math mode. This is no problem with argument brackets, since you don't want to highlight the inside text as math. Here we use transparent regions.
+" The purpose of this code is only to highlight matching braces and parenthesis. Just as the folds defined below they are transparent.
 "FIXME conceal inside group and gather
 syn region  contextGroup      transparent matchgroup=contextDelimiter start='{'  end='}'
 syn region  contextGather     transparent matchgroup=contextDelimiter start='('  end=')'
 
-" Inside argument brackets we can highlight some constants.
+" To get rid of nasty spell errors for options, we don't allow spell check inside argument brackets. Here we can't use transparent
+syn region  contextArgument               matchgroup=contextDelimiter start='\[' end='\]' contains=TOP,@Spell,contextError
+
+" As a bonus, we can highlight some constants inside argument brackets.
 syn match   contextLabel      display '\a\+:[0-9a-zA-Z_\-: ]\+'                                                               contained containedin=contextArgument
 syn match   contextNumber     display '\<[+-]\?\%(\d\+\%(\.\d\+\)\?\|\.\d\+\)\>'                                              contained containedin=contextArgument
 syn match   contextDimension  display '\<[+-]\?\%(\d\+\%(\.\d\+\)\?\|\.\d\+\)\%(p[tc]\|in\|bp\|cc]\|[cm]m\|dd\|sp\|e[mx]\)\>' contained containedin=contextArgument
@@ -100,6 +85,16 @@ syn keyword contextConstant   yes no on off start stop contained containedin=con
 "syn match   contextConstant   display '\<\%(small\|medium\|big\|nowhite\|back\|white\|disable\|force\|reset\|line\|halfline\|fixed\|flexible\|none\|samepage\)=\@!\>' contained containedin=contextArgument
 "syn match   contextConstant   display '\<\%(left\|right\|here\|top\|bottom\|inleft\|inright\|inmargin\|margin\|leftmargin\|rightmargin\|leftedge\|rightedge\|innermargin\|outermargin\|inneredge\|outeredge\|inner\|outer\|line\|high\|low\|fit\|page\|leftpage\|rightpage\|opposite\|always\|auto\|force\|tall\|reset\|line\|height\|depth\)=\@!\>' contained containedin=contextArgument
 
+" Errors And Mismatches: {{{1
+" ----------------------
+
+" These are not allowed outside mathmode.
+"FIXME # error inside mathmode?
+syn match   contextError      display '[#^_]'
+
+" Ending delimiters that are not matched by groups and arguments above (which have priority because the opening starts earlier), are matched as errors.
+syn match   contextMismatch   display '[]})]'
+
 " Specials: {{{1
 " ---------
 
@@ -112,18 +107,41 @@ syn match   contextSpecial    display '\\\@!\%(\~\|&\|\^\|_\|-\{2,3}\)'
 
 syn match   contextParameter  display '\\\@!#\d\+'
 
-" Errors And Mismatches: {{{1
-" ----------------------
+" Fonts And Styles: {{{1
+" -----------------
 
-" These are not allowed outside mathmode.
-"FIXME # error inside mathmode?
-syn match   contextError      display '[#^_]'
+syn match   contextFont       display '\\\%(rm\|ss\|tt\|hw\|cg\|mf\)\>'
 
-" Ending delimiters that are not matched by groups and arguments above (which have priority because the opening starts earlier), are matched as errors.
-syn match   contextMismatch   display '[]})]'
+syn match   contextFont       display '\\\%(em\|tf\|b[fsi]\|s[cl]\|it\|os\)\%(xx\|[xabcd]\)\?\>'
+syn match   contextFont       display '\\\%(vi\{1,3}\|ix\|xi\{0,2}\)\>'
 
-" Math: {{{1
-" -----
+syn match   contextStyle      display '\\\%(cap\|Cap\|CAP\|Caps\|nocap\)\>'
+syn match   contextStyle      display '\\\%(Word\|WORD\|Words\|WORDS\)\>'
+syn match   contextStyle      display '\\\%(underbar\|over\%(bar\|strike\)\)s\?'
+"FIXME What is this?
+"syn match   contextStyle      display '\\\%(character\|Character\)s\?\>'
+
+syn region  contextTypeFace    display matchgroup=contextDelimiter start='{\\tf\s'     end='}' contains=TOP
+syn region  contextItalic      display matchgroup=contextDelimiter start='{\\it\s'     end='}' contains=TOP
+syn region  contextSlanted     display matchgroup=contextDelimiter start='{\\sl\s'     end='}' contains=TOP
+syn region  contextBold        display matchgroup=contextDelimiter start='{\\bf\s'     end='}' contains=TOP
+syn region  contextBoldItalic  display matchgroup=contextDelimiter start='{\\bi\s'     end='}' contains=TOP
+syn region  contextBoldItalic  display matchgroup=contextDelimiter start='{\\bf\\it\s' end='}' contains=TOP
+syn region  contextBoldItalic  display matchgroup=contextDelimiter start='{\\it\\bf\s' end='}' contains=TOP
+syn region  contextBoldSlanted display matchgroup=contextDelimiter start='{\\bs\s'     end='}' contains=TOP
+syn region  contextBoldSlanted display matchgroup=contextDelimiter start='{\\bf\\sl\s' end='}' contains=TOP
+syn region  contextBoldSlanted display matchgroup=contextDelimiter start='{\\sl\\bf\s' end='}' contains=TOP
+
+syn region  contextOuterEmph   display matchgroup=contextDelimiter start='{\\em\s'            end='}'                 contains=TOP,contextOuterEmph
+syn region  contextOuterEmph   display matchgroup=contextDelimiter start='\\emph{'            end='}'                 contains=TOP,contextOuterEmph
+syn region  contextOuterEmph           matchgroup=contextBlock     start='\\startemphasize\>' end='\\stopemphasize\>' contains=TOP,contextOuterEmph
+
+syn region  contextInnerEmph   display matchgroup=contextDelimiter start='{\\em\s'            end='}'                 contains=TOP,contextInnerEmph contained containedin=contextOuterEmph,context.*\(Italic\|Slanted\)
+syn region  contextInnerEmph   display matchgroup=contextDelimiter start='\\emph{'            end='}'                 contains=TOP,contextInnerEmph contained containedin=contextOuterEmph,context.*\(Italic\|Slanted\)
+syn region  contextInnerEmph           matchgroup=contextBlock     start='\\startemphasize\>' end='\\stopemphasize\>' contains=TOP,contextInnerEmph contained containedin=contextOuterEmph,context.*\(Italic\|Slanted\)
+
+" Mathematics: {{{1
+" ------------
 
 syn region  contextMath       display matchgroup=contextDelimiter start='\$'                       end='\$'                 contains=TOP,@Spell,contextError
 syn region  contextMath       display matchgroup=contextDelimiter start='\\math\%(ematics\)\?{'    end='}'                  contains=TOP,@Spell,contextError
@@ -691,8 +709,8 @@ endif
     endfor
   endif
 
-" Typing: {{{1
-" -------
+" Types And Codes: {{{1
+" ----------------
 
 syn region  contextTyping     display matchgroup=contextDelimiter start='\\type\z(\A\)'                 end='\z1'
 syn region  contextTyping     display matchgroup=contextDelimiter start='\\\%(type\?\|tex\|arg\|mat\){' end='}'               contains=contextGroup
@@ -701,13 +719,6 @@ syn region  contextTyping     display matchgroup=contextDelimiter start='\\\%(ty
 syn region  contextTyping             matchgroup=contextBlock   start='\\start\z(\a*\)typing\>'       end='\\stop\z1typing\>' contains=contextComment
 
 "TODO MetaPost, Lua etc.
-
-" Emphasize: {{{1
-" ----------
-
-"FIXME Maybe without keepend and with matchgroup as in typing.
-syn region  contextEmphasize  display keepend                 start='\\emph{'            end='}'                 contains=TOP
-syn region  contextEmphasize          matchgroup=contextBlock start='\\startemphasize\>' end='\\stopemphasize\>' contains=TOP
 
 " Comments: {{{1
 " ---------
@@ -784,15 +795,25 @@ hi def link contextStructure   Include
 hi def link contextDefine      Define
 hi def link contextSetup       contextDefine
 
-" Fonts And Styles:
-hi def link contextFont        Type
-hi def link contextStyle       contextFont
-
 " Groups And Arguments:
 hi def link contextNumber      Number
 hi def link contextDimension   contextNumber
 hi def link contextLabel       Tag
 hi def link contextConstant    Constant
+
+" Fonts And Styles:
+hi def link contextFont        Type
+hi def link contextStyle       contextFont
+
+hi def      contextTypeFace    gui=NONE
+hi def      contextItalic      gui=italic
+hi def link contextSlanted     contextItalic
+hi def      contextBold        gui=bold
+hi def      contextBoldItalic  gui=bold,italic
+hi def link contextBoldSlanted contextBoldItalic
+
+hi def      contextOuterEmph   gui=italic
+hi def      contextInnerEmph   gui=NONE
 
 " Specials:
 hi def link contextParameter   Identifier
@@ -816,9 +837,6 @@ hi!    link Conceal            contextMathSymbol
 
 " Typing:
 hi def link contextTyping      String
-
-" Emphasize:
-hi def      contextEmphasize   gui=italic
 
 " Comments:
 hi def link contextTodo        Todo
