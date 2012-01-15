@@ -151,7 +151,7 @@ if has('conceal') && &enc == 'utf-8'
   "   a = accents
   " By default we conceal everything.
   if !exists('g:context_conceal')
-   let s:context_conceal = 'mfsdglna'
+   let s:context_conceal = 'mfsdgln'
   else
    let s:context_conceal = g:context_conceal
   endif
