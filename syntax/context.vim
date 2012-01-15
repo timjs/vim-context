@@ -149,10 +149,9 @@ if has('conceal') && &enc == 'utf-8'
   "   l = Latin superscripts/subscripts
   "   n = numeric superscripts/subscripts
   "   a = accents
-  " At default we don't conceal fractions, because the commands are not standard,
-  " and alphabetic superscript/subscripts, because they are not complete.
+  " By default we conceal everything.
   if !exists('g:context_conceal')
-   let s:context_conceal = 'msdgna'
+   let s:context_conceal = 'mfsdglna'
   else
    let s:context_conceal = g:context_conceal
   endif
@@ -174,11 +173,16 @@ if has('conceal') && &enc == 'utf-8'
     exe 'syn match contextMathSymbol "\\'.a:name.'{'.a:pattern.'" nextgroup=contextMathAccent'.a:name.' contained containedin=contextMath conceal cchar='.a:replacement
   endfun
 
+  " Scripts are only concealed if there is a suitable character in the Unicode tables.
   fun! s:ContextConcealScript(pattern, superscript, subscript)
-    exe 'syn match contextSuperscript "\^'.a:pattern.'" contained containedin=contextMath conceal cchar='.a:superscript
-    exe 'syn match contextSubscript    "_'.a:pattern.'" contained containedin=contextMath conceal cchar='.a:subscript
-    exe 'syn match contextSuperscripts  "'.a:pattern.'" contained                         conceal cchar='.a:superscript.' nextgroup=contextSuperscripts'
-    exe 'syn match contextSubscripts    "'.a:pattern.'" contained                         conceal cchar='.a:subscript.'   nextgroup=contextSubscripts'
+    if a:superscript != ' '
+      exe 'syn match contextSuperscript "\^'.a:pattern.'" contained containedin=contextMath conceal cchar='.a:superscript
+      exe 'syn match contextSuperscripts  "'.a:pattern.'" contained                         conceal cchar='.a:superscript.' nextgroup=contextSuperscripts'
+    endif
+    if a:subscript != ' '
+      exe 'syn match contextSubscript    "_'.a:pattern.'" contained containedin=contextMath conceal cchar='.a:subscript
+      exe 'syn match contextSubscripts    "'.a:pattern.'" contained                         conceal cchar='.a:subscript.'   nextgroup=contextSubscripts'
+    endif
   endfun
 
   " Math Symbols: {{{2
@@ -556,68 +560,66 @@ if has('conceal') && &enc == 'utf-8'
   if s:context_conceal =~ 'g'
     for symbol in s:contextGreekSymbols
       call s:ContextConcealSymbol('\\'.symbol[0].'\>', symbol[1])
-      "if s:context_conceal =~ 'l'
-        "call s:ContextConcealScript('\\'.symbol[0].'\>', symbol[2], symbol[3])
-      "endif
+      "call s:ContextConcealScript('\\'.symbol[0].'\>', symbol[2], symbol[3])
     endfor
   endif
 
   " Latin Scripts: {{{2
   let s:contextLatinSymbols = [
     \ ['a' , 'ᵃ' , 'ₐ'],
-    \ ['b' , 'ᵇ' , 'b'],
-    \ ['c' , 'ᶜ' , 'c'],
-    \ ['d' , 'ᵈ' , 'd'],
+    \ ['b' , 'ᵇ' , ' '],
+    \ ['c' , 'ᶜ' , ' '],
+    \ ['d' , 'ᵈ' , ' '],
     \ ['e' , 'ᵉ' , 'ₑ'],
-    \ ['f' , 'ᶠ' , 'f'],
-    \ ['g' , 'ᵍ' , 'g'],
-    \ ['h' , 'ʰ' , 'h'],
+    \ ['f' , 'ᶠ' , ' '],
+    \ ['g' , 'ᵍ' , ' '],
+    \ ['h' , 'ʰ' , ' '],
     \ ['i' , 'ⁱ' , 'ᵢ'],
-    \ ['j' , 'ʲ' , 'j'],
-    \ ['k' , 'ᵏ' , 'k'],
-    \ ['l' , 'ˡ' , 'l'],
-    \ ['m' , 'ᵐ' , 'm'],
-    \ ['n' , 'ⁿ' , 'n'],
+    \ ['j' , 'ʲ' , ' '],
+    \ ['k' , 'ᵏ' , ' '],
+    \ ['l' , 'ˡ' , ' '],
+    \ ['m' , 'ᵐ' , ' '],
+    \ ['n' , 'ⁿ' , ' '],
     \ ['o' , 'ᵒ' , 'ₒ'],
-    \ ['p' , 'ᵖ' , 'p'],
-    \ ['q' , ' ' , 'q'],
-    \ ['r' , 'ʳ' , 'r'],
-    \ ['s' , 'ˢ' , 's'],
-    \ ['t' , 'ᵗ' , 't'],
+    \ ['p' , 'ᵖ' , ' '],
+    \ ['q' , ' ' , ' '],
+    \ ['r' , 'ʳ' , ' '],
+    \ ['s' , 'ˢ' , ' '],
+    \ ['t' , 'ᵗ' , ' '],
     \ ['u' , 'ᵘ' , 'ᵤ'],
-    \ ['v' , 'ᵛ' , 'v'],
-    \ ['w' , 'ʷ' , 'w'],
-    \ ['x' , 'ˣ' , 'x'],
-    \ ['y' , 'ʸ' , 'y'],
-    \ ['z' , 'ᶻ' , 'z'],
-    \ ['A' , 'ᴬ' , 'A'],
-    \ ['B' , 'ᴮ' , 'B'],
-    \ ['C' , 'C' , 'C'],
-    \ ['D' , 'ᴰ' , 'D'],
-    \ ['E' , 'ᴱ' , 'E'],
-    \ ['F' , 'F' , 'F'],
-    \ ['G' , 'ᴳ' , 'G'],
-    \ ['H' , 'ᴴ' , 'H'],
-    \ ['I' , 'ᴵ' , 'I'],
-    \ ['J' , 'ᴶ' , 'J'],
-    \ ['K' , 'ᴷ' , 'K'],
-    \ ['L' , 'ᴸ' , 'L'],
-    \ ['M' , 'ᴹ' , 'M'],
-    \ ['N' , 'ᴺ' , 'N'],
-    \ ['O' , 'ᴼ' , 'O'],
-    \ ['P' , 'ᴾ' , 'P'],
-    \ ['Q' , 'Q' , 'Q'],
+    \ ['v' , 'ᵛ' , ' '],
+    \ ['w' , 'ʷ' , ' '],
+    \ ['x' , 'ˣ' , ' '],
+    \ ['y' , 'ʸ' , ' '],
+    \ ['z' , 'ᶻ' , ' '],
+    \ ['A' , 'ᴬ' , ' '],
+    \ ['B' , 'ᴮ' , ' '],
+    \ ['C' , ' ' , ' '],
+    \ ['D' , 'ᴰ' , ' '],
+    \ ['E' , 'ᴱ' , ' '],
+    \ ['F' , ' ' , ' '],
+    \ ['G' , 'ᴳ' , ' '],
+    \ ['H' , 'ᴴ' , ' '],
+    \ ['I' , 'ᴵ' , ' '],
+    \ ['J' , 'ᴶ' , ' '],
+    \ ['K' , 'ᴷ' , ' '],
+    \ ['L' , 'ᴸ' , ' '],
+    \ ['M' , 'ᴹ' , ' '],
+    \ ['N' , 'ᴺ' , ' '],
+    \ ['O' , 'ᴼ' , ' '],
+    \ ['P' , 'ᴾ' , ' '],
+    \ ['Q' , ' ' , ' '],
     \ ['R' , 'ᴿ' , 'ᵣ'],
-    \ ['S' , 'S' , 'S'],
-    \ ['T' , 'ᵀ' , 'T'],
-    \ ['U' , 'ᵁ' , 'U'],
-    \ ['V' , 'V' , 'ᵥ'],
-    \ ['W' , 'ᵂ' , 'W'],
-    \ ['X' , 'X' , 'ₓ'],
-    \ ['Y' , 'Y' , 'Y'],
-    \ ['Z' , 'Z' , 'Z']]
+    \ ['S' , ' ' , ' '],
+    \ ['T' , 'ᵀ' , ' '],
+    \ ['U' , 'ᵁ' , ' '],
+    \ ['V' , ' ' , 'ᵥ'],
+    \ ['W' , 'ᵂ' , ' '],
+    \ ['X' , ' ' , 'ₓ'],
+    \ ['Y' , ' ' , ' '],
+    \ ['Z' , ' ' , ' ']]
 
-  if s:context_conceal =~ 'r'
+  if s:context_conceal =~ 'l'
     for symbol in s:contextLatinSymbols
       call s:ContextConcealScript(symbol[0], symbol[1], symbol[2])
     endfor
