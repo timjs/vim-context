@@ -711,11 +711,11 @@ syn region  contextEmphasize          matchgroup=contextBlock start='\\startemph
 
 syn keyword contextTodo       TODO FIXME NOTE XXX contained
 
-" The matchgroup is there to prevent spell checking of the %D %M and %C themselves.
+" The match group is there to prevent spell checking of the %D %M and %C themselves.
 syn region  contextComment    display oneline                           start='\\\@!%'    end='$' contains=contextTodo
 syn region  contextComment    display oneline matchgroup=contextComment start='^%[CDM]\s' end='$' contains=TOP,contextComment
 
-syn region  contextComment    matchgroup=contextBlock start='\\starthiding\>' end='\\stophiding\>'
+syn region  contextHiding     matchgroup=contextBlock start='\\starthiding\>' end='\\stophiding\>'
 
 " Folding: {{{1
 " --------
@@ -815,11 +815,12 @@ hi!    link Conceal            contextMathSymbol
 hi def link contextTyping      String
 
 " Emphasize:
-hi          contextEmphasize   gui=italic
+hi def      contextEmphasize   gui=italic
 
 " Comments:
 hi def link contextTodo        Todo
 hi def link contextComment     Comment
+hi def link contextHiding      contextComment
 
 " Finalize Syntaxfile: {{{1
 " ====================
