@@ -42,9 +42,14 @@ syn match   contextHead       display '\\\%(start\|stop\)\?part\>'
 syn match   contextHead       display '\\\%(start\|stop\)\?\%(chapter\|title\)\>'
 syn match   contextHead       display '\\\%(start\|stop\)\?\%(sub\)*\%(section\|subject\)\>'
 
+" The mistake I make most often.
+syn match   contextStructureError     display '\\\%(start\)\?\%(component\|product\|project\|environment\)\>'
+syn match   contextStructureError     display '\\input\>'
+
 " And these define the document structure.
-syn match   contextStructure  display '^\s*\\\%(start\|stop\)\?\%(component\|product\|project\|environment\)\>.*$'
-syn match   contextStructure  display '^\s*\\input\>.*$'
+syn match   contextStructure  display '^\s*\\\%(start\)\?\%(component\|product\|project\|environment\)\s\+\a\+$'
+syn match   contextStructure  display '^\s*\\stop\%(component\|product\|project\|environment\)$'
+syn match   contextStructure  display '^\s*\\input\s\+\a\+$'
 syn match   contextStructure  display '^\s*\\\%(start\|stop\)text$'
 
 " Definitions And Setups: {{{1
@@ -67,7 +72,10 @@ syn region  contextGroup      transparent matchgroup=contextDelimiter start='{' 
 syn region  contextGather     transparent matchgroup=contextDelimiter start='('  end=')'
 
 " To get rid of nasty spell errors for options, we don't allow spell check inside argument brackets. Here we can't use transparent
-syn region  contextArgument               matchgroup=contextDelimiter start='\[' end='\]' contains=TOP,@Spell,contextError
+syn region  contextArgument               matchgroup=contextDelimiter start='\[' end='\]' contains=TOP,@Spell,contextScriptError
+
+" Ending delimiters that are not matched by groups, gathers and arguments above (which have priority because the opening starts earlier), are matched as errors.
+syn match   contextMismatch   display '[]})]'
 
 " As a bonus, we can highlight some constants inside argument brackets.
 syn match   contextLabel      display '\a\+:[0-9a-zA-Z_\-: ]\+'                                                               contained containedin=contextArgument
@@ -85,16 +93,6 @@ syn keyword contextConstant   yes no on off start stop contained containedin=con
 "syn match   contextConstant   display '\<\%(small\|medium\|big\|nowhite\|back\|white\|disable\|force\|reset\|line\|halfline\|fixed\|flexible\|none\|samepage\)=\@!\>' contained containedin=contextArgument
 "syn match   contextConstant   display '\<\%(left\|right\|here\|top\|bottom\|inleft\|inright\|inmargin\|margin\|leftmargin\|rightmargin\|leftedge\|rightedge\|innermargin\|outermargin\|inneredge\|outeredge\|inner\|outer\|line\|high\|low\|fit\|page\|leftpage\|rightpage\|opposite\|always\|auto\|force\|tall\|reset\|line\|height\|depth\)=\@!\>' contained containedin=contextArgument
 
-" Errors And Mismatches: {{{1
-" ----------------------
-
-" These are not allowed outside mathmode.
-"FIXME # error inside mathmode?
-syn match   contextError      display '[#^_]'
-
-" Ending delimiters that are not matched by groups and arguments above (which have priority because the opening starts earlier), are matched as errors.
-syn match   contextMismatch   display '[]})]'
-
 " Specials: {{{1
 " ---------
 
@@ -105,6 +103,10 @@ syn match   contextSpecial    display '\\\%(par\|crlf\)\>'
 syn match   contextSpecial    display '\\\@!\%(\~\|&\|\^\|_\|-\{2,3}\)'
 "syn match   contextSpecial    display '|[<>/]\?|'
 
+" These are not allowed outside math mode, see math section.
+syn match   contextScriptError        display '[_^]'
+
+syn match   contextParameterError     display '#'
 syn match   contextParameter  display '\\\@!#\d\+'
 
 " Fonts And Styles: {{{1
@@ -143,11 +145,11 @@ syn region  contextInnerEmph           matchgroup=contextBlock     start='\\star
 " Mathematics: {{{1
 " ------------
 
-syn region  contextMath       display matchgroup=contextDelimiter start='\$'                       end='\$'                 contains=TOP,@Spell,contextError
-syn region  contextMath       display matchgroup=contextDelimiter start='\\math\%(ematics\)\?{'    end='}'                  contains=TOP,@Spell,contextError
+syn region  contextMath       display matchgroup=contextDelimiter start='\$'                       end='\$'                 contains=TOP,@Spell,contextScriptError
+syn region  contextMath       display matchgroup=contextDelimiter start='\\math\%(ematics\)\?{'    end='}'                  contains=TOP,@Spell,contextScriptError
 
-syn region  contextMath               matchgroup=contextDelimiter start='\$\$'                     end='\$\$'               contains=TOP,@Spell,contextError
-syn region  contextMath               matchgroup=contextBlock     start='\\start\z(\a*\)formula\>' end='\\stop\z1formula\>' contains=TOP,@Spell,contextError
+syn region  contextMath               matchgroup=contextDelimiter start='\$\$'                     end='\$\$'               contains=TOP,@Spell,contextScriptError
+syn region  contextMath               matchgroup=contextBlock     start='\\start\z(\a*\)formula\>' end='\\stop\z1formula\>' contains=TOP,@Spell,contextScriptError
 
 syn region  contextMathText   display matchgroup=contextDelimiter start='\\\%(inter\)\?text{'      end='}'                  contains=TOP contained containedin=contextMath
 
@@ -775,66 +777,66 @@ syn sync    ccomment          contextComment
 " ======================
 
 " Commands:
-hi def link contextCommand     Function
+hi def link contextCommand        Function
 
-hi def link contextBlock       Statement
-hi def link contextCondition   Conditional
-hi def link contextLoop        Repeat
-hi def link contextHead        Keyword
+hi def link contextBlock          Statement
+hi def link contextCondition      Conditional
+hi def link contextLoop           Repeat
+hi def link contextHead           Keyword
 
-hi def link contextStructure   Include
+hi def link contextStructure      Include
+hi def link contextStructureError Error
 
 " Definitions And Setups:
-hi def link contextDefine      Define
-hi def link contextSetup       contextDefine
+hi def link contextDefine         Define
+hi def link contextSetup          contextDefine
 
 " Groups And Arguments:
-hi def link contextNumber      Number
-hi def link contextDimension   contextNumber
-hi def link contextLabel       Tag
-hi def link contextConstant    Constant
+hi def link contextDelimiter      Delimiter
+hi def link contextMismatch       Error
+
+hi def link contextNumber         Number
+hi def link contextDimension      contextNumber
+hi def link contextLabel          Tag
+hi def link contextConstant       Constant
 
 " Fonts And Styles:
-hi def link contextFont        Type
-hi def link contextStyle       contextFont
+hi def link contextFont           Type
+hi def link contextStyle          contextFont
 
-hi def      contextTypeFace    gui=NONE
-hi def      contextItalic      gui=italic
-hi def link contextSlanted     contextItalic
-hi def      contextBold        gui=bold
-hi def      contextBoldItalic  gui=bold,italic
-hi def link contextBoldSlanted contextBoldItalic
+hi def      contextTypeFace       gui=NONE
+hi def      contextItalic         gui=italic
+hi def link contextSlanted        contextItalic
+hi def      contextBold           gui=bold
+hi def      contextBoldItalic     gui=bold,italic
+hi def link contextBoldSlanted    contextBoldItalic
 
-hi def      contextOuterEmph   gui=italic
-hi def      contextInnerEmph   gui=NONE
+hi def      contextOuterEmph      gui=italic
+hi def      contextInnerEmph      gui=NONE
 
 " Specials:
-hi def link contextParameter   Identifier
-hi def link contextSpecial     Special
-hi def link contextEscaped     contextSpecial
-
-" Errors And Matches:
-hi def link contextError       Error
-hi def link contextMismatch    contextError
-
-hi def link contextDelimiter   Delimiter
+hi def link contextEscaped        contextSpecial
+hi def link contextSpecial        Special
+hi def link contextScriptError    Error
+hi def link contextParameter      Identifier
+hi def link contextParameterError Error
 
 " Math:
-hi def link contextMath        String
-hi def link contextMathText    Normal
-hi def link contextMathSymbol  SpecialChar
-hi def link contextMathAccent  contextMathSymbol
-hi def link contextSuperscript contextMathSymbol
-hi def link contextSubscript   contextMathSymbol
-hi!    link Conceal            contextMathSymbol
+hi def link contextMath           String
+hi def link contextMathText       Normal
+hi def link contextMathSymbol     SpecialChar
+hi def link contextMathAccent     contextMathSymbol
+hi def link contextSuperscript    contextMathSymbol
+hi def link contextSubscript      contextMathSymbol
+hi!    link Conceal               contextMathSymbol
 
 " Typing:
-hi def link contextTyping      String
+hi def link contextTyping         String
 
 " Comments:
-hi def link contextTodo        Todo
-hi def link contextComment     Comment
-hi def link contextHiding      contextComment
+hi def link contextTodo           Todo
+hi def link contextComment        Comment
+hi def link contextHiding         contextComment
 
 " Finalize Syntaxfile: {{{1
 " ====================
