@@ -169,7 +169,7 @@ if has('conceal') && &enc == 'utf-8'
   "   a = accents
   " By default we conceal everything.
   if !exists('g:context_conceal')
-   let s:context_conceal = 'mfsdgln'
+   let s:context_conceal = 'mfsdglna'
   else
    let s:context_conceal = g:context_conceal
   endif
@@ -466,16 +466,9 @@ if has('conceal') && &enc == 'utf-8'
   endif
 
   " Spaces: {{{2
-  let s:contextSpaceSymbols = [
-    \ [';'],
-    \ [':'],
-    \ [','],
-    \ ['!']]
-
   if s:context_conceal =~ 's'
-    for symbol in s:contextSpaceSymbols
-      call s:ContextConcealSymbol('\\'.symbol[0], '␣')
-    endfor
+    call s:ContextConcealSymbol('\\[;:,!]', '␣')
+    call s:ContextConcealSymbol('\\\%(q\)\?quad', '␣')
   endif
 
   " Delimiters: {{{2
