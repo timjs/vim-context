@@ -47,9 +47,9 @@ syn match   contextStructureError     display '\\\%(start\)\?\%(component\|produ
 syn match   contextStructureError     display '\\input\>'
 
 " And these define the document structure.
-syn match   contextStructure  display '^\s*\\\%(start\)\?\%(component\|product\|project\|environment\)\s\+\a\+$'
+syn match   contextStructure  display '^\s*\\\%(start\)\?\%(component\|product\|project\|environment\)\s\+\S\+$'
 syn match   contextStructure  display '^\s*\\stop\%(component\|product\|project\|environment\)$'
-syn match   contextStructure  display '^\s*\\input\s\+\a\+$'
+syn match   contextStructure  display '^\s*\\input\s\+\S\+$'
 syn match   contextStructure  display '^\s*\\\%(start\|stop\)text$'
 
 " Definitions And Setups: {{{1
