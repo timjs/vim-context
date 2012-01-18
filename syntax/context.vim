@@ -213,6 +213,7 @@ if has('conceal') && &enc == 'utf-8'
     \ ['asymp'              , '≍'],
     \ ['backepsilon'        , '∍'],
     \ ['backsimeq'          , '≃'],
+    \ ['backslash'          , '\'],
     \ ['barwedge'           , '⊼'],
     \ ['because'            , '∵'],
     \ ['between'            , '≬'],
