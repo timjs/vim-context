@@ -2,6 +2,9 @@
 " Language:         ConTeXt typesetting engine
 " Maintainer:       Tim Steenvoorden <tim.steenvoorden@gmail.com>
 " Latest Revision:  2012-01-13
+" TODO:
+"   * Conceal \quote{} and \quotation?
+"   * minus in digits.
 
 " Initialize Syntaxfile: {{{1
 " ======================
@@ -168,10 +171,11 @@ if has('conceal') && &enc == 'utf-8'
   "   g = Greek
   "   l = Latin superscripts/subscripts
   "   n = numeric superscripts/subscripts
+  "   b = blackboard, calligraphic and fraktur
   "   a = accents
   " By default we conceal everything.
   if !exists('g:context_conceal')
-   let s:context_conceal = 'mfsdglna'
+   let s:context_conceal = 'mfsdglnab'
   else
    let s:context_conceal = g:context_conceal
   endif
@@ -445,88 +449,98 @@ if has('conceal') && &enc == 'utf-8'
   
   " Fractions: {{{2
   let s:contextFractionSymbols = [
-    \ ['half'          , 'frac12' , '½'],
-    \ ['third'         , 'frac13' , '⅓'],
-    \ ['thwothirds'    , 'frac23' , '⅔'],
-    \ ['quarter'       , 'frac14' , '¼'],
-    \ ['threequarters' , 'frac34' , '¾'],
-    \ ['fifth'         , 'frac15' , '⅕'],
-    \ ['twofifths'     , 'frac25' , '⅖'],
-    \ ['threefifths'   , 'frac35' , '⅗'],
-    \ ['fourfifths'    , 'frac45' , '⅘'],
-    \ ['sixth'         , 'frac16' , '⅙'],
-    \ ['fifesixths'    , 'frac56' , '⅚'],
-    \ ['eighth'        , 'frac18' , '⅛'],
-    \ ['threeeighths'  , 'frac38' , '⅜'],
-    \ ['fifeeighths'   , 'frac58' , '⅝'],
-    \ ['seveneighths'  , 'frac78' , '⅞']]
+    \ ['half'         , 'frac12', '½'],
+    \ ['third'        , 'frac13', '⅓'],
+    \ ['thwothirds'   , 'frac23', '⅔'],
+    \ ['quarter'      , 'frac14', '¼'],
+    \ ['threequarters', 'frac34', '¾'],
+    \ ['fifth'        , 'frac15', '⅕'],
+    \ ['twofifths'    , 'frac25', '⅖'],
+    \ ['threefifths'  , 'frac35', '⅗'],
+    \ ['fourfifths'   , 'frac45', '⅘'],
+    \ ['sixth'        , 'frac16', '⅙'],
+    \ ['fifesixths'   , 'frac56', '⅚'],
+    \ ['eighth'       , 'frac18', '⅛'],
+    \ ['threeeighths' , 'frac38', '⅜'],
+    \ ['fifeeighths'  , 'frac58', '⅝'],
+    \ ['seveneighths' , 'frac78', '⅞']]
 
   if s:context_conceal =~ 'f'
     for symbol in s:contextFractionSymbols
       call s:ContextConcealSymbol('\\'.symbol[0].'\>', symbol[2])
-      call s:ContextConcealSymbol('\\'.symbol[1],      symbol[2])
+      call s:ContextConcealSymbol('\\'.symbol[1]     , symbol[2])
     endfor
   endif
 
   " Spaces: {{{2
   if s:context_conceal =~ 's'
-    call s:ContextConcealSymbol('\\[;:,!]', '␣')
+    call s:ContextConcealSymbol('\\[;:,!]'      , '␣')
     call s:ContextConcealSymbol('\\\%(q\)\?quad', '␣')
   endif
 
   " Delimiters: {{{2
   let s:contextDelimiterSymbols = [
-    \ ['.'        , '¦'],
-    \ ['('        , '('],
-    \ [')'        , ')'],
-    \ ['\\{'      , '{'],
-    \ ['\\}'      , '}'],
-    \ ['\['       , '['],
-    \ ['\]'       , ']'],
-    \ ['<'        , '⟨'],
-    \ ['>'        , '⟩'],
-    \ ['|'        , '|'],
-    \ ['\\|'      , '‖'],
-    \ ['/'        , '/']]
+    \ ['\.' , '¦'],
+    \ ['('  , '('],
+    \ [')'  , ')'],
+    \ ['\\{', '{'],
+    \ ['\\}', '}'],
+    \ ['\[' , '['],
+    \ ['\]' , ']'],
+    \ ['<'  , '⟨'],
+    \ ['>'  , '⟩'],
+    \ ['|'  , '|'],
+    \ ['\\|', '‖'],
+    \ ['/'  , '/']]
   let s:contextDelimiterCommands = [
-    \ ['lgroup'      , '('],
-    \ ['rgroup'      , ')'],
-    \ ['lbrace'      , '{'],
-    \ ['rbrace'      , '}'],
-    \ ['langle'      , '⟨'],
-    \ ['rangle'      , '⟩'],
-    \ ['vert'        , '|'],
-    \ ['lvert'       , '|'],
-    \ ['rvert'       , '|'],
-    \ ['Vert'        , '‖'],
-    \ ['lVert'       , '‖'],
-    \ ['rVert'       , '‖'],
-    \ ['backslash'   , '\'],
-    \ ['lfloor'      , '⌊'],
-    \ ['rfloor'      , '⌋'],
-    \ ['lceil'       , '⌈'],
-    \ ['rceil'       , '⌉'],
-    \ ['uparrow'     , '↑'],
-    \ ['Uparrow'     , '⇑'],
-    \ ['downarrow'   , '↓'],
-    \ ['Downarrow'   , '⇓'],
-    \ ['updownarrow' , '↕'],
-    \ ['Updownarrow' , '⇕'],
-    \ ['llcorner'    , '⌞'],
-    \ ['lrcorner'    , '⌟'],
-    \ ['ulcorner'    , '⌜'],
-    \ ['urconrner'   , '⌝'],
-    \ ['lmoustache'  , '⎠'],
-    \ ['rmoustache'  , '⎝']]
+    \ ['lgroup'     , '('],
+    \ ['rgroup'     , ')'],
+    \ ['lbrace'     , '{'],
+    \ ['rbrace'     , '}'],
+    \ ['langle'     , '⟨'],
+    \ ['rangle'     , '⟩'],
+    \ ['vert'       , '|'],
+    \ ['lvert'      , '|'],
+    \ ['rvert'      , '|'],
+    \ ['Vert'       , '‖'],
+    \ ['lVert'      , '‖'],
+    \ ['rVert'      , '‖'],
+    \ ['backslash'  , '\'],
+    \ ['lfloor'     , '⌊'],
+    \ ['rfloor'     , '⌋'],
+    \ ['lceil'      , '⌈'],
+    \ ['rceil'      , '⌉'],
+    \ ['uparrow'    , '↑'],
+    \ ['Uparrow'    , '⇑'],
+    \ ['downarrow'  , '↓'],
+    \ ['Downarrow'  , '⇓'],
+    \ ['updownarrow', '↕'],
+    \ ['Updownarrow', '⇕'],
+    \ ['llcorner'   , '⌞'],
+    \ ['lrcorner'   , '⌟'],
+    \ ['ulcorner'   , '⌜'],
+    \ ['urconrner'  , '⌝'],
+    \ ['lmoustache' , '⎠'],
+    \ ['rmoustache' , '⎝']]
 
   if s:context_conceal =~ 'd'
+    call s:ContextConcealSymbol('\\{', '{')
+    call s:ContextConcealSymbol('\\}', '}')
     for symbol in s:contextDelimiterSymbols
-      call s:ContextConcealSymbol('\\left'.symbol[0],  symbol[1])
+      call s:ContextConcealSymbol( '\\left'.symbol[0], symbol[1])
       call s:ContextConcealSymbol('\\right'.symbol[0], symbol[1])
+      call s:ContextConcealSymbol(  '\\big'.symbol[0], symbol[1])
+      call s:ContextConcealSymbol(  '\\Big'.symbol[0], symbol[1])
+      call s:ContextConcealSymbol( '\\bigg'.symbol[0], symbol[1])
+      call s:ContextConcealSymbol( '\\Bigg'.symbol[0], symbol[1])
     endfor
     for symbol in s:contextDelimiterCommands
-      call s:ContextConcealSymbol('\\left\\'.symbol[0].'\>',  symbol[1])
+      call s:ContextConcealSymbol( '\\left\\'.symbol[0].'\>', symbol[1])
       call s:ContextConcealSymbol('\\right\\'.symbol[0].'\>', symbol[1])
+      call s:ContextConcealSymbol(  '\\big\\'.symbol[0].'\>', symbol[1])
+      call s:ContextConcealSymbol(  '\\Big\\'.symbol[0].'\>', symbol[1])
+      call s:ContextConcealSymbol( '\\bigg\\'.symbol[0].'\>', symbol[1])
+      call s:ContextConcealSymbol( '\\Bigg\\'.symbol[0].'\>', symbol[1])
     endfor
   endif
 
@@ -579,60 +593,60 @@ if has('conceal') && &enc == 'utf-8'
     endfor
   endif
 
-  " Latin Scripts: {{{2
+  " Latin: {{{2
   let s:contextLatinSymbols = [
-    \ ['a' , 'ᵃ' , 'ₐ'],
-    \ ['b' , 'ᵇ' , ' '],
-    \ ['c' , 'ᶜ' , ' '],
-    \ ['d' , 'ᵈ' , ' '],
-    \ ['e' , 'ᵉ' , 'ₑ'],
-    \ ['f' , 'ᶠ' , ' '],
-    \ ['g' , 'ᵍ' , ' '],
-    \ ['h' , 'ʰ' , ' '],
-    \ ['i' , 'ⁱ' , 'ᵢ'],
-    \ ['j' , 'ʲ' , ' '],
-    \ ['k' , 'ᵏ' , ' '],
-    \ ['l' , 'ˡ' , ' '],
-    \ ['m' , 'ᵐ' , ' '],
-    \ ['n' , 'ⁿ' , ' '],
-    \ ['o' , 'ᵒ' , 'ₒ'],
-    \ ['p' , 'ᵖ' , ' '],
-    \ ['q' , ' ' , ' '],
-    \ ['r' , 'ʳ' , ' '],
-    \ ['s' , 'ˢ' , ' '],
-    \ ['t' , 'ᵗ' , ' '],
-    \ ['u' , 'ᵘ' , 'ᵤ'],
-    \ ['v' , 'ᵛ' , ' '],
-    \ ['w' , 'ʷ' , ' '],
-    \ ['x' , 'ˣ' , ' '],
-    \ ['y' , 'ʸ' , ' '],
-    \ ['z' , 'ᶻ' , ' '],
-    \ ['A' , 'ᴬ' , ' '],
-    \ ['B' , 'ᴮ' , ' '],
-    \ ['C' , ' ' , ' '],
-    \ ['D' , 'ᴰ' , ' '],
-    \ ['E' , 'ᴱ' , ' '],
-    \ ['F' , ' ' , ' '],
-    \ ['G' , 'ᴳ' , ' '],
-    \ ['H' , 'ᴴ' , ' '],
-    \ ['I' , 'ᴵ' , ' '],
-    \ ['J' , 'ᴶ' , ' '],
-    \ ['K' , 'ᴷ' , ' '],
-    \ ['L' , 'ᴸ' , ' '],
-    \ ['M' , 'ᴹ' , ' '],
-    \ ['N' , 'ᴺ' , ' '],
-    \ ['O' , 'ᴼ' , ' '],
-    \ ['P' , 'ᴾ' , ' '],
-    \ ['Q' , ' ' , ' '],
-    \ ['R' , 'ᴿ' , 'ᵣ'],
-    \ ['S' , ' ' , ' '],
-    \ ['T' , 'ᵀ' , ' '],
-    \ ['U' , 'ᵁ' , ' '],
-    \ ['V' , ' ' , 'ᵥ'],
-    \ ['W' , 'ᵂ' , ' '],
-    \ ['X' , ' ' , 'ₓ'],
-    \ ['Y' , ' ' , ' '],
-    \ ['Z' , ' ' , ' ']]
+    \ ['a', 'ᵃ', 'ₐ', '𝕒', '𝒶', '𝓪', '𝔞', '𝖆'],
+    \ ['b', 'ᵇ', ' ', '𝕓', '𝒷', '𝓫', '𝔟', '𝖇'],
+    \ ['c', 'ᶜ', ' ', '𝕔', '𝒸', '𝓬', '𝔠', '𝖈'],
+    \ ['d', 'ᵈ', ' ', '𝕕', '𝒹', '𝓭', '𝔡', '𝖉'],
+    \ ['e', 'ᵉ', 'ₑ', '𝕖', 'ℯ', '𝓮', '𝔢', '𝖊'],
+    \ ['f', 'ᶠ', ' ', '𝕗', '𝒻', '𝓯', '𝔣', '𝖋'],
+    \ ['g', 'ᵍ', ' ', '𝕘', 'ℊ', '𝓰', '𝔤', '𝖌'],
+    \ ['h', 'ʰ', ' ', '𝕙', '𝒽', '𝓱', '𝔥', '𝖍'],
+    \ ['i', 'ⁱ', 'ᵢ', '𝕚', '𝒾', '𝓲', '𝔦', '𝖎'],
+    \ ['j', 'ʲ', ' ', '𝕛', '𝒿', '𝓳', '𝔧', '𝖏'],
+    \ ['k', 'ᵏ', ' ', '𝕜', '𝓀', '𝓴', '𝔨', '𝖐'],
+    \ ['l', 'ˡ', ' ', '𝕝', '𝓁', '𝓵', '𝔩', '𝖑'],
+    \ ['m', 'ᵐ', ' ', '𝕞', '𝓂', '𝓶', '𝔪', '𝖒'],
+    \ ['n', 'ⁿ', ' ', '𝕟', '𝓃', '𝓷', '𝔫', '𝖓'],
+    \ ['o', 'ᵒ', 'ₒ', '𝕠', 'ℴ', '𝓸', '𝔬', '𝖔'],
+    \ ['p', 'ᵖ', ' ', '𝕡', '𝓅', '𝓹', '𝔭', '𝖕'],
+    \ ['q', ' ', ' ', '𝕢', '𝓆', '𝓺', '𝔮', '𝖖'],
+    \ ['r', 'ʳ', ' ', '𝕣', '𝓇', '𝓻', '𝔯', '𝖗'],
+    \ ['s', 'ˢ', ' ', '𝕤', '𝓈', '𝓼', '𝔰', '𝖘'],
+    \ ['t', 'ᵗ', ' ', '𝕥', '𝓉', '𝓽', '𝔱', '𝖙'],
+    \ ['u', 'ᵘ', 'ᵤ', '𝕦', '𝓊', '𝓾', '𝔲', '𝖚'],
+    \ ['v', 'ᵛ', ' ', '𝕧', '𝓋', '𝓿', '𝔳', '𝖛'],
+    \ ['w', 'ʷ', ' ', '𝕨', '𝓌', '𝔀', '𝔴', '𝖜'],
+    \ ['x', 'ˣ', ' ', '𝕩', '𝓍', '𝔁', '𝔵', '𝖝'],
+    \ ['y', 'ʸ', ' ', '𝕪', '𝓎', '𝔂', '𝔶', '𝖞'],
+    \ ['z', 'ᶻ', ' ', '𝕫', '𝓏', '𝔃', '𝔷', '𝖟'],
+    \ ['A', 'ᴬ', ' ', '𝔸', '𝒜', '𝓐', '𝔄', '𝕬'],
+    \ ['B', 'ᴮ', ' ', '𝔹', 'ℬ', '𝓑', '𝔅', '𝕭'],
+    \ ['C', ' ', ' ', 'ℂ', '𝒞', '𝓒', ' ', '𝕮'],
+    \ ['D', 'ᴰ', ' ', '𝔻', '𝒟', '𝓓', '𝔇', '𝕯'],
+    \ ['E', 'ᴱ', ' ', '𝔼', 'ℰ', '𝓔', '𝔈', '𝕰'],
+    \ ['F', ' ', ' ', '𝔽', 'ℱ', '𝓕', '𝔉', '𝕱'],
+    \ ['G', 'ᴳ', ' ', '𝔾', '𝒢', '𝓖', '𝔊', '𝕲'],
+    \ ['H', 'ᴴ', ' ', 'ℍ', 'ℋ', '𝓗', ' ', '𝕳'],
+    \ ['I', 'ᴵ', ' ', '𝕀', 'ℐ', '𝓘', ' ', '𝕴'],
+    \ ['J', 'ᴶ', ' ', '𝕁', '𝒥', '𝓙', '𝔍', '𝕵'],
+    \ ['K', 'ᴷ', ' ', '𝕂', '𝒦', '𝓚', '𝔎', '𝕶'],
+    \ ['L', 'ᴸ', ' ', '𝕃', 'ℒ', '𝓛', '𝔏', '𝕷'],
+    \ ['M', 'ᴹ', ' ', '𝕄', 'ℳ', '𝓜', '𝔐', '𝕸'],
+    \ ['N', 'ᴺ', ' ', 'ℕ', '𝒩', '𝓝', '𝔑', '𝕹'],
+    \ ['O', 'ᴼ', ' ', '𝕆', '𝒪', '𝓞', '𝔒', '𝕺'],
+    \ ['P', 'ᴾ', ' ', 'ℙ', '𝒫', '𝓟', '𝔓', '𝕻'],
+    \ ['Q', ' ', ' ', 'ℚ', '𝒬', '𝓠', '𝔔', '𝕼'],
+    \ ['R', 'ᴿ', 'ᵣ', 'ℝ', 'ℛ', '𝓡', ' ', '𝕽'],
+    \ ['S', ' ', ' ', '𝕊', '𝒮', '𝓢', '𝔖', '𝕾'],
+    \ ['T', 'ᵀ', ' ', '𝕋', '𝒯', '𝓣', '𝔗', '𝕿'],
+    \ ['U', 'ᵁ', ' ', '𝕌', '𝒰', '𝓤', '𝔘', '𝖀'],
+    \ ['V', ' ', 'ᵥ', '𝕍', '𝒱', '𝓥', '𝔙', '𝖁'],
+    \ ['W', 'ᵂ', ' ', '𝕎', '𝒲', '𝓦', '𝔚', '𝖂'],
+    \ ['X', ' ', 'ₓ', '𝕏', '𝒳', '𝓧', '𝔛', '𝖃'],
+    \ ['Y', ' ', ' ', '𝕐', '𝒴', '𝓨', '𝔜', '𝖄'],
+    \ ['Z', ' ', ' ', 'ℤ', '𝒵', '𝓩', ' ', '𝖅']]
 
   if s:context_conceal =~ 'l'
     for symbol in s:contextLatinSymbols
@@ -640,27 +654,27 @@ if has('conceal') && &enc == 'utf-8'
     endfor
   endif
 
-  " Numeric Scripts: {{{2
+  " Numeric: {{{2
   let s:contextNumericSymbols = [
-    \ ['0' , '⁰', '₀'],
-    \ ['1' , '¹', '₁'],
-    \ ['2' , '²', '₂'],
-    \ ['3' , '³', '₃'],
-    \ ['4' , '⁴', '₄'],
-    \ ['5' , '⁵', '₅'],
-    \ ['6' , '⁶', '₆'],
-    \ ['7' , '⁷', '₇'],
-    \ ['8' , '⁸', '₈'],
-    \ ['9' , '⁹', '₉'],
-    \ ['=' , '˭', '₌'],
-    \ ['+' , '⁺', '₊'],
-    \ ['-' , '⁻', '₋'],
-    \ ['/' , 'ˊ', 'ˏ'],
-    \ ['(' , '⁽', '₍'],
-    \ [')' , '⁾', '₎'],
-    \ ['<' , '˂', '˱'],
-    \ ['>' , '˃', '˲'],
-    \ ['\.', '˙', '‸']]
+    \ ['0' , '⁰', '₀', '𝟘'],
+    \ ['1' , '¹', '₁', '𝟙'],
+    \ ['2' , '²', '₂', '𝟚'],
+    \ ['3' , '³', '₃', '𝟛'],
+    \ ['4' , '⁴', '₄', '𝟜'],
+    \ ['5' , '⁵', '₅', '𝟝'],
+    \ ['6' , '⁶', '₆', '𝟞'],
+    \ ['7' , '⁷', '₇', '𝟟'],
+    \ ['8' , '⁸', '₈', '𝟠'],
+    \ ['9' , '⁹', '₉', '𝟡'],
+    \ ['=' , '˭', '₌', ' '],
+    \ ['+' , '⁺', '₊', ' '],
+    \ ['-' , '⁻', '₋', ' '],
+    \ ['/' , 'ˊ', 'ˏ', ' '],
+    \ ['(' , '⁽', '₍', ' '],
+    \ [')' , '⁾', '₎', ' '],
+    \ ['<' , '˂', '˱', ' '],
+    \ ['>' , '˃', '˲', ' '],
+    \ ['\.', '˙', '‸', ' ']]
 
   if s:context_conceal =~ 'n'
     for symbol in s:contextNumericSymbols
@@ -668,9 +682,27 @@ if has('conceal') && &enc == 'utf-8'
     endfor
   endif
 
+  " Blackboard And Calligraphic And Fraktur: {{{2
+  " TODO more characters inside \math..{} with contains?
+  if s:context_conceal =~ 'b'
+    for symbol in s:contextLatinSymbols
+      call s:ContextConcealSymbol(  '\\mathbb{'.symbol[0].'}', symbol[3])
+      call s:ContextConcealSymbol( '\\mathcal{'.symbol[0].'}', symbol[4])
+      call s:ContextConcealSymbol('\\mathfrak{'.symbol[0].'}', symbol[6])
+    endfor
+    for symbol in s:contextNumericSymbols
+      call s:ContextConcealSymbol('\\mathbb{'.symbol[0].'}', symbol[3])
+    endfor
+  endif
+
 endif
 
   " Accents: {{{2
+  " Unicode names:
+  "   bar   -> macron
+  "   check -> caron
+  "   ddot  -> diaeresis
+  "   hat   -> circumflex
   let s:contextAccentSymbols = [
     \ ['acute'    , '´', '́'],
     \ ['bar'      , '¯', '̄'],
@@ -684,11 +716,6 @@ endif
     \ ['tilde'    , '˜', '̃'],
     \ ['widetilde', '˜', '͠'],
     \ ['vec'      , '→', '⃗']]
-  " Unicode names:
-  "   bar   -> macron
-  "   check -> caron
-  "   ddot  -> diaeresis
-  "   hat   -> circumflex
 
   " This is a bit hacked code, but it works...
   if s:context_conceal =~ 'a'
@@ -698,7 +725,7 @@ endif
         call s:ContextConcealAccent(symbol[0], '\\'.letter[0], letter[1])
       endfor
       for letter in s:contextLatinSymbols
-        call s:ContextConcealAccent(symbol[0], letter[0], letter[0])
+        call s:ContextConcealAccent(symbol[0],      letter[0], letter[0])
       endfor
       " Old solution just replaced the command:
       "call s:ContextConcealSymbol('\\'.symbol[0].'\>', symbol[1])
