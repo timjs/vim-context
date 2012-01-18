@@ -1,7 +1,7 @@
 " Vim syntax file
 " Language:         ConTeXt typesetting engine
-" Maintainer:       Tim Steenvoorden <tim.steenvoorden@gmail.com>
-" Latest Revision:  2012-01-13
+" Maintainer:       Tim Steenvoorden <steenvoo@science.ru.nl>
+" Latest Revision:  2012-01-18
 " TODO:
 "   * Conceal \quote{} and \quotation?
 "   * minus in digits.
