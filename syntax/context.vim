@@ -5,6 +5,13 @@
 " TODO:
 "   * Conceal \quote{} and \quotation?
 "   * minus in digits.
+"   * \protect / \unprotect
+"     - \..@..!..?..
+"     - \new(if|counter|box|..)
+"     - \long\[egx](def|let)
+"     - \expandafter
+"     - \unexpanded
+"     - ...
 
 " Initialize Syntaxfile: {{{1
 " ======================
@@ -750,8 +757,9 @@ syn region  contextTyping             matchgroup=contextBlock   start='\\start\z
 syn keyword contextTodo       TODO FIXME NOTE XXX contained
 
 " The match group is there to prevent spell checking of the %D %M and %C themselves.
-syn region  contextComment    display oneline                           start='\\\@!%'    end='$' contains=contextTodo
-syn region  contextComment    display oneline matchgroup=contextComment start='^%[CDM]\s' end='$' contains=TOP,contextComment
+syn region  contextComment    display oneline         start='\\\@!%'    end='$' contains=contextTodo
+syn match   contextComment    display '^%[CDM]\s'
+"syn region  contextComment    display oneline matchgroup=contextComment start='^%[CDM]\s' end='$' contains=TOP,contextComment
 
 syn region  contextHiding     matchgroup=contextBlock start='\\starthiding\>' end='\\stophiding\>'
 
