@@ -34,6 +34,7 @@ syn match   contextCommand    display '\\\a\+'
 " Some commands are special statements...
 syn match   contextBlock      display '\\\%(start\|stop\)\a*'
 
+syn match   contextCondition  display '\\\%(if\a\+\|else\|fi\)\>'
 syn match   contextCondition  display '\\doif\a*' 
 syn match   contextCondition  display '\\\%(start\|stop\)\%(not\)\?\%(all\)\?mode\>'
 
@@ -110,7 +111,7 @@ syn match   contextSpecial    display '\\\@!\%(\~\|&\|\^\|_\|-\{2,3}\)'
 syn match   contextScriptError        display '[_^]'
 
 syn match   contextParameterError     display '#'
-syn match   contextParameter  display '\\\@!#\d\+'
+syn match   contextParameter  display '\\\@!#\+\d\+'
 
 " Fonts And Styles: {{{1
 " -----------------
@@ -695,8 +696,6 @@ if has('conceal') && &enc == 'utf-8'
     endfor
   endif
 
-endif
-
   " Accents: {{{2
   " Unicode names:
   "   bar   -> macron
@@ -731,6 +730,8 @@ endif
       "call s:ContextConcealSymbol('\\'.symbol[0].'\>', symbol[1])
     endfor
   endif
+
+endif
 
 " Types And Codes: {{{1
 " ----------------
