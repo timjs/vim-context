@@ -184,7 +184,7 @@ if has('conceal') && &enc == 'utf-8'
   "   a = accents
   " By default we conceal everything.
   if !exists('g:context_conceal')
-   let s:context_conceal = 'mfsdglnab'
+   let s:context_conceal = 'mfsdglnba'
   else
    let s:context_conceal = g:context_conceal
   endif
@@ -299,6 +299,8 @@ if has('conceal') && &enc == 'utf-8'
     \ ['gtreqless'          , '⋛'],
     \ ['gtrless'            , '≷'],
     \ ['gtrsim'             , '≳'],
+    \ ['hbar'               , 'ħ'],
+    \ ['hslash'             , 'ℏ'],
     \ ['hookleftarrow'      , '↩'],
     \ ['hookrightarrow'     , '↪'],
     \ ['iiint'              , '∭'],
