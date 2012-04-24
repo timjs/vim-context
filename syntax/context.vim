@@ -80,12 +80,11 @@ syn match   contextSetup      display '\\\%(start\|stop\)\?setups\>'
 " The purpose of this code is only to highlight matching braces and parenthesis. Just as the folds defined below they are transparent. Math concealment doesn't work inside transparent regions, so we've to define these groups once again below.
 syn region  contextGroup      transparent matchgroup=contextDelimiter start='{'  end='}'
 syn region  contextGroup      transparent matchgroup=contextDelimiter start='('  end=')'
-"syn region  contextGroup      transparent matchgroup=contextDelimiter start='\[' end='\]'
 
-" To get rid of nasty spell errors for options, we don't allow spell check inside argument brackets.
+" To get rid of nasty spell errors for options, we don't allow spell check inside argument brackets. Here we can't use the transparent option.
 syn region  contextArgument               matchgroup=contextDelimiter start='\[' end='\]' contains=TOP,@Spell,contextScriptError
 
-" Ending delimiters that are not matched by groups, gathers and arguments above (which have priority because the opening starts earlier), are matched as errors.
+" Ending delimiters that are not matched by the groups above (which have priority because the opening starts earlier), are matched as errors.
 syn match   contextMismatch   display '[]})]'
 
 " As a bonus, we can highlight some constants inside argument brackets.
