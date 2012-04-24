@@ -77,12 +77,12 @@ syn match   contextSetup      display '\\\%(start\|stop\)\?setups\>'
 " Groups And Arguments: {{{1
 " -------------------
 
-" The purpose of this code is only to highlight matching braces and parenthesis. Just as the folds defined below they are transparent.
-"FIXME conceal inside group and gather
+" The purpose of this code is only to highlight matching braces and parenthesis. Just as the folds defined below they are transparent. Math concealment doesn't work inside transparent regions, so we've to define these groups once again below.
 syn region  contextGroup      transparent matchgroup=contextDelimiter start='{'  end='}'
-syn region  contextGather     transparent matchgroup=contextDelimiter start='('  end=')'
+syn region  contextGroup      transparent matchgroup=contextDelimiter start='('  end=')'
+"syn region  contextGroup      transparent matchgroup=contextDelimiter start='\[' end='\]'
 
-" To get rid of nasty spell errors for options, we don't allow spell check inside argument brackets. Here we can't use transparent
+" To get rid of nasty spell errors for options, we don't allow spell check inside argument brackets.
 syn region  contextArgument               matchgroup=contextDelimiter start='\[' end='\]' contains=TOP,@Spell,contextScriptError
 
 " Ending delimiters that are not matched by groups, gathers and arguments above (which have priority because the opening starts earlier), are matched as errors.
@@ -164,6 +164,11 @@ syn region  contextMath               matchgroup=contextDelimiter start='\$\$'  
 syn region  contextMath               matchgroup=contextBlock     start='\\start\z(\a*\)formula\>' end='\\stop\z1formula\>' contains=TOP,@Spell,contextScriptError
 
 syn region  contextMathText   display matchgroup=contextDelimiter start='\\\%(inter\)\?text{'      end='}'                  contains=TOP contained containedin=contextMath
+
+" Because math concealment doesn't work well with the transparent groups defined by contextGroup, we define them here once again.
+syn region  contextMath    transparent matchgroup=contextDelimiter start='{'                        end='}'                 contained containedin=contextMath
+syn region  contextMath    transparent matchgroup=contextDelimiter start='('                        end=')'                 contained containedin=contextMath
+syn region  contextMath    transparent matchgroup=contextDelimiter start='\['                       end='\]'                contained containedin=contextMath
 
 " Math Concealment: {{{1
 " ~~~~~~~~~~~~~~~~~
@@ -750,7 +755,7 @@ endif
 " ----------------
 
 syn region  contextTyping     display matchgroup=contextDelimiter start='\\type\z(\A\)'                 end='\z1'
-syn region  contextTyping     display matchgroup=contextDelimiter start='\\\%(type\?\|tex\|arg\|mat\){' end='}'               contains=contextGroup
+syn region  contextTyping     display matchgroup=contextDelimiter start='\\\%(type\?\|tex\|arg\|mat\){' end='}'
 
 "FIXME arguments after \starttyping
 syn region  contextTyping             matchgroup=contextBlock   start='\\start\z(\a*\)typing\>'       end='\\stop\z1typing\>' contains=contextComment
