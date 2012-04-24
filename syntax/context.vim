@@ -182,6 +182,7 @@ if has('conceal') && &enc == 'utf-8'
   "   n = numeric superscripts/subscripts
   "   b = blackboard, calligraphic and fraktur
   "   a = accents
+  "   S = sub- and superscripts inside braces
   " By default we conceal everything.
   if !exists('g:context_conceal')
    let s:context_conceal = 'mfsdglnba'
@@ -189,9 +190,11 @@ if has('conceal') && &enc == 'utf-8'
    let s:context_conceal = g:context_conceal
   endif
 
-  " We will define the unbraced variants separately for each symbol in the function ContextConcealScript.
-  syn region contextSuperscript start='\^{' end='}' concealends contained containedin=contextMath contains=contextSuperscript,contextSubscript,contextSuperscripts,contextCommand
-  syn region contextSubscript   start='_{'  end='}' concealends contained containedin=contextMath contains=contextSuperscript,contextSubscript,contextSubscripts,contextCommand
+  if s:context_conceal =~ 'S'
+    " We will define the unbraced variants separately for each symbol in the function ContextConcealScript.
+    syn region contextSuperscript start='\^{' end='}' concealends contained containedin=contextMath contains=contextSuperscript,contextSubscript,contextSuperscripts,contextCommand
+    syn region contextSubscript   start='_{'  end='}' concealends contained containedin=contextMath contains=contextSuperscript,contextSubscript,contextSubscripts,contextCommand
+  endif
 
   fun! s:ContextConcealSymbol(pattern, replacement)
     exe 'syn match contextMathSymbol "'.a:pattern.'" contained containedin=contextMath conceal cchar='.a:replacement
