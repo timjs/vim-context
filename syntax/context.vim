@@ -82,6 +82,7 @@ syn region  contextGroup      transparent matchgroup=contextDelimiter start='{' 
 syn region  contextGroup      transparent matchgroup=contextDelimiter start='('  end=')'
 
 " To get rid of nasty spell errors for options, we don't allow spell check inside argument brackets. Here we can't use the transparent option.
+" We don't define this as a 'nextgroup' after commands to save us some work.
 syn region  contextArgument               matchgroup=contextDelimiter start='\[' end='\]' contains=TOP,@Spell,contextScriptError
 
 " Ending delimiters that are not matched by the groups above (which have priority because the opening starts earlier), are matched as errors.
