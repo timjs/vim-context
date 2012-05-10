@@ -191,7 +191,7 @@ if has('conceal') && &enc == 'utf-8'
   "   S = sub- and superscripts inside braces
   " By default we conceal everything.
   if !exists('g:context_conceal')
-   let s:context_conceal = 'mfsdglnba'
+   let s:context_conceal = 'mfsdglnb'
   else
    let s:context_conceal = g:context_conceal
   endif
