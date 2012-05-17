@@ -43,7 +43,7 @@ syn match   contextBlock      display '\\\%(start\|stop\)\a*'
 
 syn match   contextCondition  display '\\\%(if\a\+\|else\|fi\)\>'
 syn match   contextCondition  display '\\doif\a*' 
-syn match   contextCondition  display '\\\%(start\|stop\)\%(not\)\?\%(all\)\?mode\>'
+syn match   contextCondition  display '\\\%(start\|stop\)\%(not\)\?\%(all\)\?mode\%(set\)\?\>'
 
 syn match   contextLoop       display '\\do\%(\%(stepwise\)\?recurse\|loop\)\>'
 syn match   contextLoop       display '\\\%(recurselevel\|exitloop\)\>'
