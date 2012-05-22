@@ -3,15 +3,7 @@
 " Maintainer:       Tim Steenvoorden <steenvoo@science.ru.nl>
 " Latest Revision:  2012-01-18
 " TODO:
-"   * Conceal \quote{} and \quotation?
 "   * minus in digits.
-"   * \protect / \unprotect
-"     - \..@..!..?..
-"     - \new(if|counter|box|..)
-"     - \long\[egx](def|let)
-"     - \expandafter
-"     - \unexpanded
-"     - ...
 
 " Initialize Syntaxfile: {{{1
 " ======================
@@ -41,7 +33,6 @@ syn match   contextCommand    display '\\\a\+'
 " Some commands are special statements...
 syn match   contextBlock      display '\\\%(start\|stop\)\a*'
 
-syn match   contextCondition  display '\\\%(if\a\+\|else\|fi\)\>'
 syn match   contextCondition  display '\\doif\a*' 
 syn match   contextCondition  display '\\\%(start\|stop\)\%(not\)\?\%(all\)\?mode\%(set\)\?\>'
 
@@ -73,6 +64,15 @@ syn match   contextDefine     display '\\\%(start\|stop\)texdefinition\>'
 
 syn match   contextSetup      display '\\\%(setup\|use\|enable\|disable\|prevent\|show\)\a\+'
 syn match   contextSetup      display '\\\%(start\|stop\)\?setups\>'
+
+syn region  contextUnprotected        transparent matchgroup=contextSetup start='\\unprotect' end='\\protect'
+
+syn match   contextCommand    display '\\\(\a\|@\|!\)\+'              contained containedin=contextUnprotected
+syn match   contextDefine     display '\(\\long\)\?\\[egx]def'        contained containedin=contextUnprotected
+syn match   contextDefine     display '\\let'                         contained containedin=contextUnprotected
+syn match   contextDefine     display '\\\(expandafter\|unexpanded\)' contained containedin=contextUnprotected
+syn match   contextDefine     display '\\new\(if\|counter\|box\)'     contained containedin=contextUnprotected
+syn match   contextCondition  display '\\\%(if\a\+\|else\|fi\)\>'     contained containedin=contextUnprotected
 
 " Groups And Arguments: {{{1
 " -------------------
