@@ -129,7 +129,7 @@ syn match   contextFont       display '\\\%(em\|tf\|b[fsi]\|s[cl]\|it\|os\)\%(xx
 syn match   contextFont       display '\\\%(vi\{1,3}\|ix\|xi\{0,2}\)\>'
 
 syn match   contextStyle      display '\\\%(cap\|Cap\|CAP\|Caps\|nocap\)\>'
-syn match   contextStyle      display '\\\%(Word\|WORD\|Words\|WORDS\)\>'
+syn match   contextStyle      display '\\\%(word\|Word\|WORD\|Words\|WORDS\)\>'
 syn match   contextStyle      display '\\\%(underbar\|over\%(bar\|strike\)\)s\?'
 "FIXME What is this?
 "syn match   contextStyle      display '\\\%(character\|Character\)s\?\>'
