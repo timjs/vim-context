@@ -1,7 +1,7 @@
 " Vim syntax file
 " Language:         ConTeXt typesetting engine
 " Maintainer:       Tim Steenvoorden <steenvoo@science.ru.nl>
-" Latest Revision:  2012-01-18
+" Latest Revision:  2012-05-29
 " TODO:
 "   * minus in digits.
 
@@ -187,11 +187,12 @@ if has('conceal') && &enc == 'utf-8'
   "   l = Latin superscripts/subscripts
   "   n = numeric superscripts/subscripts
   "   b = blackboard, calligraphic and fraktur
+  "   B = short blackboard
   "   a = accents
   "   S = sub- and superscripts inside braces
   " By default we conceal everything.
   if !exists('g:context_conceal')
-   let s:context_conceal = 'mfsdglnb'
+   let s:context_conceal = 'mfsdglnbB'
   else
    let s:context_conceal = g:context_conceal
   endif
@@ -715,6 +716,11 @@ if has('conceal') && &enc == 'utf-8'
     for symbol in s:contextNumericSymbols
       call s:ContextConcealSymbol('\\mathbb{'.symbol[0].'}', symbol[3])
     endfor
+    if s:context_conceal =~ 'B'
+      for symbol in s:contextLatinSymbols
+        call s:ContextConcealSymbol('\\'.symbol[0].symbol[0], symbol[3])
+      endfor
+    endif
   endif
 
   " Accents: {{{2
