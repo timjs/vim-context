@@ -31,6 +31,7 @@ syn match   contextDelimiter  display '\(``\|\'\'\)'
 " Mathematics: {{{1
 " ------------
 
+" No, I won't define "eqnarray" here, it is obsolete...
 syn region  contextMath       display matchgroup=contextDelimiter start='\\begin{\z(\(equation\|align\|gather\|multiline\)\*\?\)}' end='\\end{\z1}' contains=TOP,@Spell,contextScriptError
 
 " Finalize Syntaxfile: {{{1
