@@ -31,8 +31,17 @@ syn match   contextDelimiter  display '\(``\|\'\'\)'
 " Mathematics: {{{1
 " ------------
 
+syn region  contextMath       display matchgroup=contextDelimiter start='\\ensuremath{'                                            end='}'          contains=TOP,@Spell,contextScriptError
+
 " No, I won't define "eqnarray" here, it is obsolete...
-syn region  contextMath       display matchgroup=contextDelimiter start='\\begin{\z(\(equation\|align\|gather\|multiline\)\*\?\)}' end='\\end{\z1}' contains=TOP,@Spell,contextScriptError
+syn region  contextMath               matchgroup=contextBlock     start='\\begin{\z(\(equation\|align\|gather\|multiline\)\*\?\)}' end='\\end{\z1}' contains=TOP,@Spell,contextScriptError
+
+" Typing And Coding: {{{1
+" ------------------
+
+syn region  contextTyping     display matchgroup=contextDelimiter start='\\verb\z(\A\)'                    end='\z1'
+
+syn region  contextTyping             matchgroup=contextBlock   start='\\begin{\z(verbatim\|lstlisting\)}' end='\\end{\z1}' contains=contextComment
 
 " Finalize Syntaxfile: {{{1
 " ====================
