@@ -718,7 +718,7 @@ if has('conceal') && &enc == 'utf-8'
     endfor
     if s:context_conceal =~ 'B'
       for symbol in s:contextLatinSymbols
-        call s:ContextConcealSymbol('\\'.symbol[0].symbol[0], symbol[3])
+        call s:ContextConcealSymbol('\\'.symbol[0].symbol[0].'\>', symbol[3])
       endfor
     endif
   endif
@@ -760,8 +760,8 @@ if has('conceal') && &enc == 'utf-8'
 
 endif
 
-" Types And Codes: {{{1
-" ----------------
+" Typing And Coding: {{{1
+" ------------------
 
 syn region  contextTyping     display matchgroup=contextDelimiter start='@'                             end='@'
 syn region  contextTyping     display matchgroup=contextDelimiter start='\\type\z(\A\)'                 end='\z1'
