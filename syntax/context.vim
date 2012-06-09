@@ -27,17 +27,14 @@ syn spell toplevel
 " Commands: {{{1
 " ---------
 
-" We just match \...alphabetic... Sometimes @ and ! are used inside commands, but this is only supported inside \unprotect'ed environments.
+" We just match \...alphabetic... Sometimes _, @ and ! are used inside commands, but this is only supported inside \unprotect'ed environments.
 syn match   contextCommand    display '\\\a\+'
+syn match   contextCommand    display '\\\%(\a\|_\|@\|!\)\+' contained containedin=contextUnprotect
+
+syn region  contextUnprotect  transparent matchgroup=contextDelimiter start='\\unprotect' end='\\protect'
 
 " Some commands are special statements...
 syn match   contextBlock      display '\\\%(start\|stop\)\a*'
-
-syn match   contextCondition  display '\\doif\a*' 
-syn match   contextCondition  display '\\\%(start\|stop\)\%(not\)\?\%(all\)\?mode\%(set\)\?\>'
-
-syn match   contextLoop       display '\\do\%(\%(stepwise\)\?recurse\|loop\)\>'
-syn match   contextLoop       display '\\\%(recurselevel\|exitloop\)\>'
 
 " ...or section heads.
 syn match   contextHead       display '\\\%(start\|stop\)\?part\>'
@@ -57,7 +54,7 @@ syn match   contextStructure  display '^\s*\\\%(start\|stop\)text$'
 " Definitions And Setups: {{{1
 " -----------------------
 
-"syn match   contextDefine     display '\\[egx]\%(def\|let\)'
+syn match   contextDefine     display '\\\%([egx]\?def\|let\)\>'
 syn match   contextDefine     display '\\\%(re\)\?define\>'
 syn match   contextDefine     display '\\\%(define\|\%(re\)\?set\|get\|let\)\a\+'
 syn match   contextDefine     display '\\\%(start\|stop\)texdefinition\>'
@@ -65,14 +62,13 @@ syn match   contextDefine     display '\\\%(start\|stop\)texdefinition\>'
 syn match   contextSetup      display '\\\%(setup\|use\|enable\|disable\|prevent\|show\)\a\+'
 syn match   contextSetup      display '\\\%(start\|stop\)\?setups\>'
 
-syn region  contextUnprotected        transparent matchgroup=contextSetup start='\\unprotect' end='\\protect'
+syn match   contextCondition  display '\\\%(if\a\+\|else\|fi\)\>'
+syn match   contextCondition  display '\\doif\a*' 
+syn match   contextCondition  display '\\\%(start\|stop\)\%(not\)\?\%(all\)\?mode\%(set\)\?\>'
 
-syn match   contextCommand    display '\\\(\a\|@\|!\)\+'              contained containedin=contextUnprotected
-syn match   contextDefine     display '\(\\long\)\?\\[egx]def'        contained containedin=contextUnprotected
-syn match   contextDefine     display '\\let'                         contained containedin=contextUnprotected
-syn match   contextDefine     display '\\\(expandafter\|unexpanded\)' contained containedin=contextUnprotected
-syn match   contextDefine     display '\\new\(if\|counter\|box\)'     contained containedin=contextUnprotected
-syn match   contextCondition  display '\\\%(if\a\+\|else\|fi\)\>'     contained containedin=contextUnprotected
+syn match   contextLoop       display '\\do\%(\%(stepwise\)\?recurse\|loop\)\>'
+syn match   contextLoop       display '\\\%(recurselevel\|exitloop\)\>'
+
 
 " Groups And Arguments: {{{1
 " -------------------
@@ -763,9 +759,9 @@ endif
 " Typing And Coding: {{{1
 " ------------------
 
-syn region  contextTyping     display matchgroup=contextDelimiter start='@'                             end='@'
-syn region  contextTyping     display matchgroup=contextDelimiter start='\\type\z(\A\)'                 end='\z1'
-syn region  contextTyping     display matchgroup=contextDelimiter start='\\\%(type\?\|tex\|arg\|mat\){' end='}'
+syn region  contextTyping     display matchgroup=contextDelimiter start='@'                                end='@'
+syn region  contextTyping     display matchgroup=contextDelimiter start='\\type\s*\z(\A\)'                 end='\z1'
+syn region  contextTyping     display matchgroup=contextDelimiter start='\\\%(type\?\|tex\|arg\|mat\)\s*{' end='}'
 
 "FIXME arguments after \starttyping
 syn region  contextTyping             matchgroup=contextBlock   start='\\start\z(\a*\)typing\>'       end='\\stop\z1typing\>' contains=contextComment
