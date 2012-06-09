@@ -828,8 +828,11 @@ endif
 " Syncing: {{{1
 " ========
 
-" Syncing against comments is simply the best way to go.
-syn sync    ccomment          contextComment
+" Syncing from the start is simply the best way to go.
+syn sync    fromstart
+" Syncing against comments is a nice taught, but won't work with comments inside math and protected environments.
+"syn sync    ccomment          contextComment
+" Maybe some day we'll sync against sections...
 
 " Highlight Definitions: {{{1
 " ======================
