@@ -130,7 +130,7 @@ syn match   contextStyle      display '\\\%(underbar\|over\%(bar\|strike\)\)s\?'
 "FIXME What is this?
 "syn match   contextStyle      display '\\\%(character\|Character\)s\?\>'
 
-syn region  contextTypeFace    display matchgroup=contextDelimiter start='{\\tf\s'     end='}' contains=TOP
+syn region  contextNormal      display matchgroup=contextDelimiter start='{\\tf\s'     end='}' contains=TOP
 syn region  contextItalic      display matchgroup=contextDelimiter start='{\\it\s'     end='}' contains=TOP
 syn region  contextSlanted     display matchgroup=contextDelimiter start='{\\sl\s'     end='}' contains=TOP
 syn region  contextBold        display matchgroup=contextDelimiter start='{\\bf\s'     end='}' contains=TOP
@@ -140,6 +140,8 @@ syn region  contextBoldItalic  display matchgroup=contextDelimiter start='{\\it\
 syn region  contextBoldSlanted display matchgroup=contextDelimiter start='{\\bs\s'     end='}' contains=TOP
 syn region  contextBoldSlanted display matchgroup=contextDelimiter start='{\\bf\\sl\s' end='}' contains=TOP
 syn region  contextBoldSlanted display matchgroup=contextDelimiter start='{\\sl\\bf\s' end='}' contains=TOP
+
+syn region  contextAlert       display matchgroup=contextDelimiter start='\\alert{'           end='}'                 contains=TOP
 
 syn region  contextOuterEmph   display matchgroup=contextDelimiter start='{\\em\s'            end='}'                 contains=TOP,contextOuterEmph
 syn region  contextOuterEmph   display matchgroup=contextDelimiter start='\\emph{'            end='}'                 contains=TOP,contextOuterEmph
@@ -861,15 +863,16 @@ hi def link contextConstant       Constant
 hi def link contextFont           Type
 hi def link contextStyle          contextFont
 
-hi def      contextTypeFace       gui=NONE
+hi def      contextNormal         gui=NONE
 hi def      contextItalic         gui=italic
 hi def link contextSlanted        contextItalic
 hi def      contextBold           gui=bold
 hi def      contextBoldItalic     gui=bold,italic
 hi def link contextBoldSlanted    contextBoldItalic
 
-hi def      contextOuterEmph      gui=italic
-hi def      contextInnerEmph      gui=NONE
+hi def link contextAlert          contextBold
+hi def link contextOuterEmph      contextItalic
+hi def link contextInnerEmph      contextNormal
 
 " Specials:
 hi def link contextEscaped        contextSpecial
