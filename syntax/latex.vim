@@ -47,9 +47,10 @@ syn region  contextMath               matchgroup=contextBlock     start='\\begin
 " Typing And Coding: {{{1
 " ------------------
 
-syn region  contextTyping     display matchgroup=contextDelimiter start='\\verb\z(\A\)'                    end='\z1'
+syn region  contextTyping     display matchgroup=contextDelimiter start='\\verb\z(\A\)'                      end='\z1'
 
-syn region  contextTyping             matchgroup=contextBlock   start='\\begin{\z(verbatim\|lstlisting\)}' end='\\end{\z1}' contains=contextComment
+syn region  contextTyping             matchgroup=contextBlock     start='\\begin{\z(verbatim\|lstlisting\)}' end='\\end{\z1}' contains=contextComment
+
 " Folding: {{{1
 " --------
 
