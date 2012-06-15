@@ -50,6 +50,19 @@ syn region  contextMath               matchgroup=contextBlock     start='\\begin
 syn region  contextTyping     display matchgroup=contextDelimiter start='\\verb\z(\A\)'                    end='\z1'
 
 syn region  contextTyping             matchgroup=contextBlock   start='\\begin{\z(verbatim\|lstlisting\)}' end='\\end{\z1}' contains=contextComment
+" Folding: {{{1
+" --------
+
+if exists('g:latex_no_fold')
+ let s:latex_fold = 0
+else
+ let s:latex_fold = 1
+endif
+
+
+if has('folding') && s:latex_fold == 1
+  syn region  contextDocument   transparent keepend start='\\begin{document}' end='\\end{document}'
+endif
 
 " Finalize Syntaxfile: {{{1
 " ====================
