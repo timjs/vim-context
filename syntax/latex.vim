@@ -23,6 +23,14 @@ set cpo&vim
 " Syntax Definitions:
 " ===================
 
+" Commands: {{{1
+" ---------
+
+syn match   contextBlock      display '\\\%(begin\|end\){\w\+}'
+
+syn match   contextStructure  display '\\\%(begin\|end\){document}'
+syn match   contextStructure  display '\\documentclass'
+
 " Quotes: {{{1
 " -------
 
