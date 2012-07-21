@@ -1,0 +1,117 @@
+# Vim snippets file
+# Language:    ConTeXt typesetting engine
+# Maintainer:  Tim Steenvoorden <steenvoo@science.ru.nl>
+# Version:     21 Jul 2012
+#
+# Use with snipmate plugin.
+
+# General environments {{{1
+# --------------------
+
+snippet start
+	\start${1:text}
+	${2}
+	\stop$1
+
+# Itemizations {{{1
+# ------------
+
+snippet item
+	\startitemize
+	\item ${1}
+	\stopitemize
+
+snippet enum
+	\startitemize[n]
+	\item ${1}
+	\stopitemize
+
+snippet it
+	\item ${1}
+
+# Floats {{{1
+# ------
+
+snippet fig
+	\placefigure[${1}][fig:${2}]
+	  {${3:$2}}
+	  {\externalpicture[${4:$2}][${5:width=\textwidth}]}
+
+snippet com
+	\placefigure[${1}][fig:${2}]
+	  {${3:$2}}
+	  \startcombination[${4:2*1}]
+	  ${5}
+	  \stopcombination
+
+snippet pic
+	{\externalpicture[${1}][${2:width=0.5\textwidth}]}
+
+snippet tab
+	\placetable[${1}][tab:${2}]
+	\starttabulate[${3:|l|l|}]
+	${4}
+	\stoptabulate
+
+# Mathematics {{{1
+# -----------
+
+snippet for
+	\placeformula[for:${1:label}]
+	\startformula
+	${2}
+	\stopformula
+
+snippet ali
+	\startalign[${1}]
+	${2}
+	\stopalign
+
+snippet mat
+	\start${1:p/b/B/v/V}matrix
+	${2}
+	\stop$1matrix
+
+snippet cas
+	\startcases
+	\NC ${1} \MC \text{if} ${2} \NR
+	${3}
+	\NC ${4} \NC otherwise \NR
+	\stopcases
+
+# Additions {{{2
+# ~~~~~~~~~
+
+snippet spl
+	\placeformula[for:${1:label}]
+	\startformula\startsplit
+	${2}
+	\stopsplit\stopformula
+
+snippet spr
+	\placeformula[for:${1:label}]
+	\startformula\startspread
+	${2}
+	\stopspread\stopformula
+
+snippet stp
+	\placeformula[for:${1:label}]
+	\startformula\startsteps
+	${2}
+	\stopsteps\stopformula
+
+# Headings {{{1
+# --------
+
+snippet part
+	\part[prt:${1:label}]{${2:title}}
+
+snippet chap
+	\chapter[chp:${1:label}]{${2:title}}
+
+snippet sec
+	\section[sec:${1:label}]{${2:title}}
+
+snippet sub
+	\subsection[sub:${1:label}]{${2:title}}
+
