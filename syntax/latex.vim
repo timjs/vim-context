@@ -42,6 +42,17 @@ syn match   contextDefine     display '\\\%(re\)\?new\%(command\|environment\)\>
 
 syn match   contextDelimiter  display '\(``\|\'\'\)'
 
+" Fonts And Styles: {{{1
+" -----------------
+
+syn match   contextFont       display '\\normalfont\>'
+syn match   contextFont       display '\\\%(rm\|sf\|tt\)family\>'
+syn match   contextFont       display '\\\%(md\|bf\)series\>'
+syn match   contextFont       display '\\\%(up\|it\|sl\|sc\)shape\>'
+
+syn match   contextStyle      display '\\\%(tiny\|scriptsize\|footnotesize\|small\|normalsize\|large\|Large\|LARGE\|huge\|Huge\)\>'
+syn match   contextStyle      display '\\text\%(normal\|rm\|sf\|tt\|up\|it\|sl\|sc\|bf\|md\)'
+
 " Mathematics: {{{1
 " ------------
 
