@@ -29,7 +29,8 @@ set cpo&vim
 syn match   contextBlock      display '\\\%(begin\|end\){\w\+}'
 
 syn match   contextStructure  display '\\\%(begin\|end\){document}'
-syn match   contextStructure  display '\\documentclass'
+syn match   contextStructure  display '\\documentclass\>'
+syn match   contextStructure  display '\\\%(titlehead\|subject\|title\|author\|date\|publishers\)\>'
 
 " Quotes: {{{1
 " -------
