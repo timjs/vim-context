@@ -32,6 +32,11 @@ syn match   contextStructure  display '\\\%(begin\|end\){document}'
 syn match   contextStructure  display '\\documentclass\>'
 syn match   contextStructure  display '\\\%(titlehead\|subject\|title\|author\|date\|publishers\)\>'
 
+" Definitions And Setups: {{{1
+" -----------------------
+
+syn match   contextDefine     display '\\\%(re\)\?new\%(command\|environment\)\>'
+
 " Quotes: {{{1
 " -------
 
