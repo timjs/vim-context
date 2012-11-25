@@ -1,7 +1,7 @@
 " Vim syntax file
 " Language:         LaTeX typesetting engine
 " Maintainer:       Tim Steenvoorden <steenvoo@science.ru.nl>
-" Latest Revision:  2012-05-29
+" Latest Revision:  2012-10-02
 "
 " This is *not* a standalone LaTeX specific syntax file!
 " Syntax is based on ConTeXt with some additions,
@@ -59,7 +59,7 @@ syn match   contextStyle      display '\\text\%(normal\|rm\|sf\|tt\|up\|it\|sl\|
 syn region  contextMath       display matchgroup=contextDelimiter start='\\ensuremath{'                                            end='}'          contains=TOP,@Spell,contextScriptError
 
 " No, I won't define "eqnarray" here, it is obsolete...
-syn region  contextMath               matchgroup=contextBlock     start='\\begin{\z(\(equation\|align\|gather\|multiline\)\*\?\)}' end='\\end{\z1}' contains=TOP,@Spell,contextScriptError
+syn region  contextMath               matchgroup=contextBlock     start='\\begin{\z(\(equation\|align\|gather\|multline\)\*\?\)}' end='\\end{\z1}' contains=TOP,@Spell,contextScriptError
 
 " Typing And Coding: {{{1
 " ------------------
