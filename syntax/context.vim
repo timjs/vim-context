@@ -335,6 +335,7 @@ if has('conceal') && &enc == 'utf-8'
     \ ['lesssim'            , '≲'],
     \ ['lfloor'             , '⌊'],
     \ ['ll'                 , '≪'],
+    \ ['lnot'               , '¬'],
     \ ['lor'                , '∨'],
     \ ['lneqq'              , '≨'],
     \ ['ltimes'             , '⋉'],
