@@ -759,6 +759,13 @@ if has('conceal') && &enc == 'utf-8'
 
 endif
 
+" Tabulates: {{{1
+" ----------
+
+syn match   contextTabulate   '\\NC\>' conceal cchar=|
+syn match   contextTabulate   '\\NR\>' conceal cchar=|
+syn match   contextTabulate   '\\HL\>' conceal cchar=-
+
 " Typing And Coding: {{{1
 " ------------------
 
@@ -890,6 +897,9 @@ hi def link contextMathAccent     contextMathSymbol
 hi def link contextSuperscript    contextMathSymbol
 hi def link contextSubscript      contextMathSymbol
 hi!    link Conceal               contextMathSymbol
+
+" Tabulates:
+hi def link contextTabulate       SpecialChar
 
 " Typing:
 hi def link contextTyping         String
