@@ -762,9 +762,11 @@ endif
 " Tabulates: {{{1
 " ----------
 
-syn match   contextTabulate   '\\NC\>' conceal cchar=|
-syn match   contextTabulate   '\\NR\>' conceal cchar=|
-syn match   contextTabulate   '\\HL\>' conceal cchar=-
+if has('conceal')
+  syn match   contextTabulate   '\\NC\>' conceal cchar=|
+  syn match   contextTabulate   '\\NR\>' conceal cchar=|
+  syn match   contextTabulate   '\\HL\>' conceal cchar=-
+endif
 
 " Typing And Coding: {{{1
 " ------------------
