@@ -35,7 +35,7 @@ snippet it
 snippet fig
 	\placefigure[${1}][fig:${2}]
 	  {${3:$2}}
-	  {\externalpicture[${4:$2}][${5:width=\textwidth}]}
+	  {\externalfigure[${4:$2}][${5:width=\textwidth}]}
 
 snippet com
 	\placefigure[${1}][fig:${2}]
@@ -44,8 +44,8 @@ snippet com
 	  ${5}
 	  \stopcombination
 
-snippet pic
-	{\externalpicture[${1}][${2:width=0.5\textwidth}]}
+snippet ext
+	{\externalfigure[${1}][${2:width=0.5\textwidth}]}
 
 snippet tab
 	\placetable[${1}][tab:${2}]
