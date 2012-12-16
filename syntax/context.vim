@@ -156,6 +156,7 @@ syn region  contextInnerEmph           matchgroup=contextBlock     start='\\star
 
 syn region  contextMath       display matchgroup=contextDelimiter start='\$'                       end='\$'                 contains=TOP,@Spell,contextScriptError
 syn region  contextMath       display matchgroup=contextDelimiter start='\\math\%(ematics\)\?{'    end='}'                  contains=TOP,@Spell,contextScriptError
+syn region  contextMath       display matchgroup=contextDelimiter start='\\formula{'               end='}'                  contains=TOP,@Spell,contextScriptError
 syn region  contextMath       display matchgroup=contextDelimiter start='\\chemical{'              end='}'                  contains=TOP,@Spell,contextScriptError
 syn region  contextMath       display matchgroup=contextDelimiter start='\\molecule{'              end='}'                  contains=TOP,@Spell,contextScriptError
 
