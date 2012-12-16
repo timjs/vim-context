@@ -764,9 +764,9 @@ endif
 " ----------
 
 if has('conceal')
-  syn match   contextTabulate   '\\NC\>' conceal cchar=|
-  syn match   contextTabulate   '\\NR\>' conceal cchar=|
-  syn match   contextTabulate   '\\HL\>' conceal cchar=-
+  syn match   contextTabulate   '\\\(NC\|VL\)\>' conceal cchar=|
+  syn match   contextTabulate   '\\\(NR\|SR\|FR\|MR\|LR\|AR\)\>' conceal cchar=+
+  syn match   contextTabulate   '\\\(HL\|FL\|ML\|LL\)\>' conceal cchar=-
 endif
 
 " Typing And Coding: {{{1
