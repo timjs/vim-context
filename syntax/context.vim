@@ -56,7 +56,7 @@ syn match   contextStructure  display '^\s*\\\%(start\|stop\)text$'
 
 syn match   contextDefine     display '\\\%([egx]\?def\|let\)\>'
 syn match   contextDefine     display '\\\%(re\)\?define\>'
-syn match   contextDefine     display '\\\%(define\|\%(re\)\?set\|get\|let\)\a\+'
+syn match   contextDefine     display '\\\%(define\|\%(re\)\?set\|get\|let\|new\)\a\+'
 syn match   contextDefine     display '\\\%(start\|stop\)texdefinition\>'
 
 syn match   contextSetup      display '\\\%(setup\|use\|enable\|disable\|prevent\|show\)\a\+'
