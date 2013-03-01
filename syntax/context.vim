@@ -778,7 +778,7 @@ endif
 " Typing And Coding: {{{1
 " ------------------
 
-"syn region  contextTyping     display matchgroup=contextDelimiter start='@'                                end='@'
+syn region  contextTyping     display matchgroup=contextDelimiter start='@'                                end='@'
 syn region  contextTyping     display matchgroup=contextDelimiter start='\\type\s*\z(\A\)'                 end='\z1'
 syn region  contextTyping     display matchgroup=contextDelimiter start='\\\%(type\?\|tex\|arg\|mat\)\s*{' end='}'
 
