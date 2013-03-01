@@ -29,7 +29,7 @@ syn spell toplevel
 
 " We just match \...alphabetic... Sometimes _, @ and ! are used inside commands, but this is only supported inside \unprotect'ed environments.
 syn match   contextCommand    display '\\\a\+'
-syn match   contextCommand    display '\\\%(\a\|_\|@\|!\)\+' contained containedin=contextUnprotect
+syn match   contextCommand            '\\\%(\a\|_\|@\|!\|?\)\+' contained containedin=contextUnprotect
 
 syn region  contextUnprotect  transparent matchgroup=contextDelimiter start='\\unprotect' end='\\protect'
 
