@@ -764,10 +764,14 @@ endif
 " -----------
 
 if has('conceal')
-  syn match   contextTabulate   '\\\(NC\|RC\|HC\|SC\|VL\)\>'     conceal cchar=|
-  syn match   contextTabulate   '\\\(EQ\|RQ\|HQ\|SQ\)\>'         conceal cchar=:
-  syn match   contextTabulate   '\\\(NR\|FR\|MR\|LR\|AR\|SR\)\>' conceal cchar=+
-  syn match   contextTabulate   '\\\(HL\|FL\|ML\|LL\)\>'         conceal cchar=-
+  "syn match   contextTabulate   '\\\(NC\|RC\|HC\|SC\|VL\)\>'     conceal cchar=|
+  "syn match   contextTabulate   '\\\(EQ\|RQ\|HQ\|SQ\|TQ\)\>'     conceal cchar=:
+  "syn match   contextTabulate   '\\\(NR\|FR\|MR\|LR\|AR\|SR\)\>' conceal cchar=+
+  "syn match   contextTabulate   '\\\(HL\|FL\|ML\|LL\)\>'         conceal cchar=-
+  syn match   contextTabulate   '\\\uC\>' conceal cchar=|
+  syn match   contextTabulate   '\\\uQ\>' conceal cchar=:
+  syn match   contextTabulate   '\\\uR\>' conceal cchar=+
+  syn match   contextTabulate   '\\\uL\>' conceal cchar=-
 endif
 
 " Typing And Coding: {{{1
