@@ -441,6 +441,7 @@ if has('conceal') && &enc == 'utf-8'
     \ ['times'              , '×'],
     \ ['to'                 , '→'],
     \ ['top'                , '⊤'],
+    \ ['total'              , 'd'],
     \ ['triangleleft'       , '⊲'],
     \ ['trianglelefteq'     , '⊴'],
     \ ['triangleq'          , '≜'],
