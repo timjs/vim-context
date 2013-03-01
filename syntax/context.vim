@@ -784,8 +784,23 @@ syn region  contextTyping     display matchgroup=contextDelimiter start='\\\%(ty
 
 "FIXME arguments after \starttyping
 syn region  contextTyping             matchgroup=contextBlock   start='\\start\z(\a*\)typing\>'       end='\\stop\z1typing\>' contains=contextComment
+syn region  contextTyping             matchgroup=contextBlock   start='\\start\z(\u\+\)\>'            end='\\stop\z1\>'       contains=contextComment
 
-"TODO MetaPost, Lua etc.
+fun! s:ContextIncludeSyntax(name, startstop)
+  exe 'syn include @'.a:name.'Top syntax/'.a:name.'.vim'
+  unlet b:current_syntax
+  exe 'syn region context'.a:name.'Code transparent matchgroup=contextBlock start="\\start\z('.a:startstop.'\)\>" end="\\stop\z1\>" contains=@'.a:name.'Top'
+endfun
+
+let s:contextCodeNames = [
+  \ ['ruby'   , 'RUBY'   ],
+  \ ['haskell', 'HASKELL'],
+  \ ['lua'    , 'luacode'],
+  \ ['mp'     , '\(reusable\|static\|unique\|use\)\?MP\(environment\|figure\|graphic\|inclusions\|instance\)\?']]
+
+for name in s:contextCodeNames
+  call s:ContextIncludeSyntax(name[0], name[1])
+endfor
 
 " Comments: {{{1
 " ---------
