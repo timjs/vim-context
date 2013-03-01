@@ -837,6 +837,7 @@ if has('folding') && s:context_fold == 1
   syn region  contextDocument   transparent keepend      start='\\startenvironment\>'         end='\\stopenvironment\>'
 
   syn region  contextHiding     transparent keepend fold start='\\starthiding\>'              end='\\stophiding\>'                                                                                                             contained containedin=contextDocument
+  "syn region  contextHiding     transparent keepend fold start='\\startstandardmakeup\>'      end='\\stopstandardmakeup\>'                                                                                                     contained containedin=contextDocument
 
   " Fold everything up to subsections.
   syn region  contextPart       transparent keepend fold start='\\startpart\>'                end='\\stoppart\>'                                                                                                               contained containedin=contextDocument
