@@ -119,7 +119,7 @@ syn match   contextParameter  display '\\\@!#\+\d\+'
 " Fonts And Styles: {{{1
 " -----------------
 
-syn match   contextFont       display '\\\%(rm\|ss\|tt\|hw\|cg\|mf\)\>'
+syn match   contextFont       display '\\\%(rm\|ss\|tt\|hw\|cg\|mf\)\%(xx\|[xabcd]\)\?\>'
 
 syn match   contextFont       display '\\\%(em\|tf\|b[fsi]\|s[cl]\|it\|os\)\%(xx\|[xabcd]\)\?\>'
 syn match   contextFont       display '\\\%(vi\{1,3}\|ix\|xi\{0,2}\)\>'
