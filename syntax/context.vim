@@ -89,7 +89,7 @@ syn match   contextLabel      display '\a\+:[0-9a-zA-Z_\-: ]\+'                 
 syn match   contextNumber     display '\<[+-]\?\%(\d\+\%(\.\d\+\)\?\|\.\d\+\)\>'                                              contained containedin=contextArgument
 syn match   contextDimension  display '\<[+-]\?\%(\d\+\%(\.\d\+\)\?\|\.\d\+\)\%(p[tc]\|in\|bp\|cc]\|[cm]m\|dd\|sp\|e[mx]\)\>' contained containedin=contextArgument
 
-syn keyword contextConstant   yes no on off start stop contained containedin=contextArgument
+syn keyword contextConstant   yes no on off start stop true false contained containedin=contextArgument
 
 "TODO Maybe highlight more constants, probably do it this way.
 "syn match   contextConstant   display '\<\%(yes\|no\|on\|off\)=\@!\>' contained containedin=contextArgument
@@ -323,8 +323,8 @@ if has('conceal') && &enc == 'utf-8'
     \ ['lceil'              , '⌈'],
     \ ['ldots'              , '…'],
     \ ['le'                 , '≤'],
-    \ ['leftarrow'          , '⟵'],
-    \ ['Leftarrow'          , '⟸'],
+    \ ['leftarrow'          , '←'],
+    \ ['Leftarrow'          , '⇐'],
     \ ['leftarrowtail'      , '↢'],
     \ ['Leftrightarrow'     , '⇔'],
     \ ['leftrightsquigarrow', '↭'],
@@ -337,6 +337,10 @@ if has('conceal') && &enc == 'utf-8'
     \ ['lfloor'             , '⌊'],
     \ ['ll'                 , '≪'],
     \ ['lnot'               , '¬'],
+    \ ['longleftarrow'      , '⟵'],
+    \ ['Longleftarrow'      , '⟸'],
+    \ ['longrightarrow'     , '⟶'],
+    \ ['Longrightarrow'     , '⟹'],
     \ ['lor'                , '∨'],
     \ ['lneqq'              , '≨'],
     \ ['ltimes'             , '⋉'],
