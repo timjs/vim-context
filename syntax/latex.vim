@@ -68,6 +68,14 @@ syn region  contextTyping     display matchgroup=contextDelimiter start='\\verb\
 
 syn region  contextTyping             matchgroup=contextBlock     start='\\begin{\z(verbatim\|lstlisting\)}' end='\\end{\z1}' contains=contextComment
 
+fun! s:LatexIncludeSyntax(name, startstop)
+  exe 'syn include @'.a:name.'Top syntax/'.a:name.'.vim'
+  unlet b:current_syntax
+  exe 'syn region context'.a:name.'Code transparent matchgroup=contextBlock start="\\begin{\z('.a:startstop.'\)}" end="\\end{\z1}" contains=@'.a:name.'Top'
+endfun
+
+call s:LatexIncludeSyntax('haskell', 'HASKELL')
+
 " Folding: {{{1
 " --------
 
