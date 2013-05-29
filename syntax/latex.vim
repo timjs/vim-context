@@ -64,9 +64,9 @@ syn region  contextMath               matchgroup=contextBlock     start='\\begin
 " Typing And Coding: {{{1
 " ------------------
 
-syn region  contextTyping     display matchgroup=contextDelimiter start='\\verb\z(\A\)'                      end='\z1'
+syn region  contextTyping     display matchgroup=contextDelimiter start='\\verb\z(\A\)'                            end='\z1'
 
-syn region  contextTyping             matchgroup=contextBlock     start='\\begin{\z(verbatim\|lstlisting\)}' end='\\end{\z1}' contains=contextComment
+syn region  contextTyping             matchgroup=contextBlock     start='\\begin{\z(verbatim\|code\|lstlisting\)}' end='\\end{\z1}' contains=contextComment
 
 fun! s:LatexIncludeSyntax(name, startstop)
   exe 'syn include @'.a:name.'Top syntax/'.a:name.'.vim'
