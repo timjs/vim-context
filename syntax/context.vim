@@ -103,11 +103,13 @@ syn keyword contextConstant   yes no on off start stop true false contained cont
 " Specials: {{{1
 " ---------
 
-syn match   contextEscaped    display '\\[%#~&$^_\{} \n]'
+syn match   contextEscaped    display '\\\W'
+"syn match   contextEscaped    display '\\[%#~&$^_\{} \n]'
 "syn match   contextEscaped    display '\\[`'"]'
 
 syn match   contextSpecial    display '\\\%(par\|crlf\)\>'
-syn match   contextSpecial    display '\\\@!\%(\~\|&\|\^\|_\|-\{2,3}\)'
+syn match   contextSpecial    display '\\\@!\%(\~\|\^\|_\|-\{2,3}\)'
+syn match   contextSpecial    display '\\$'
 "syn match   contextSpecial    display '|[<>/]\?|'
 
 " These are not allowed outside math mode, see math section.
@@ -249,7 +251,9 @@ if has('conceal') && &enc == 'utf-8'
     \ ['bigvee'             , '⋁'],
     \ ['bigwedge'           , '⋀'],
     \ ['blacksquare'        , '∎'],
+    \ ['booleans'           , '𝔹'],
     \ ['bot'                , '⊥'],
+    \ ['bowtie'             , '⋈'],
     \ ['boxdot'             , '⊡'],
     \ ['boxminus'           , '⊟'],
     \ ['boxplus'            , '⊞'],
@@ -267,6 +271,7 @@ if has('conceal') && &enc == 'utf-8'
     \ ['circledast'         , '⊛'],
     \ ['circledcirc'        , '⊚'],
     \ ['complement'         , '∁'],
+    \ ['complexes'          , 'ℂ'],
     \ ['cong'               , '≅'],
     \ ['coprod'             , '∐'],
     \ ['cup'                , '∪'],
@@ -276,7 +281,7 @@ if has('conceal') && &enc == 'utf-8'
     \ ['curlyvee'           , '⋎'],
     \ ['curlywedge'         , '⋏'],
     \ ['dashv'              , '⊣'],
-    \ ['diamond'            , '⋄'],
+    \ ['diamond'            , '◇'],
     \ ['div'                , '÷'],
     \ ['doteq'              , '≐'],
     \ ['doteqdot'           , '≑'],
@@ -319,13 +324,16 @@ if has('conceal') && &enc == 'utf-8'
     \ ['in'                 , '∈'],
     \ ['infty'              , '∞'],
     \ ['int'                , '∫'],
+    \ ['integers'           , 'ℤ'],
     \ ['land'               , '∧'],
     \ ['lceil'              , '⌈'],
     \ ['ldots'              , '…'],
     \ ['le'                 , '≤'],
+    \ ['leadsto'            , '↝'],
     \ ['leftarrow'          , '←'],
     \ ['Leftarrow'          , '⇐'],
     \ ['leftarrowtail'      , '↢'],
+    \ ['leftrightarrow'     , '↔'],
     \ ['Leftrightarrow'     , '⇔'],
     \ ['leftrightsquigarrow', '↭'],
     \ ['leftthreetimes'     , '⋋'],
@@ -349,6 +357,7 @@ if has('conceal') && &enc == 'utf-8'
     \ ['mid'                , '∣'],
     \ ['mp'                 , '∓'],
     \ ['nabla'              , '∇'],
+    \ ['naturals'           , 'ℕ'],
     \ ['ncong'              , '≇'],
     \ ['nearrow'            , '↗'],
     \ ['ne'                 , '≠'],
@@ -400,8 +409,10 @@ if has('conceal') && &enc == 'utf-8'
     \ ['precsim'            , '≾'],
     \ ['prod'               , '∏'],
     \ ['propto'             , '∝'],
+    \ ['rationals'          , 'ℚ'],
     \ ['rceil'              , '⌉'],
     \ ['Re'                 , 'ℜ'],
+    \ ['reals'              , 'ℝ'],
     \ ['rfloor'             , '⌋'],
     \ ['rightarrow'         , '→'],
     \ ['Rightarrow'         , '⇒'],
@@ -420,6 +431,7 @@ if has('conceal') && &enc == 'utf-8'
     \ ['sqsubseteq'         , '⊑'],
     \ ['sqsupset'           , '⊐'],
     \ ['sqsupseteq'         , '⊒'],
+    \ ['star'               , '⋆'],
     \ ['subset'             , '⊂'],
     \ ['Subset'             , '⋐'],
     \ ['subseteq'           , '⊆'],
@@ -508,31 +520,41 @@ if has('conceal') && &enc == 'utf-8'
 
   " Delimiters: {{{2
   let s:contextDelimiterSymbols = [
-    \ ['\.' , '¦'],
-    \ ['('  , '('],
-    \ [')'  , ')'],
-    \ ['\\{', '{'],
-    \ ['\\}', '}'],
-    \ ['\[' , '['],
-    \ ['\]' , ']'],
-    \ ['<'  , '⟨'],
-    \ ['>'  , '⟩'],
-    \ ['|'  , '|'],
-    \ ['\\|', '‖'],
-    \ ['/'  , '/']]
+    \ ['\.'  , '¦'],
+    \ ['('   , '('],
+    \ [')'   , ')'],
+    \ ['\['  , '['],
+    \ ['\]'  , ']'],
+    \ ['<'   , '⟨'],
+    \ ['>'   , '⟩'],
+    \ ['|'   , '|'],
+    \ ['/'   , '/']]
   let s:contextDelimiterCommands = [
     \ ['lgroup'     , '('],
     \ ['rgroup'     , ')'],
+    \ ['{'          , '{'],
+    \ ['}'          , '}'],
     \ ['lbrace'     , '{'],
     \ ['rbrace'     , '}'],
+    \ ['lbracket'   , '['],
+    \ ['rbracket'   , ']'],
+    \ ['lBracket'   , '⟦'],
+    \ ['rBracket'   , '⟧'],
+    \ ['\['         , '⟦'],
+    \ ['\]'         , '⟧'],
     \ ['langle'     , '⟨'],
     \ ['rangle'     , '⟩'],
+    \ ['lAngle'     , '⟪'],
+    \ ['rAngle'     , '⟫'],
+    \ ['<'          , '⟪'],
+    \ ['>'          , '⟫'],
     \ ['vert'       , '|'],
     \ ['lvert'      , '|'],
     \ ['rvert'      , '|'],
     \ ['Vert'       , '‖'],
     \ ['lVert'      , '‖'],
     \ ['rVert'      , '‖'],
+    \ ['|'          , '‖'],
     \ ['backslash'  , '\'],
     \ ['lfloor'     , '⌊'],
     \ ['rfloor'     , '⌋'],
@@ -552,8 +574,8 @@ if has('conceal') && &enc == 'utf-8'
     \ ['rmoustache' , '⎝']]
 
   if s:context_conceal =~ 'd'
-    call s:ContextConcealSymbol('\\{', '{')
-    call s:ContextConcealSymbol('\\}', '}')
+    "call s:ContextConcealSymbol('\\{', '{')
+    "call s:ContextConcealSymbol('\\}', '}')
     for symbol in s:contextDelimiterSymbols
       call s:ContextConcealSymbol( '\\left'.symbol[0], symbol[1])
       call s:ContextConcealSymbol('\\right'.symbol[0], symbol[1])
@@ -563,6 +585,7 @@ if has('conceal') && &enc == 'utf-8'
       call s:ContextConcealSymbol( '\\Bigg'.symbol[0], symbol[1])
     endfor
     for symbol in s:contextDelimiterCommands
+      call s:ContextConcealSymbol(       '\\'.symbol[0].'\>', symbol[1])
       call s:ContextConcealSymbol( '\\left\\'.symbol[0].'\>', symbol[1])
       call s:ContextConcealSymbol('\\right\\'.symbol[0].'\>', symbol[1])
       call s:ContextConcealSymbol(  '\\big\\'.symbol[0].'\>', symbol[1])
@@ -772,11 +795,14 @@ if has('conceal')
   "syn match   contextTabulate   '\\\(NC\|RC\|HC\|SC\|VL\)\>'     conceal cchar=|
   "syn match   contextTabulate   '\\\(EQ\|RQ\|HQ\|SQ\|TQ\)\>'     conceal cchar=:
   "syn match   contextTabulate   '\\\(NR\|FR\|MR\|LR\|AR\|SR\)\>' conceal cchar=+
+  "syn match   contextTabulate   '\\\(NB\|TB\)\>'                 conceal cchar=±
   "syn match   contextTabulate   '\\\(HL\|FL\|ML\|LL\)\>'         conceal cchar=-
-  syn match   contextTabulate   '\\\uC\>' conceal cchar=|
-  syn match   contextTabulate   '\\\uQ\>' conceal cchar=:
-  syn match   contextTabulate   '\\\uR\>' conceal cchar=+
-  syn match   contextTabulate   '\\\uL\>' conceal cchar=-
+  syn match   contextTabulate   '\\\uC\>' conceal cchar=| " Columns
+  syn match   contextTabulate   '\\\uN\>' conceal cchar=| " Number columns
+  syn match   contextTabulate   '\\\uQ\>' conceal cchar=: " Equality columns
+  syn match   contextTabulate   '\\\uR\>' conceal cchar=+ " Rows
+  syn match   contextTabulate   '\\\uB\>' conceal cchar=± " Blocks and Blanks
+  syn match   contextTabulate   '\\\uL\>' conceal cchar=- " Lines
 endif
 
 " Typing And Coding: {{{1
