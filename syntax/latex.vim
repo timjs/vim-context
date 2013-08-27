@@ -35,7 +35,7 @@ syn match   contextStructure  display '\\\%(titlehead\|subject\|title\|author\|d
 " Definitions And Setups: {{{1
 " -----------------------
 
-syn match   contextDefine     display '\\\%(re\)\?new\%(command\|environment\)\>'
+syn match   contextDefine     display '\\\%(new\|renew\|provide\)\%(command\|environment\)\>'
 
 " Quotes: {{{1
 " -------
