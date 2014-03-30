@@ -132,35 +132,65 @@ syn match   contextStyle      display '\\\%(underbar\|over\%(bar\|strike\)\)s\?'
 "FIXME What is this?
 "syn match   contextStyle      display '\\\%(character\|Character\)s\?\>'
 
-syn region  contextNormal      display matchgroup=contextDelimiter start='{\\tf\s'     end='}' contains=TOP
-syn region  contextItalic      display matchgroup=contextDelimiter start='{\\it\s'     end='}' contains=TOP
-syn region  contextSlanted     display matchgroup=contextDelimiter start='{\\sl\s'     end='}' contains=TOP
-syn region  contextBold        display matchgroup=contextDelimiter start='{\\bf\s'     end='}' contains=TOP
-syn region  contextBoldItalic  display matchgroup=contextDelimiter start='{\\bi\s'     end='}' contains=TOP
-syn region  contextBoldItalic  display matchgroup=contextDelimiter start='{\\bf\\it\s' end='}' contains=TOP
-syn region  contextBoldItalic  display matchgroup=contextDelimiter start='{\\it\\bf\s' end='}' contains=TOP
-syn region  contextBoldSlanted display matchgroup=contextDelimiter start='{\\bs\s'     end='}' contains=TOP
-syn region  contextBoldSlanted display matchgroup=contextDelimiter start='{\\bf\\sl\s' end='}' contains=TOP
-syn region  contextBoldSlanted display matchgroup=contextDelimiter start='{\\sl\\bf\s' end='}' contains=TOP
+if has('conceal') && &enc == 'utf-8'
+    syn region  contextNormal      display matchgroup=contextDelimiter start='{\\tf\s'     end='}' concealends contains=TOP
+    syn region  contextItalic      display matchgroup=contextDelimiter start='{\\it\s'     end='}' concealends contains=TOP
+    syn region  contextSlanted     display matchgroup=contextDelimiter start='{\\sl\s'     end='}' concealends contains=TOP
+    syn region  contextBold        display matchgroup=contextDelimiter start='{\\bf\s'     end='}' concealends contains=TOP
+    syn region  contextBoldItalic  display matchgroup=contextDelimiter start='{\\bi\s'     end='}' concealends contains=TOP
+    syn region  contextBoldItalic  display matchgroup=contextDelimiter start='{\\bf\\it\s' end='}' concealends contains=TOP
+    syn region  contextBoldItalic  display matchgroup=contextDelimiter start='{\\it\\bf\s' end='}' concealends contains=TOP
+    syn region  contextBoldSlanted display matchgroup=contextDelimiter start='{\\bs\s'     end='}' concealends contains=TOP
+    syn region  contextBoldSlanted display matchgroup=contextDelimiter start='{\\bf\\sl\s' end='}' concealends contains=TOP
+    syn region  contextBoldSlanted display matchgroup=contextDelimiter start='{\\sl\\bf\s' end='}' concealends contains=TOP
 
-syn region  contextAlert       display matchgroup=contextDelimiter start='\\alert{'           end='}'                 contains=TOP
+    syn region  contextAlert       display matchgroup=contextDelimiter start='\\alert{'           end='}'                 concealends contains=TOP
 
-syn region  contextOuterEmph   display matchgroup=contextDelimiter start='{\\em\s'            end='}'                 contains=TOP,contextOuterEmph
-syn region  contextOuterEmph   display matchgroup=contextDelimiter start='\\emph{'            end='}'                 contains=TOP,contextOuterEmph
-syn region  contextOuterEmph           matchgroup=contextBlock     start='\\startemphasize\>' end='\\stopemphasize\>' contains=TOP,contextOuterEmph
+    syn region  contextOuterEmph   display matchgroup=contextDelimiter start='{\\em\s'            end='}'                 concealends contains=TOP,contextOuterEmph
+    syn region  contextOuterEmph   display matchgroup=contextDelimiter start='\\emph{'            end='}'                 concealends contains=TOP,contextOuterEmph
 
-syn region  contextInnerEmph   display matchgroup=contextDelimiter start='{\\em\s'            end='}'                 contains=TOP,contextInnerEmph contained containedin=contextOuterEmph,context.*\(Italic\|Slanted\)
-syn region  contextInnerEmph   display matchgroup=contextDelimiter start='\\emph{'            end='}'                 contains=TOP,contextInnerEmph contained containedin=contextOuterEmph,context.*\(Italic\|Slanted\)
+    syn region  contextInnerEmph   display matchgroup=contextDelimiter start='{\\em\s'            end='}'                 concealends contains=TOP,contextInnerEmph contained containedin=contextOuterEmph,context.*\(Italic\|Slanted\)
+    syn region  contextInnerEmph   display matchgroup=contextDelimiter start='\\emph{'            end='}'                 concealends contains=TOP,contextInnerEmph contained containedin=contextOuterEmph,context.*\(Italic\|Slanted\)
+else
+    syn region  contextNormal      display matchgroup=contextDelimiter start='{\\tf\s'     end='}' contains=TOP
+    syn region  contextItalic      display matchgroup=contextDelimiter start='{\\it\s'     end='}' contains=TOP
+    syn region  contextSlanted     display matchgroup=contextDelimiter start='{\\sl\s'     end='}' contains=TOP
+    syn region  contextBold        display matchgroup=contextDelimiter start='{\\bf\s'     end='}' contains=TOP
+    syn region  contextBoldItalic  display matchgroup=contextDelimiter start='{\\bi\s'     end='}' contains=TOP
+    syn region  contextBoldItalic  display matchgroup=contextDelimiter start='{\\bf\\it\s' end='}' contains=TOP
+    syn region  contextBoldItalic  display matchgroup=contextDelimiter start='{\\it\\bf\s' end='}' contains=TOP
+    syn region  contextBoldSlanted display matchgroup=contextDelimiter start='{\\bs\s'     end='}' contains=TOP
+    syn region  contextBoldSlanted display matchgroup=contextDelimiter start='{\\bf\\sl\s' end='}' contains=TOP
+    syn region  contextBoldSlanted display matchgroup=contextDelimiter start='{\\sl\\bf\s' end='}' contains=TOP
+
+    syn region  contextAlert       display matchgroup=contextDelimiter start='\\alert{'           end='}'                 contains=TOP
+
+    syn region  contextOuterEmph   display matchgroup=contextDelimiter start='{\\em\s'            end='}'                 contains=TOP,contextOuterEmph
+    syn region  contextOuterEmph   display matchgroup=contextDelimiter start='\\emph{'            end='}'                 contains=TOP,contextOuterEmph
+
+    syn region  contextInnerEmph   display matchgroup=contextDelimiter start='{\\em\s'            end='}'                 contains=TOP,contextInnerEmph contained containedin=contextOuterEmph,context.*\(Italic\|Slanted\)
+    syn region  contextInnerEmph   display matchgroup=contextDelimiter start='\\emph{'            end='}'                 contains=TOP,contextInnerEmph contained containedin=contextOuterEmph,context.*\(Italic\|Slanted\)
+endif
+
 syn region  contextInnerEmph           matchgroup=contextBlock     start='\\startemphasize\>' end='\\stopemphasize\>' contains=TOP,contextInnerEmph contained containedin=contextOuterEmph,context.*\(Italic\|Slanted\)
+syn region  contextOuterEmph           matchgroup=contextBlock     start='\\startemphasize\>' end='\\stopemphasize\>' contains=TOP,contextOuterEmph
 
 " Mathematics: {{{1
 " ------------
 
-syn region  contextMath       display matchgroup=contextDelimiter start='\$'                       end='\$'                 contains=TOP,@Spell,contextScriptError
-syn region  contextMath       display matchgroup=contextDelimiter start='\\math\%(ematics\)\?{'    end='}'                  contains=TOP,@Spell,contextScriptError
-syn region  contextMath       display matchgroup=contextDelimiter start='\\formula{'               end='}'                  contains=TOP,@Spell,contextScriptError
-syn region  contextMath       display matchgroup=contextDelimiter start='\\chemical{'              end='}'                  contains=TOP,@Spell,contextScriptError
-syn region  contextMath       display matchgroup=contextDelimiter start='\\molecule{'              end='}'                  contains=TOP,@Spell,contextScriptError
+if has('conceal') && &enc == 'utf-8'
+    syn region  contextMath       display matchgroup=contextDelimiter start='\$'                       end='\$' concealends     contains=TOP,@Spell,contextScriptError
+    syn region  contextMath       display matchgroup=contextDelimiter start='\\math\%(ematics\)\?{'    end='}'  concealends     contains=TOP,@Spell,contextScriptError
+    syn region  contextMath       display matchgroup=contextDelimiter start='\\formula{'               end='}'  concealends     contains=TOP,@Spell,contextScriptError
+    syn region  contextMath       display matchgroup=contextDelimiter start='\\chemical{'              end='}'  concealends     contains=TOP,@Spell,contextScriptError
+    syn region  contextMath       display matchgroup=contextDelimiter start='\\molecule{'              end='}'  concealends     contains=TOP,@Spell,contextScriptError
+else
+    syn region  contextMath       display matchgroup=contextDelimiter start='\$'                       end='\$'                 contains=TOP,@Spell,contextScriptError
+    syn region  contextMath       display matchgroup=contextDelimiter start='\\math\%(ematics\)\?{'    end='}'                  contains=TOP,@Spell,contextScriptError
+    syn region  contextMath       display matchgroup=contextDelimiter start='\\formula{'               end='}'                  contains=TOP,@Spell,contextScriptError
+    syn region  contextMath       display matchgroup=contextDelimiter start='\\chemical{'              end='}'                  contains=TOP,@Spell,contextScriptError
+    syn region  contextMath       display matchgroup=contextDelimiter start='\\molecule{'              end='}'                  contains=TOP,@Spell,contextScriptError
+endif
 
 syn region  contextMath               matchgroup=contextDelimiter start='\$\$'                     end='\$\$'               contains=TOP,@Spell,contextScriptError
 syn region  contextMath               matchgroup=contextBlock     start='\\start\z(\a*\)formula\>' end='\\stop\z1formula\>' contains=TOP,@Spell,contextScriptError
@@ -212,7 +242,7 @@ if has('conceal') && &enc == 'utf-8'
     exe 'syn match   contextMathAccent'.a:name.' "}" contained conceal cchar='.a:accent
     exe 'hi def link contextMathAccent'.a:name.' contextMathAccent'
   endfun
-  
+
   fun! s:ContextConcealAccent(name, pattern, replacement)
     exe 'syn match contextMathSymbol "\\'.a:name.'{'.a:pattern.'" nextgroup=contextMathAccent'.a:name.' contained containedin=contextMath conceal cchar='.a:replacement
   endfun
@@ -808,9 +838,15 @@ endif
 " Typing And Coding: {{{1
 " ------------------
 
-syn region  contextTyping     display matchgroup=contextDelimiter start='@'                                end='@'
-syn region  contextTyping     display matchgroup=contextDelimiter start='\\type\s*\z(\A\)'                 end='\z1'
-syn region  contextTyping     display matchgroup=contextDelimiter start='\\\%(type\?\|tex\|arg\|mat\)\s*{' end='}'
+if has('conceal') && &enc == 'utf-8'
+    syn region  contextTyping     display matchgroup=contextDelimiter start='@'                                end='@'   concealends
+    syn region  contextTyping     display matchgroup=contextDelimiter start='\\type\s*\z(\A\)'                 end='\z1' concealends
+    syn region  contextTyping     display matchgroup=contextDelimiter start='\\\%(type\?\|tex\|arg\|mat\)\s*{' end='}'   concealends
+else
+    syn region  contextTyping     display matchgroup=contextDelimiter start='@'                                end='@'
+    syn region  contextTyping     display matchgroup=contextDelimiter start='\\type\s*\z(\A\)'                 end='\z1'
+    syn region  contextTyping     display matchgroup=contextDelimiter start='\\\%(type\?\|tex\|arg\|mat\)\s*{' end='}'
+endif
 
 "FIXME arguments after \starttyping
 syn region  contextTyping             matchgroup=contextBlock   start='\\start\z(\a*\)typing\>'       end='\\stop\z1typing\>' contains=contextComment
