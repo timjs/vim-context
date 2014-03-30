@@ -825,7 +825,7 @@ endfun
 let s:contextCodeNames = [
   \ ['ruby'   , 'RUBY'   ],
   \ ['haskell', 'HASKELL'],
-  \ ['lua'    , 'luacode'],
+  \ ['lua'    , '\(luacode\|LUA\)'],
   \ ['mp'     , '\(reusable\|static\|unique\|use\)\?MP\(environment\|figure\|graphic\|inclusions\|instance\)\?']]
 
 for name in s:contextCodeNames
