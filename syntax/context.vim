@@ -288,6 +288,7 @@ if has('conceal') && &enc == 'utf-8'
     \ ['boxminus'           , '⊟'],
     \ ['boxplus'            , '⊞'],
     \ ['boxtimes'           , '⊠'],
+    \ ['bullet'             , '•'],
     \ ['bumpeq'             , '≏'],
     \ ['Bumpeq'             , '≎'],
     \ ['cap'                , '∩'],
