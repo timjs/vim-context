@@ -839,11 +839,11 @@ endif
 " ------------------
 
 if has('conceal') && &enc == 'utf-8'
-    syn region  contextTyping     display matchgroup=contextDelimiter start='@'                                end='@'   concealends
+    syn region  contextTyping     display matchgroup=contextDelimiter start='|'                                end='|'   concealends
     syn region  contextTyping     display matchgroup=contextDelimiter start='\\type\s*\z(\A\)'                 end='\z1' concealends
     syn region  contextTyping     display matchgroup=contextDelimiter start='\\\%(type\?\|tex\|arg\|mat\)\s*{' end='}'   concealends
 else
-    syn region  contextTyping     display matchgroup=contextDelimiter start='@'                                end='@'
+    syn region  contextTyping     display matchgroup=contextDelimiter start='|'                                end='|'
     syn region  contextTyping     display matchgroup=contextDelimiter start='\\type\s*\z(\A\)'                 end='\z1'
     syn region  contextTyping     display matchgroup=contextDelimiter start='\\\%(type\?\|tex\|arg\|mat\)\s*{' end='}'
 endif
