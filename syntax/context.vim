@@ -838,14 +838,24 @@ endif
 " Typing And Coding: {{{1
 " ------------------
 
-if has('conceal') && &enc == 'utf-8'
-    syn region  contextTyping     display matchgroup=contextDelimiter start='|'                                end='|'   concealends
-    syn region  contextTyping     display matchgroup=contextDelimiter start='\\type\s*\z(\A\)'                 end='\z1' concealends
-    syn region  contextTyping     display matchgroup=contextDelimiter start='\\\%(type\?\|tex\|arg\|mat\)\s*{' end='}'   concealends
+if !exists('g:context_at')
+  let s:context_at = 0
 else
-    syn region  contextTyping     display matchgroup=contextDelimiter start='|'                                end='|'
-    syn region  contextTyping     display matchgroup=contextDelimiter start='\\type\s*\z(\A\)'                 end='\z1'
-    syn region  contextTyping     display matchgroup=contextDelimiter start='\\\%(type\?\|tex\|arg\|mat\)\s*{' end='}'
+  let s:context_at = g:context_at
+end
+
+if has('conceal') && &enc == 'utf-8'
+  if s:context_at
+    syn region  contextTyping     display matchgroup=contextDelimiter start='@'                                end='@'   concealends
+  end
+  syn region  contextTyping     display matchgroup=contextDelimiter start='\\type\s*\z(\A\)'                 end='\z1' concealends
+  syn region  contextTyping     display matchgroup=contextDelimiter start='\\\%(type\?\|tex\|arg\|mat\)\s*{' end='}'   concealends
+else
+  if s:context_at
+    syn region  contextTyping     display matchgroup=contextDelimiter start='@'                                end='@'
+  end
+  syn region  contextTyping     display matchgroup=contextDelimiter start='\\type\s*\z(\A\)'                 end='\z1'
+  syn region  contextTyping     display matchgroup=contextDelimiter start='\\\%(type\?\|tex\|arg\|mat\)\s*{' end='}'
 endif
 
 "FIXME arguments after \starttyping
