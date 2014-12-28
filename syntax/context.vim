@@ -144,13 +144,13 @@ if has('conceal') && &enc == 'utf-8'
     syn region  contextBoldSlanted display matchgroup=contextDelimiter start='{\\bf\\sl\s' end='}' concealends contains=TOP
     syn region  contextBoldSlanted display matchgroup=contextDelimiter start='{\\sl\\bf\s' end='}' concealends contains=TOP
 
-    syn region  contextAlert       display matchgroup=contextDelimiter start='\\alert{'           end='}'                 concealends contains=TOP
+    syn region  contextAlert       display matchgroup=contextDelimiter start='\\alert{'    end='}' concealends contains=TOP
 
-    syn region  contextOuterEmph   display matchgroup=contextDelimiter start='{\\em\s'            end='}'                 concealends contains=TOP,contextOuterEmph
-    syn region  contextOuterEmph   display matchgroup=contextDelimiter start='\\emph{'            end='}'                 concealends contains=TOP,contextOuterEmph
+    syn region  contextOuterEmph   display matchgroup=contextDelimiter start='{\\em\s'     end='}' concealends contains=TOP,contextOuterEmph
+    syn region  contextOuterEmph   display matchgroup=contextDelimiter start='\\emph{'     end='}' concealends contains=TOP,contextOuterEmph
 
-    syn region  contextInnerEmph   display matchgroup=contextDelimiter start='{\\em\s'            end='}'                 concealends contains=TOP,contextInnerEmph contained containedin=contextOuterEmph,context.*\(Italic\|Slanted\)
-    syn region  contextInnerEmph   display matchgroup=contextDelimiter start='\\emph{'            end='}'                 concealends contains=TOP,contextInnerEmph contained containedin=contextOuterEmph,context.*\(Italic\|Slanted\)
+    syn region  contextInnerEmph   display matchgroup=contextDelimiter start='{\\em\s'     end='}' concealends contains=TOP,contextInnerEmph contained containedin=contextOuterEmph,context.*\(Italic\|Slanted\)
+    syn region  contextInnerEmph   display matchgroup=contextDelimiter start='\\emph{'     end='}' concealends contains=TOP,contextInnerEmph contained containedin=contextOuterEmph,context.*\(Italic\|Slanted\)
 else
     syn region  contextNormal      display matchgroup=contextDelimiter start='{\\tf\s'     end='}' contains=TOP
     syn region  contextItalic      display matchgroup=contextDelimiter start='{\\it\s'     end='}' contains=TOP
@@ -163,13 +163,13 @@ else
     syn region  contextBoldSlanted display matchgroup=contextDelimiter start='{\\bf\\sl\s' end='}' contains=TOP
     syn region  contextBoldSlanted display matchgroup=contextDelimiter start='{\\sl\\bf\s' end='}' contains=TOP
 
-    syn region  contextAlert       display matchgroup=contextDelimiter start='\\alert{'           end='}'                 contains=TOP
+    syn region  contextAlert       display matchgroup=contextDelimiter start='\\alert{'    end='}' contains=TOP
 
-    syn region  contextOuterEmph   display matchgroup=contextDelimiter start='{\\em\s'            end='}'                 contains=TOP,contextOuterEmph
-    syn region  contextOuterEmph   display matchgroup=contextDelimiter start='\\emph{'            end='}'                 contains=TOP,contextOuterEmph
+    syn region  contextOuterEmph   display matchgroup=contextDelimiter start='{\\em\s'     end='}' contains=TOP,contextOuterEmph
+    syn region  contextOuterEmph   display matchgroup=contextDelimiter start='\\emph{'     end='}' contains=TOP,contextOuterEmph
 
-    syn region  contextInnerEmph   display matchgroup=contextDelimiter start='{\\em\s'            end='}'                 contains=TOP,contextInnerEmph contained containedin=contextOuterEmph,context.*\(Italic\|Slanted\)
-    syn region  contextInnerEmph   display matchgroup=contextDelimiter start='\\emph{'            end='}'                 contains=TOP,contextInnerEmph contained containedin=contextOuterEmph,context.*\(Italic\|Slanted\)
+    syn region  contextInnerEmph   display matchgroup=contextDelimiter start='{\\em\s'     end='}' contains=TOP,contextInnerEmph contained containedin=contextOuterEmph,context.*\(Italic\|Slanted\)
+    syn region  contextInnerEmph   display matchgroup=contextDelimiter start='\\emph{'     end='}' contains=TOP,contextInnerEmph contained containedin=contextOuterEmph,context.*\(Italic\|Slanted\)
 endif
 
 syn region  contextInnerEmph           matchgroup=contextBlock     start='\\startemphasize\>' end='\\stopemphasize\>' contains=TOP,contextInnerEmph contained containedin=contextOuterEmph,context.*\(Italic\|Slanted\)
