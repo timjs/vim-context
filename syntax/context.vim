@@ -27,7 +27,7 @@ syn spell toplevel
 " Commands: {{{1
 " ---------
 
-" We just match \...alphabetic... Sometimes _, @ and ! are used inside commands, but this is only supported inside \unprotect'ed environments.
+" We just match \...alphabetic... Sometimes _, @, ! and ? are used inside commands, but this is only supported inside \unprotect'ed environments.
 syn match   contextCommand    display '\\\a\+'
 syn match   contextCommand            '\\\%(\a\|_\|@\|!\|?\)\+' contained containedin=contextUnprotect
 
