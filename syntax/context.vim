@@ -21,6 +21,30 @@ setlocal isk-=_
 
 syn spell toplevel
 
+" Options: {{{2
+" -------
+
+" Let user determine which classes of concealment will be supported:
+"   h = headings
+"   m = math symbols
+"   f = fractions
+"   s = spaces
+"   d = delimiters
+"   g = Greek
+"   l = Latin superscripts/subscripts
+"   n = numeric superscripts/subscripts
+"   b = blackboard, calligraphic and fraktur
+"   B = short blackboard
+"   a = accents
+"   S = sub- and superscripts inside braces
+" By default we conceal all math except accents and sub- and superscripts
+" inside braces.
+if !exists('g:context_conceal')
+    let s:context_conceal = 'hmfsdglnbB'
+else
+    let s:context_conceal = g:context_conceal
+endif
+
 " Syntax Definitions:
 " ===================
 
@@ -40,6 +64,11 @@ syn match   contextBlock      display '\\\%(start\|stop\)\a*'
 syn match   contextHead       display '\\\%(start\|stop\)\?part\>'
 syn match   contextHead       display '\\\%(start\|stop\)\?\%(chapter\|title\)\>'
 syn match   contextHead       display '\\\%(start\|stop\)\?\%(sub\)*\%(section\|subject\)\>'
+
+if has('conceal') && s:context_conceal =~ 'h'
+    syn match   contextHeadSymbol     display '\\'                                 contained containedin=contextHead conceal
+    syn match   contextHeadSymbol     display '\%(chapter\|sec\|tion\|sub\|ject\)' contained containedin=contextHead conceal cchar=§
+endif
 
 " The mistake I make most often.
 syn match   contextStructureError     display '\\\%(start\)\?\%(component\|product\|project\|environment\)\>'
@@ -208,25 +237,6 @@ syn region  contextMath    transparent matchgroup=contextDelimiter start='\['   
 " Many symbols by Björn Winckler, additions by Tim Steenvoorden.
 
 if has('conceal') && &enc == 'utf-8'
-
-  " Let user determine which classes of concealment will be supported:
-  "   m = math symbols
-  "   f = fractions
-  "   s = spaces
-  "   d = delimiters
-  "   g = Greek
-  "   l = Latin superscripts/subscripts
-  "   n = numeric superscripts/subscripts
-  "   b = blackboard, calligraphic and fraktur
-  "   B = short blackboard
-  "   a = accents
-  "   S = sub- and superscripts inside braces
-  " By default we conceal everything.
-  if !exists('g:context_conceal')
-   let s:context_conceal = 'mfsdglnbB'
-  else
-   let s:context_conceal = g:context_conceal
-  endif
 
   if s:context_conceal =~ 'S'
     " We will define the unbraced variants separately for each symbol in the function ContextConcealScript.
