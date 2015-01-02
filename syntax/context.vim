@@ -73,8 +73,8 @@ end
 " Syntax Definitions:
 " ===================
 
-" Commands: {{{1
-" ---------
+" Commands And Headings: {{{1
+" ---------------------
 
 " We just match \...alphabetic... Sometimes _, @, ! and ? are used inside commands, but this is only supported inside \unprotect'ed environments.
 syn match   contextCommand    display '\\\a\+'
@@ -91,7 +91,7 @@ syn match   contextHead       display '\\\%(start\|stop\)\?\%(chapter\|title\)\>
 syn match   contextHead       display '\\\%(start\|stop\)\?\%(sub\)*\%(section\|subject\)\>'
 
 if s:context_conceal =~ 'H'
-    syn match   contextHeadSymbol     display '\\'                                 contained containedin=contextHead conceal
+    " syn match   contextHeadSymbol     display '\\'                                 contained containedin=contextHead conceal
     syn match   contextHeadSymbol     display '\%(chapter\|sec\|tion\|sub\|ject\)' contained containedin=contextHead conceal cchar=§
 endif
 
