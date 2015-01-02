@@ -6,7 +6,7 @@
 " Initialize Compiler File: {{{1
 " ========================
 
-if exists("b:current_compiler")
+if exists('b:current_compiler')
   finish
 endif
 
@@ -18,7 +18,7 @@ set cpo&vim
 
 let &l:makeprg = 'context --batchmode %'
 
-let &l:errorformat  = 'tex error       > error on line %l in file %f: ! %m'
+let &l:errorformat  = '%Etex error       > error on line %l in file %f: ! %m'
 let &l:errorformat .= ',%-G%.%#'
 
 " Finalize Compiler File: {{{1
