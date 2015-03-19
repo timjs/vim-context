@@ -48,7 +48,7 @@ if has('conceal') && &enc == 'utf-8'
   if exists('g:context_conceal')
     let s:context_conceal = g:context_conceal
   else
-    let s:context_conceal = 'HFMVTmfsdglnb'
+    let s:context_conceal = 'FMVTmfsdglnb'
   endif
 else
   let s:context_conceal = ''
