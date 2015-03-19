@@ -5,8 +5,8 @@
 " TODO:
 "   * minus in digits.
 
-" Initialize Syntaxfile: {{{1
-" ======================
+" Initialize Syntax File: {{{1
+" =======================
 
 if exists('b:current_syntax')
   finish
@@ -1031,12 +1031,13 @@ hi def link contextTodo           Todo
 hi def link contextComment        Comment
 hi def link contextHiding         contextComment
 
-" Finalize Syntaxfile: {{{1
-" ====================
+" Finalize Syntax File: {{{1
+" =====================
 
 let b:current_syntax = 'context'
 
 let &cpo = s:cpo_save
 unlet s:cpo_save
 
-" vim: nowrap fdm=marker spell spl=en
+" vim: nowrap fdm=marker spell spl=en ts=2 sw=2
+
