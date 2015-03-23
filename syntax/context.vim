@@ -108,7 +108,7 @@ syn match   contextStructure  display '^\s*\\\%(start\|stop\)text$'
 " Definitions And Setups: {{{1
 " -----------------------
 
-syn match   contextDefine     display '\\\%([egx]\?def\|let\)\>'
+syn match   contextDefine     display '\\\%([up]\?[egx]\?def\|let\)\>'
 syn match   contextDefine     display '\\\%(re\)\?define\>'
 syn match   contextDefine     display '\\\%(define\|\%(re\)\?set\|get\|let\|new\)\a\+'
 syn match   contextDefine     display '\\\%(start\|stop\)texdefinition\>'
