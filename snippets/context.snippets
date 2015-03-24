@@ -3,12 +3,12 @@
 # Maintainer:  Tim Steenvoorden <steenvoo@science.ru.nl>
 # Version:     21 Jul 2012
 #
-# Use with snipmate plugin.
+# Use with snipmate or ultisnips plugin.
 
 # General environments {{{1
 # --------------------
 
-snippet start
+snippet env
 	\start${1:text}
 	${2}
 	\stop$1
@@ -37,14 +37,14 @@ snippet fig
 	  {${3:$2}}
 	  {\externalfigure[${4:$2}][${5:width=\textwidth}]}
 
-snippet com
+snippet figc
 	\placefigure[${1}][fig:${2}]
 	  {${3:$2}}
 	  \startcombination[${4:2*1}]
 	  ${5}
 	  \stopcombination
 
-snippet ext
+snippet fige
 	{\externalfigure[${1}][${2:width=0.5\textwidth}]}
 
 snippet tab
@@ -103,10 +103,10 @@ snippet stp
 # Headings {{{1
 # --------
 
-snippet part
+snippet prt
 	\part[prt:${1:label}]{${2:title}}
 
-snippet chap
+snippet chp
 	\chapter[chp:${1:label}]{${2:title}}
 
 snippet sec
